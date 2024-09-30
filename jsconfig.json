@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+  "footer": {
+    "author": "星林"
+  }
+}

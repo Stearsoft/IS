@@ -1,0 +1,32 @@
+html.light:root,
+html:root:not(.dark) {
+    --bg-1: #ffffff;
+    --bg-2: #ffffffa6;
+    --bg-3: #ffffff96;
+    --bg-4: #ffffffba;
+    --bg-5: #00000014;
+    --bg-6: rgba(255, 255, 255, 0.5);
+    --bg-7: #ffffffa6;
+    --bg-8: #00000038;
+    --bg-9: #ffffff4d;
+    --shadow-1: #00000033;
+    --border-1: #e7e7e71f;
+    --border-2: #dbdbdb;
+    --font-1: #181818;
+}
+
+html.dark:root {
+    --bg-1: rgba(0, 0, 0, 0.8);
+    --bg-2: #ffffffa6;
+    --bg-3: #242424e0;
+    --bg-4: #2e2e2ed9;
+    --bg-5: #ffffff0d;
+    --bg-6: rgba(30, 30, 30, 0.5);
+    --bg-7: #2a2a2ab5;
+    --bg-8: #ffffffa8;
+    --bg-9: #232323e3;
+    --shadow-1: #00000033;
+    --border-1: #e7e7e71f;
+    --border-2: #4b4b4b;
+    --font-1: #dbdbdb;
+}

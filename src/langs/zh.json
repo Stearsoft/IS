@@ -1,0 +1,23 @@
+{
+  "search": {
+    "input": "搜索框",
+    "suggestion_list": "搜索结果列表",
+    "suggestion": {
+      "love": "收藏",
+      "url": "网址",
+      "translate": "翻译"
+    }
+  },
+  "footer": {
+    "info": "关于",
+    "author": "星林",
+    "links": "友链",
+    "sentence": "让生活充满色彩，让梦想更加绚丽"
+  },
+  "background": {
+    "label": "背景"
+  },
+  "url": {
+    "translate": "https://fanyi.baidu.com/#zh/en/{text}"
+  }
+}
