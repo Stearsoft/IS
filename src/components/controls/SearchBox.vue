@@ -1,6 +1,12 @@
 <template>
     <div id="timeContainer" style="opacity: 1;" aria-hidden="true">
-        <div id="timeText" style="padding: 10px;">18:36</div>
+        <div id="timeText" :style="{
+            padding:current_time == '/logo_xn/' || current_time == '/logo_tif/' ? '0' : '10px',
+        }">
+            <img src="../../assets/img/xn.webp" v-if="current_time == '/logo_xn/'" alt="LOGO">
+            <img src="../../assets/img/tif.png" v-else-if="current_time == '/logo_tif/'" alt="LOGO">
+            <span v-else>{{ current_time }}</span>
+        </div>
     </div>
     <div id="searchBox">
         <div id="inputContainer">
@@ -50,16 +56,14 @@ const emit = defineEmits(['focused', 'blurred', 'enter']);
 const searchSuggestionContainer = ref(null);
 const searchInputDom = ref(null);
 const currentIndex = ref(-1);
-
+const current_time = ref('10:00');
 const searchFocus = () => {
     emit('focused');
 };
-
 const searchBlur = () => {
     emit('blurred');
     suggestions.value = [];
 };
-
 const searchInput = (e) => {
     currentIndex.value = -1;
     const search_text = e.target.value;
@@ -138,7 +142,6 @@ const searchEnter = (e) => {
     goSearch(e.target.value);
 };
 const triggerItem = (e) => {
-
     if (e.keyCode == 38) {
         e.preventDefault();
         if (currentIndex.value > 0) {
@@ -185,6 +188,27 @@ function goSearch(text) {
         window.open(is_data.search.engine_url + text, target);
     }
 }
+const getTime = (format) => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hour = String(now.getHours()).padStart(2, '0');
+    const minute = String(now.getMinutes()).padStart(2, '0');
+    const second = String(now.getSeconds()).padStart(2, '0');
+    return format.replace('YYYY', year)
+        .replace('MoMo', month)
+        .replace('DDDD', day)
+        .replace('HHHH', hour)
+        .replace('MiMi', minute)
+        .replace('SSSS', second);
+}
+setInterval(() => {
+    const format = is_data.time.form;
+    if (format !== "/logo_xn/" || format !== "/logo_tif/" || format !== "") {
+        current_time.value = getTime(format);
+    }
+}, 1000);
 </script>
 
 
@@ -278,6 +302,28 @@ div#searchBox {
                 margin-right: 10px;
                 fill: var(--theme-color, #0084ff);
             }
+        }
+    }
+}
+
+div#timeContainer {
+    position: fixed;
+    left: 50%;
+    padding: 10px;
+    transform: translateX(-50%);
+    top: calc(var(--top-box) - 75px);
+    transition: all 0.3s;
+    z-index: 1000;
+
+    div#timeText {
+        font-size: 30px;
+        transition: all 0.3s;
+        color: #f9fcff;
+        padding: 10px;
+        text-shadow: 0 0 1px black;
+
+        img{
+            height: 50px;
         }
     }
 }

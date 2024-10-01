@@ -4,5 +4,27 @@
     "author": "Chuck Robert",
     "links": "Links",
     "sentence": "Add color to life and make dreams vibrant"
+  },
+  "background": {
+    "label": "Background"
+  },
+  "menu": {
+    "accountSetting": "Account settings",
+    "feedback": "Feedback",
+    "language": "Language",
+    "logout": "Log out",
+    "setting": "Setting"
+  },
+  "search": {
+    "input": "search box",
+    "suggestion": {
+      "love": "Love",
+      "translate": "Translate",
+      "url": "URL"
+    },
+    "suggestion_list": "Search result list"
+  },
+  "url": {
+    "translate": "https://translate.google.com/?sl=auto&tl=en&op=translate&text="
   }
 }
