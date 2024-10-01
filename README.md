@@ -1,35 +1,45 @@
-# IS
+# 项目名称
 
-This template should help get you started developing with Vue 3 in Vite.
+欢迎访问 [tfseek.top](https://tfseek.top)！这是一个基于 Vue 和 Element Plus 的浏览器起始页项目。
 
-## Recommended IDE Setup
+## 项目描述
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+此项目旨在为用户提供一个简洁、美观的浏览器起始页，方便快捷地访问常用网站和服务。
 
-## Customize configuration
+## 使用技术
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+- **Vue**: 用于构建用户界面
+- **Element Plus**: 组件库，提供丰富的 UI 组件
 
-## Project Setup
+## 安装
 
-```sh
+```bash
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+## 运行项目
 
-```sh
+```bash
 npm run dev
 ```
 
-### Compile and Minify for Production
+## 访问网站
 
-```sh
-npm run build
-```
+请访问 [tfseek.top](https://tfseek.top) 来体验项目。
 
-### Lint with [ESLint](https://eslint.org/)
+## 联系方式
 
-```sh
-npm run lint
-```
+- **制作者**: 星林
+- **社交群聊**: 762786144
+- **站长联系方式**:
+  - 2872505366@qq.com
+  - wood3013.ck@gmail.com
+
+## 使用声明
+
+- 不允许私自声明为自己的作品。
+- 不允许牟利或进行商业用途。
+- 仅允许学习和私人使用。
+- 禁止在其他网站上运行（包括改名字或改 logo）。
+
+感谢您的支持与理解！
