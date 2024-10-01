@@ -1,0 +1,476 @@
+<template>
+    <div class="settingContainer">
+        <el-container>
+            <el-aside class="aside">
+                <ul class="type_list">
+                    <li v-for="(item, index) in types_list" :key="index"
+                        :class="{ active: index === types_active_index }" @click="types_active_index = index">
+                        <i :class="item.icon"></i>
+                        <span @click.stop="types_active_index = index">{{ item.label }}</span>
+                    </li>
+                </ul>
+            </el-aside>
+            <el-main class="main">
+                <div v-for="(item, index) in types_list" :class="{ active: index === types_active_index }" :key="index"
+                    class="type_content">
+                    <template v-if="item.contents.group">
+                        <el-header class="group">
+                            <span v-for="(ii, i) in item.contents.pages" :key="i"
+                                :class="{ active: i === item.contents.default_page }"
+                                @click.stop="item.contents.default_page = i">{{ ii.label }}</span>
+                        </el-header>
+                        <el-main class="pages">
+                            <div class="page" v-for="(ii, i) in item.contents.pages" :key="i"
+                                :class="{ active: i === item.contents.default_page }">
+                                <dl v-for="(ji, j) in ii.items" :key="j" :class="{
+                                    disabled: !ji.condition(),
+                                    card: ji.type === 'card',
+                                }">
+                                    <template v-if="ji.type === 'card'">
+                                        <SettingCard :card="ji.card_name" />
+                                    </template>
+                                    <template v-else>
+                                        <dt>
+                                            <span class="title">{{ ji.label }}</span>
+                                            <span class="description">{{ ji.description }}</span>
+                                        </dt>
+                                        <dd>
+                                            <template v-if="ji.type === 'switch'">
+                                                <el-switch size="large" v-model="ji.default"
+                                                    @change="ji.action(ji.default)" />
+                                            </template>
+                                            <template v-if="ji.type === 'button'">
+                                                <el-button plain type="primary" @click="ji.action">{{ ji.text
+                                                    }}</el-button>
+                                            </template>
+                                        </dd>
+                                    </template>
+                                </dl>
+                            </div>
+                        </el-main>
+                    </template>
+                    <template v-else>
+                        <main class="item_main">
+                            <dl v-for="(ji, j) in item.contents.page" :key="j" :class="{
+                                disabled: !ji.condition(),
+                                card: ji.type === 'card',
+                            }">
+                                <template v-if="ji.type === 'card'">
+                                    <SettingCard :card="ji.card_name" />
+                                </template>
+                                <template v-else>
+                                    <dt>
+                                        <span class="title">{{ ji.label }}</span>
+                                        <span class="description">{{ ji.description }}</span>
+                                    </dt>
+                                    <dd>
+                                        <template v-if="ji.type === 'switch'">
+                                            <el-switch size="large" v-model="ji.default"
+                                                @change="ji.action(ji.default)" />
+                                        </template>
+                                        <template v-if="ji.type === 'button'">
+                                            <el-button plain type="primary" @click="ji.action">{{ ji.text
+                                                }}</el-button>
+                                        </template>
+                                    </dd>
+                                </template>
+                            </dl>
+                        </main>
+                    </template>
+                </div>
+            </el-main>
+        </el-container>
+    </div>
+</template>
+
+
+<script setup>
+import { ref } from 'vue';
+import SettingCard from './setting_components/SettingCard.vue';
+const types_list_default = [
+    {
+        label: '基础设置',
+        icon: 'fas fa-palette',
+        contents: {
+            group: true,
+            default_page: 0,
+            pages: [
+                {
+                    label: '主题设置',
+                    icon: 'fas fa-palette',
+                    items: [
+                        {
+                            label: '暗黑模式',
+                            description: '开启暗黑模式',
+                            type: 'switch',
+                            default: false,
+                            condition: function () {
+                                return true; // 这里可以写一些条件，如果条件不满足，则不显示这个选项
+                            },
+                            action: function (value) {
+                                console.log(value);
+                            }
+                        }, {
+                            label: '暗黑模式',
+                            description: '开启暗黑模式',
+                            type: 'switch',
+                            default: false,
+                            condition: function () {
+                                return true; // 这里可以写一些条件，如果条件不满足，则不显示这个选项
+                            },
+                            action: function (value) {
+                                console.log(value);
+                            }
+                        }, {
+                            label: '暗黑模式',
+                            description: '开启暗黑模式',
+                            type: 'switch',
+                            default: false,
+                            condition: function () {
+                                return true; // 这里可以写一些条件，如果条件不满足，则不显示这个选项
+                            },
+                            action: function (value) {
+                                console.log(value);
+                            }
+                        }
+                    ]
+                }, {
+                    label: '2222',
+                    icon: 'fas fa-palette',
+                    items: [
+                        {
+                            label: '暗黑模式',
+                            description: '开启暗黑模式',
+                            type: 'switch',
+                            default: false,
+                            condition: function () {
+                                return true; // 这里可以写一些条件，如果条件不满足，则不显示这个选项
+                            },
+                            action: function (value) {
+                                console.log(value);
+                            }
+                        }, {
+                            label: '暗黑模式',
+                            description: '开启暗黑模式',
+                            type: 'switch',
+                            default: false,
+                            condition: function () {
+                                return true; // 这里可以写一些条件，如果条件不满足，则不显示这个选项
+                            },
+                            action: function (value) {
+                                console.log(value);
+                            }
+                        }, {
+                            label: '暗黑模式',
+                            description: '开启暗黑模式',
+                            type: 'switch',
+                            default: false,
+                            condition: function () {
+                                return true; // 这里可以写一些条件，如果条件不满足，则不显示这个选项
+                            },
+                            action: function (value) {
+                                console.log(value);
+                            }
+                        }
+                    ]
+                }, {
+                    label: '3333',
+                    icon: 'fas fa-palette',
+                    items: [
+                        {
+                            label: '暗黑模式',
+                            description: '开启暗黑模式',
+                            type: 'button',
+                            text: '点击我',
+                            default: false,
+                            condition: function () {
+                                return true; // 这里可以写一些条件，如果条件不满足，则不显示这个选项
+                            },
+                            action: function () {
+                                console.log(121212);
+                            }
+                        }, {
+                            label: '暗黑模式',
+                            description: '开启暗黑模式',
+                            type: 'switch',
+                            default: false,
+                            condition: function () {
+                                return false;
+                            },
+                            action: function (value) {
+                                console.log(value);
+                            }
+                        }, {
+                            label: '暗黑模式',
+                            description: '开启暗黑模式',
+                            type: 'switch',
+                            default: false,
+                            condition: function () {
+                                return true; // 这里可以写一些条件，如果条件不满足，则不显示这个选项
+                            },
+                            action: function (value) {
+                                console.log(value);
+                            }
+                        }
+                    ]
+                }, {
+                    label: 'Wallhaven',
+                    icon: 'fas fa-palette',
+                    items: [
+                        {
+                            type: 'card',
+                            text: '点击我',
+                            card_name: "Wallhaven",
+                            condition: function () {
+                                return true;
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    }, {
+        label: '搜索设置',
+        icon: 'fa fa-search',
+        contents: {
+            group: false,
+            page: [
+                {
+                    type: 'card',
+                    text: '点击我',
+                    card_name: "Wallhaven",
+                    condition: function () {
+                        return true;
+                    }
+                }, {
+                    label: '暗黑模式',
+                    description: '开启暗黑模式',
+                    type: 'button',
+                    text: '点击我',
+                    default: false,
+                    condition: function () {
+                        return true; // 这里可以写一些条件，如果条件不满足，则不显示这个选项
+                    },
+                    action: function () {
+                        console.log(121212);
+                    }
+                }, {
+                    label: '暗黑模式',
+                    description: '开启暗黑模式',
+                    type: 'switch',
+                    default: false,
+                    condition: function () {
+                        return false;
+                    },
+                    action: function (value) {
+                        console.log(value);
+                    }
+                }
+            ]
+        }
+    }, {
+        label: '更多功能',
+        icon: 'fas fa-plus',
+        contents: {
+            group: false,
+            default_page: 0,
+            page: [
+                {
+                    label: '暗黑模式',
+                    description: '开启暗黑模式',
+                    type: 'button',
+                    text: '点击我',
+                    default: false,
+                    condition: function () {
+                        return true; // 这里可以写一些条件，如果条件不满足，则不显示这个选项
+                    },
+                    action: function () {
+                        console.log(121212);
+                    }
+                }
+            ]
+        }
+    }, {
+        label: '林中木',
+        icon: 'fa fa-search',
+        contents: {
+            group: false,
+            default_page: 0,
+            page: [
+
+            ]
+        }
+    }
+]
+const types_list = ref(types_list_default);
+const types_active_index = ref(0);
+</script>
+
+<style scoped lang="less">
+.settingContainer {
+    position: absolute;
+    height: 55%;
+    top: 15%;
+    left: 0;
+    right: 0;
+    box-shadow: 0 0 20px #00000042;
+    border-radius: 7px;
+    max-width: 800px;
+    min-width: 200px;
+    width: 100%;
+    margin: auto;
+    transition: all 0.3s;
+    overflow: hidden;
+    display: flex;
+    backdrop-filter: blur(10px);
+    z-index: 10000;
+    animation: fadeInScale 0.3s;
+    max-height: 600px;
+    min-height: 450px;
+
+    .aside {
+        width: 24%;
+
+        .type_list {
+            padding-top: 50px;
+
+            background: var(--bg-3);
+            height: 100%;
+            padding-top: 50px;
+
+            li {
+                padding: 10px 15px;
+                font-size: 15px;
+                display: flex;
+                align-items: center;
+                transition: all 0.3s;
+
+                i {
+                    width: 20px;
+                    color: var(--theme-color, #0084ff);
+                    margin: 5px 12px;
+                    font-size: 20px;
+                }
+
+                &.active {
+                    background: var(--bg-9);
+                }
+            }
+        }
+    }
+
+    .main {
+        width: 76%;
+        background: var(--bg-4);
+        display: flex;
+        flex-direction: column;
+        --el-main-padding: 0;
+
+        .type_content {
+            display: none;
+
+            .group {
+                display: flex;
+                align-items: flex-end;
+                --el-header-height: 80px;
+
+                span {
+                    background: #00000017;
+                    padding: 10px;
+                    margin-right: 8px;
+                    border-radius: 5px;
+                    white-space: nowrap;
+                    transition: all 0.3s;
+                    align-items: center;
+                    display: flex;
+                    height: 40px;
+
+                    &.active {
+                        color: var(--theme-color, #0084ff);
+                        background: var(--theme-color_c, #0084ff10);
+                    }
+
+                    &:hover {
+                        color: var(--theme-color, #0084ff);
+                    }
+                }
+            }
+
+            .pages {
+                .page {
+                    display: none;
+
+                    &.active {
+                        display: block;
+                    }
+                }
+            }
+        }
+
+        .type_content.active {
+            display: block;
+        }
+
+        .item_main {
+            padding: 40px 20px;
+        }
+
+        dl {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 7px;
+
+            dt {
+                display: flex;
+                flex-direction: column;
+
+                span.title {
+                    font-size: 17px;
+                    color: var(--font-1);
+                }
+
+                span.description {
+                    opacity: .6;
+                    margin-top: 4px;
+                    font-size: 13px;
+                    color: var(--font-1);
+                }
+            }
+
+            &.card {
+                padding: 10px;
+                background: var(--bg-9);
+                border-radius: 5px;
+                margin-bottom: 10px;
+                -webkit-box-shadow: 0 0 7px #00000029;
+                box-shadow: 0 0 7px #00000029;
+            }
+
+            &.disabled {
+                opacity: .4;
+                pointer-events: none;
+            }
+        }
+    }
+
+    main.pages,main.item_main,div.page {
+        -webkit-animation: fadeInUp 0.5s ease-in-out;
+        animation: fadeInUp 0.5s ease-in-out;
+    }
+
+    @keyframes fadeInUp {
+        0% {
+            opacity: 0;
+            transform: translateX(10px);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+}
+</style>

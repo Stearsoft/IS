@@ -12,7 +12,7 @@
         <InputIconMenu @change="triggerMenu" menu="menu" :open="open_menu.menu">
             <template #menu>
                 <ul>
-                    <li aria-label="设置">{{ $t("menu.setting") }}</li>
+                    <li aria-label="设置" @click="openSetting">{{ $t("menu.setting") }}</li>
                     <li aria-label="反馈">{{ $t("menu.feedback") }}</li>
                     <li aria-label="语言" @click="subMenu('language', $event)" autoHideMenu="false">{{ $t("menu.language")
                         }}</li>
@@ -34,6 +34,10 @@ import InputIconMenu from './InputIconMenu.vue';
 import IconUser from '../icons/IconUser.vue';
 import IconMenu from '../icons/IconMenu.vue';
 import { useI18n } from 'vue-i18n';
+const emit = defineEmits(['open']);
+const openSetting = () => {
+    emit('open',"setting");
+}
 const { locale, t } = useI18n();
 const subMenu_class_language = ref('hide');
 const subMenu_language = ref({
