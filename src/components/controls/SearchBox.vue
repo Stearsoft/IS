@@ -3,8 +3,8 @@
         <div id="timeText" :style="{
             padding:current_time == '/logo_xn/' || current_time == '/logo_tif/' ? '0' : '10px',
         }">
-            <img src="../../assets/img/xn.webp" v-if="current_time == '/logo_xn/'" alt="LOGO">
-            <img src="../../assets/img/tif.png" v-else-if="current_time == '/logo_tif/'" alt="LOGO">
+            <img src="../../assets/imgs/xn.webp" v-if="current_time == '/logo_xn/'" alt="LOGO">
+            <img src="../../assets/imgs/tif.png" v-else-if="current_time == '/logo_tif/'" alt="LOGO">
             <span v-else>{{ current_time }}</span>
         </div>
     </div>

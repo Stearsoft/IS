@@ -27,7 +27,7 @@ const setBackground = (bg) => {
         backgroundBox.value.style.backgroundColor = bg.url;
     } else if (t === "time") {
         setInterval(() => {
-            backgroundBox.value.style.backgroundColor = "#" + this.$xn.date("HHHHMiMiSSSS");
+            backgroundBox.value.style.backgroundColor = "#" + getTime("HHHHMiMiSSSS");
         }, 1000);
     } else if (t === "video_url") {
         const video = createMediaElement('video', bg.url, null, { autoplay: "autoplay", muted: "muted", loop: "loop" });
@@ -36,7 +36,21 @@ const setBackground = (bg) => {
         openIndexedDBForVideo();
     }
 };
-
+const getTime = (format) => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hour = String(now.getHours()).padStart(2, '0');
+    const minute = String(now.getMinutes()).padStart(2, '0');
+    const second = String(now.getSeconds()).padStart(2, '0');
+    return format.replace('YYYY', year)
+        .replace('MoMo', month)
+        .replace('DDDD', day)
+        .replace('HHHH', hour)
+        .replace('MiMi', minute)
+        .replace('SSSS', second);
+}
 const createMediaElement = (type, src, className, attributes) => {
     const media = document.createElement(type);
     media.src = src;

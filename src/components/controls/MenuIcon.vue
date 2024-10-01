@@ -14,7 +14,8 @@
                 <ul>
                     <li aria-label="设置">{{ $t("menu.setting") }}</li>
                     <li aria-label="反馈">{{ $t("menu.feedback") }}</li>
-                    <li aria-label="语言" @click="subMenu('language', $event)" autoHideMenu="false">{{ $t("menu.language") }}</li>
+                    <li aria-label="语言" @click="subMenu('language', $event)" autoHideMenu="false">{{ $t("menu.language")
+                        }}</li>
                 </ul>
             </template>
             <IconMenu />
@@ -33,7 +34,7 @@ import InputIconMenu from './InputIconMenu.vue';
 import IconUser from '../icons/IconUser.vue';
 import IconMenu from '../icons/IconMenu.vue';
 import { useI18n } from 'vue-i18n';
-const { locale } = useI18n();
+const { locale, t } = useI18n();
 const subMenu_class_language = ref('hide');
 const subMenu_language = ref({
     top: 0,
@@ -80,8 +81,14 @@ const subMenu = (mode, e) => {
     }
 }
 const switchLanguage = (language) => {
+    // eslint-disable-next-line no-undef
+    ElNotification({
+        title: t("static.success"),
+        message: t("menu.switchLanguageSuccess"),
+        type: 'success',
+    })
     locale.value = language;
-    localStorage.setItem("language",language)
+    localStorage.setItem("language", language)
     subMenu_class_language.value = 'hide';
 }
 </script>

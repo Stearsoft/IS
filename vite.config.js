@@ -3,15 +3,18 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import postCssPxToRem from 'postcss-pxtorem';
 import autoprefixer from 'autoprefixer';
+import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite';
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
-
 export default defineConfig({
   plugins: [
     vue(),
+    AutoImport({
+      resolvers: [ElementPlusResolver()],
+    }),
     Components({
-      resolvers: [ElementPlusResolver()], 
-    })
+      resolvers: [ElementPlusResolver()],
+    }),
   ],
   resolve: {
     alias: {
@@ -66,7 +69,7 @@ export default defineConfig({
           }
           const imageExts = ['.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp', '.ico', '.bmp', '.gif'];
           if (imageExts.some(ext => assetInfo.name.endsWith(ext))) {
-            return 'assets/img/[name]-[hash][extname]';
+            return 'assets/imgs/[name]-[hash][extname]';
           }
           return 'assets/[extname]/[name]-[hash].[extname]';
         }

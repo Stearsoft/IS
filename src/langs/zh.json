@@ -25,6 +25,10 @@
     "logout": "退出登录",
     "setting": "设置",
     "feedback": "反馈",
-    "language": "语言"
+    "language": "语言",
+    "switchLanguageSuccess": "语言切换成功"
+  },
+  "static": {
+    "success": "成功"
   }
 }
