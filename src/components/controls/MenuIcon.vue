@@ -3,8 +3,8 @@
         <InputIconMenu @change="triggerMenu" menu="user" :open="open_menu.user">
             <template #menu>
                 <ul>
-                    <li aria-label="账号设置">{{ $t("menu.accountSetting") }}</li>
-                    <li aria-label="退出登录">{{ $t("menu.logout") }}</li>
+                    <li class="text_color" aria-label="账号设置">{{ $t("menu.accountSetting") }}</li>
+                    <li class="text_color" aria-label="退出登录">{{ $t("menu.logout") }}</li>
                 </ul>
             </template>
             <IconUser />
@@ -12,9 +12,9 @@
         <InputIconMenu @change="triggerMenu" menu="menu" :open="open_menu.menu">
             <template #menu>
                 <ul>
-                    <li aria-label="设置" @click="openSetting">{{ $t("menu.setting") }}</li>
-                    <li aria-label="反馈">{{ $t("menu.feedback") }}</li>
-                    <li aria-label="语言" @click="subMenu('language', $event)" autoHideMenu="false">{{ $t("menu.language")
+                    <li class="text_color" aria-label="设置" @click="openSetting">{{ $t("menu.setting") }}</li>
+                    <li class="text_color" aria-label="反馈">{{ $t("menu.feedback") }}</li>
+                    <li class="text_color" aria-label="语言" @click="subMenu('language', $event)" autoHideMenu="false">{{ $t("menu.language")
                         }}</li>
                 </ul>
             </template>
@@ -25,7 +25,7 @@
         top: subMenu_language.top + 'px',
         left: subMenu_language.left + 'px'
     }">
-        <li v-for="item in languages" :key="item.value" @click="switchLanguage(item.value)">{{ item.name }}</li>
+        <li class="text_color" v-for="item in languages" :key="item.value" @click="switchLanguage(item.value)">{{ item.name }}</li>
     </ul>
 </template>
 <script setup>

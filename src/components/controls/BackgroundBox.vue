@@ -19,18 +19,19 @@ defineProps({
 const backgroundBox = ref(null);
 
 const setBackground = (bg) => {
+    console.log(bg);
     const t = bg.type;
     if (t === "image") {
-        const img = createMediaElement('img', bg.url, 'background-image', { alt: "背景", "aria-hidden": "true" });
+        const img = createMediaElement('img', bg.value, 'background-image', { alt: "背景", "aria-hidden": "true" });
         backgroundBox.value.appendChild(img);
     } else if (t === "color") {
-        backgroundBox.value.style.backgroundColor = bg.url;
+        backgroundBox.value.style.backgroundColor = bg.value;
     } else if (t === "time") {
         setInterval(() => {
             backgroundBox.value.style.backgroundColor = "#" + getTime("HHHHMiMiSSSS");
         }, 1000);
     } else if (t === "video_url") {
-        const video = createMediaElement('video', bg.url, null, { autoplay: "autoplay", muted: "muted", loop: "loop" });
+        const video = createMediaElement('video', bg.value, null, { autoplay: "autoplay", muted: "muted", loop: "loop" });
         handleVideoPlayback(video);
     } else if (t === "video_file") {
         openIndexedDBForVideo();
@@ -103,7 +104,7 @@ const showErrorNotification = (message) => {
 
 onMounted(async () => {
     const is = localStorage.getItem('is');
-    const bg = is ? JSON.parse(is).background : { type: 'image', url: '../../assets/imgs/default.webp' };
+    const bg = is ? JSON.parse(is).theme.background : { type: 'image', value: '../../assets/imgs/default.webp' };
     setBackground(bg);
 
     // 等待 DOM 更新

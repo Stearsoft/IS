@@ -1,4 +1,4 @@
-import { ref } from 'vue';
+import { ref,watch } from 'vue';
 const local_is = localStorage.getItem("is");
 const is_default = local_is ? JSON.parse(local_is) : {
     version: "v3.0.01",
@@ -13,7 +13,7 @@ const is_default = local_is ? JSON.parse(local_is) : {
         seconder_color: [],
         background: {
             type: "image",
-            value: "assets/img/default.webp",
+            value: "https://tfseek.top/assets/img/is/background/out-002.webp",
             mark: false,
             mark_opacity: 0.25
         }
@@ -24,7 +24,6 @@ const is_default = local_is ? JSON.parse(local_is) : {
         auto_clear: false,
         disable_auto_redirect: false,
         auto_focus: true,
-        // engine_url: "https://tfseek.top/search?q=",
         engine_url: "https://google.com/search?q=",
         engine_change_input: false
     },
@@ -55,6 +54,20 @@ const is_default = local_is ? JSON.parse(local_is) : {
     }
 };
 const is_current = ref (is_default);
+const renderSetting = (config) => {
+    document.documentElement.setAttribute("data-theme", config.theme.lightMode ? "light" : "dark");
+}
+renderSetting(is_current.value);
+watch(
+    is_current,
+    (newValue) => {
+        if (newValue) {
+            localStorage.setItem("is", JSON.stringify(newValue));
+            renderSetting(newValue);
+        }
+    },
+    { deep: true } // 深度监视
+);
 // 生产/开发模式
 const development_mode = false;
 const development_config = {

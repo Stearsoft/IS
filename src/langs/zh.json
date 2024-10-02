@@ -30,5 +30,25 @@
   },
   "static": {
     "success": "成功"
+  },
+  "setting": {
+    "drawer_title": "提示",
+    "drawer_cancel": "取消",
+    "drawer_confirm": "确认",
+    "drawer_open": "设置",
+    "theme": "主题设置",
+    "darkMode": "深色模式",
+    "darkModeDescription": "开启暗黑护眼模式",
+    "reduceDynamic": "减少动态",
+    "reduceDynamicDescription": "开启后，起始页将减少动态效果",
+    "closeCover": "开启遮罩",
+    "closeCoverDescription": "开启后，背景将添加暗黑遮罩",
+    "maskOpacity": "蒙层透明度",
+    "maskOpacityDescription": "设置蒙层透明度",
+    "minimalMode": "极简模式",
+    "minimalModeDescription": "开启后，将去除所有装饰元素",
+    "background_blur": "背景模糊",
+    "background_blur_description": "设置模糊度",
+    "baseTheme": "基础样式"
   }
 }
