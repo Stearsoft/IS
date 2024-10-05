@@ -6,7 +6,7 @@ const is_default = local_is ? JSON.parse(local_is) : {
     application: "Insightful Search",
     info: "星柠 | New Page",
     theme: {
-        dynamic: false,
+        dynamic: true,
         lightMode: true,
         minimal_mode: false,
         main_color: ["#4263eb", "#364fc7", "#364fc710"],
@@ -15,7 +15,8 @@ const is_default = local_is ? JSON.parse(local_is) : {
             type: "image",
             value: "https://tfseek.top/assets/img/is/background/out-002.webp",
             mark: false,
-            mark_opacity: 0.25
+            mark_opacity: 0.25,
+            blur: 10,
         }
     },
     search: {

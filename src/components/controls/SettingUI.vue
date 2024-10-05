@@ -27,7 +27,7 @@
                   card: ji.type === 'card',
                 }">
                   <template v-if="ji.type === 'card'">
-                    <SettingCard :card="ji.card_name" />
+                    <SettingCard :card="ji.card_name" :title="ji.text" />
                   </template>
                   <template v-else>
                     <dt>
@@ -58,7 +58,7 @@
                 card: ji.type === 'card',
               }">
                 <template v-if="ji.type === 'card'">
-                  <SettingCard :card="ji.card_name" />
+                  <SettingCard :card="ji.card_name" :title="ji.text" />
                 </template>
                 <template v-else>
                   <dt>
@@ -119,149 +119,170 @@ const types_list_default = [
                 is_data.theme.lightMode = !value;
               }
             }, {
-              label: t('setting.reduceDynamic'),
-              description: t('setting.reduceDynamicDescription'),
+              label: t('setting.dynamic'),
+              description: t('setting.dynamicDescription'),
               type: 'switch',
-              default: false,
+              default: is_data.theme.dynamic,
               condition: function () {
                 return true;
               },
               action: function (value) {
-                console.log(value);
+                is_data.theme.dynamic = value;
               }
             }, {
               label: t('setting.closeCover'),
               description: t('setting.closeCoverDescription'),
               type: 'switch',
-              default: false,
+              default: is_data.theme.background.mark,
               condition: function () {
                 return true;
               },
               action: function (value) {
-                console.log(value);
+                is_data.theme.background.mark = value;
               }
             }, {
               label: t('setting.maskOpacity'),
               description: t('setting.maskOpacityDescription'),
-              type: 'switch',
-              default: false,
+              type: 'slider',
+              default: is_data.theme.background.mark_opacity * 100,
+              max: 100,
+              min: 0,
+              format_tooltip: function (value) {
+                return value + '%';
+              },
               condition: function () {
                 return true;
               },
-              action: function (value) {
-                console.log(value);
+              input: function (value) {
+                is_data.theme.background.mark_opacity = value / 100;
+              },
+              done: function (value) {
+                is_data.theme.background.mark_opacity = value / 100;
               }
             }, {
               label: t('setting.minimalMode'),
               description: t('setting.minimalModeDescription'),
               type: 'switch',
-              default: false,
+              default: is_data.theme.minimal_mode,
               condition: function () {
                 return true;
               },
               action: function (value) {
-                console.log(value);
+                is_data.theme.minimal_mode = value;
               }
             }, {
               label: t('setting.background_blur'),
               description: t('setting.background_blur_description'),
-              type: 'switch',
-              default: false,
+              type: 'slider',
+              default: is_data.theme.background.blur,
+              max: 100,
+              min: 0,
+              format_tooltip: function (value) {
+                return value + 'px';
+              },
               condition: function () {
                 return true;
               },
-              action: function (value) {
-                console.log(value);
+              input: function (value) {
+                is_data.theme.background.blur = value;
+              },
+              done: function (value) {
+                is_data.theme.background.blur = value;
               }
             }
           ]
         }, {
-          label: '2222',
+          label: t('setting.colorPage'),
           icon: 'fas fa-palette',
           items: [
             {
-              label: '暗黑模式',
-              description: '开启暗黑模式',
-              type: 'switch',
-              default: false,
+              text: t('setting.colorPage_text.color_custom'),
+              type: 'card',
+              card_name: 'color_custom',
               condition: function () {
-                return true; // 这里可以写一些条件，如果条件不满足，则不显示这个选项
-              },
-              action: function (value) {
-                console.log(value);
+                return true;
               }
             }, {
-              label: '暗黑模式',
-              description: '开启暗黑模式',
-              type: 'switch',
-              default: false,
+
+              text: t('setting.colorPage_text.color_default'),
+              type: 'card',
+              card_name: 'color_default',
               condition: function () {
-                return true; // 这里可以写一些条件，如果条件不满足，则不显示这个选项
-              },
-              action: function (value) {
-                console.log(value);
-              }
-            }, {
-              label: '暗黑模式',
-              description: '开启暗黑模式',
-              type: 'switch',
-              default: false,
-              condition: function () {
-                return true; // 这里可以写一些条件，如果条件不满足，则不显示这个选项
-              },
-              action: function (value) {
-                console.log(value);
+                return true;
               }
             }
           ]
         }, {
-          label: '3333',
+          label: t('setting.staticWallpaper'),
           icon: 'fas fa-palette',
           items: [
             {
-              label: '暗黑模式',
-              description: '开启暗黑模式',
+              condition: function () {
+                return true;
+              },
+              label: t('setting.staticWallpaper_text.time'),
+              description: t('setting.staticWallpaper_text.time_description'),
               type: 'button',
-              text: '点击我',
-              default: false,
-              condition: function () {
-                return true; // 这里可以写一些条件，如果条件不满足，则不显示这个选项
-              },
+              text: t('action.click'),
               action: function () {
                 console.log(121212);
               }
             }, {
-              label: '暗黑模式',
-              description: '开启暗黑模式',
-              type: 'switch',
-              default: false,
-              condition: function () {
-                return false;
-              },
-              action: function (value) {
-                console.log(value);
-              }
-            }, {
-              label: '暗黑模式',
-              description: '开启暗黑模式13456',
-              type: 'slider',
-              min: 0,
-              max: 50,
-              format_tooltip: function (value) {
-                return value + 'px';
-              },
-              text: '点击我',
-              default: 50,
+              text: t('setting.staticWallpaper_text.upload'),
+              type: 'card',
+              card_name: 'staticWallpaper_upload',
               condition: function () {
                 return true;
-              },
-              done: function (v) {
-                console.log(v);
-              },
-              input: function (v) {
-                console.log(v);
+              }
+            }, {
+              text: t('setting.staticWallpaper_text.link'),
+              type: 'card',
+              card_name: 'staticWallpaper_link',
+              condition: function () {
+                return true;
+              }
+            }, {
+              text: t('setting.staticWallpaper_text.color'),
+              type: 'card',
+              card_name: 'staticWallpaper_color',
+              condition: function () {
+                return true;
+              }
+            }, {
+              text: t('setting.staticWallpaper_text.imgs'),
+              type: 'card',
+              card_name: 'staticWallpaper_imgs',
+              condition: function () {
+                return true;
+              }
+            }, {
+              text: t('setting.staticWallpaper_text.random'),
+              type: 'card',
+              card_name: 'staticWallpaper_random',
+              condition: function () {
+                return true;
               }
             }
+          ]
+        }, {
+          label: t('setting.dynamicWallpaper'),
+          icon: 'fas fa-palette',
+          items: [
+            {
+              type: 'card',
+              text: t('setting.dynamicWallpaper_text.link'),
+              card_name: "dynamicWallpaper_link",
+              condition: function () {
+                return true;
+              }
+            }, {
+              type: 'card',
+              text: t('setting.dynamicWallpaper_text.upload'),
+              card_name: "dynamicWallpaper_upload",
+              condition: function () {
+                return true;
+              }
+            },
           ]
         }, {
           label: 'Wallhaven',
@@ -269,7 +290,7 @@ const types_list_default = [
           items: [
             {
               type: 'card',
-              text: '点击我',
+              text: 'Wallhaven',
               card_name: "Wallhaven",
               condition: function () {
                 return true;

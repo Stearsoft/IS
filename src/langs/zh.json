@@ -39,8 +39,8 @@
     "theme": "主题设置",
     "darkMode": "深色模式",
     "darkModeDescription": "开启暗黑护眼模式",
-    "reduceDynamic": "减少动态",
-    "reduceDynamicDescription": "开启后，起始页将减少动态效果",
+    "dynamic": "动态",
+    "dynamicDescription": "开启后，起始页将有动态效果",
     "closeCover": "开启遮罩",
     "closeCoverDescription": "开启后，背景将添加暗黑遮罩",
     "maskOpacity": "蒙层透明度",
@@ -49,6 +49,30 @@
     "minimalModeDescription": "开启后，将去除所有装饰元素",
     "background_blur": "背景模糊",
     "background_blur_description": "设置模糊度",
-    "baseTheme": "基础样式"
+    "baseTheme": "基础样式",
+    "colorPage": "主题颜色",
+    "staticWallpaper": "静态壁纸",
+    "dynamicWallpaper": "视频壁纸",
+    "colorPage_text": {
+      "color_custom": "自定义主题色",
+      "color_default": "内置颜色",
+      "label": "选择您喜爱的颜色，这个颜色将作为主色调"
+    },
+    "staticWallpaper_text": {
+      "upload": "上传壁纸",
+      "link": "使用链接",
+      "time": "时间",
+      "time_description": "使用以#HHMMSS 作为壁纸",
+      "color": "设置颜色作为壁纸",
+      "imgs": "使用推荐的壁纸",
+      "random": "随机壁纸"
+    },
+    "dynamicWallpaper_text": {
+      "link": "设置链接作为视频壁纸",
+      "upload": "上传视频壁纸"
+    }
+  },
+  "action": {
+    "click": "点我"
   }
 }

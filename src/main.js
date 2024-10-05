@@ -5,6 +5,7 @@ import './assets/styles/theme.css'
 import { createApp } from 'vue';
 import App from './App.vue';
 import { autoAnimatePlugin } from '@formkit/auto-animate/vue'
+import './index.css'
 
 // 插件引入
 import i18n from './i18n'; // 引入 i18n 配置
