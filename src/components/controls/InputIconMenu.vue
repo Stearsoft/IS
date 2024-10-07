@@ -60,7 +60,7 @@ watch(
     fill: var(--theme-color, #ffffffc2);
 
     &:hover {
-        fill: var(--theme-color-hover, #fff);
+        fill: var(--theme-color_b, #fff);
     }
 }
 

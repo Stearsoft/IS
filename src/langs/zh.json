@@ -29,7 +29,8 @@
     "switchLanguageSuccess": "语言切换成功"
   },
   "static": {
-    "success": "成功"
+    "success": "成功",
+    "warning": "警告"
   },
   "setting": {
     "drawer_title": "提示",
@@ -56,7 +57,9 @@
     "colorPage_text": {
       "color_custom": "自定义主题色",
       "color_default": "内置颜色",
-      "label": "选择您喜爱的颜色，这个颜色将作为主色调"
+      "label": "选择您喜爱的颜色，这个颜色将作为主色调",
+      "default": "设置内置的颜色作为主题色，第一个颜色为主颜色，第二个为鼠标悬浮字体颜色，第三个为悬浮背景颜色",
+      "default_2": "若主颜色不符合您的审美，可以先点击下方的预选颜色，然后在上方自定义与预选颜色相近的您喜欢的主颜色"
     },
     "staticWallpaper_text": {
       "upload": "上传壁纸",
@@ -70,9 +73,23 @@
     "dynamicWallpaper_text": {
       "link": "设置链接作为视频壁纸",
       "upload": "上传视频壁纸"
+    },
+    "msg": {
+      "onlyImg": "只支持图片",
+      "imgTooLarge": "图片太大了，我们只允许压缩后为 { limit } 的图片，但是您的是 { size } MB",
+      "imgSize": "我们只支持图片，并且图片在压缩后小于"
     }
   },
   "action": {
-    "click": "点我"
+    "click": "点我",
+    "uploadFile_drop": "拖拽上传",
+    "uploadFile_drop_em": "点击上传"
+  },
+  "input": {
+    "msg": {
+      "error": {
+        "url": "输入的类型必须为链接"
+      }
+    }
   }
 }

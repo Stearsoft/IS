@@ -4,19 +4,18 @@ import './assets/styles/icon.css'
 import './assets/styles/theme.css'
 import { createApp } from 'vue';
 import App from './App.vue';
-import { autoAnimatePlugin } from '@formkit/auto-animate/vue'
 import './index.css'
 
 // 插件引入
-import i18n from './i18n'; // 引入 i18n 配置
-
+import i18n from './i18n';
+import store from './store'; // 导入 store
 
 
 const app = createApp(App);
 
 // 插件使用
 app.use(i18n);
-app.use(autoAnimatePlugin);
+app.use(store);
 
 // 全局组件引入
 app.mount('#app');

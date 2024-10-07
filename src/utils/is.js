@@ -57,12 +57,17 @@ const is_default = local_is ? JSON.parse(local_is) : {
 const is_current = ref (is_default);
 const renderSetting = (config) => {
     document.documentElement.setAttribute("data-theme", config.theme.lightMode ? "light" : "dark");
+    document.documentElement.style.setProperty("--theme-color", config.theme.main_color[0]);
+    document.documentElement.style.setProperty("--theme-color_b", config.theme.main_color[1]);
+    document.documentElement.style.setProperty("--theme-color_c", config.theme.main_color[2]);
+
 }
 renderSetting(is_current.value);
 watch(
     is_current,
     (newValue) => {
         if (newValue) {
+            console.log("来自is.js的检测，检测到有变化");
             localStorage.setItem("is", JSON.stringify(newValue));
             renderSetting(newValue);
         }

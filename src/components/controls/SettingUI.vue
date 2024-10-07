@@ -3,9 +3,9 @@
     <el-container>
       <el-aside class="aside">
         <ul class="type_list">
-          <li v-for="(item, index) in types_list" :key="index" :class="{ active: index === types_active_index }"
+          <li v-for="(item, index) in types_list" :key="index" :class="{ active: index === types_active_index }" 
             @click="types_active_index = index">
-            <i :class="item.icon"></i>
+            <i :class="item.icon" class="xl-transition-all"></i>
             <span class="text_color" @click.stop="types_active_index = index">{{ item.label }}</span>
           </li>
         </ul>
@@ -91,10 +91,13 @@
 <script setup>
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-const { t } = useI18n();
-import { is } from '@/utils/is';
-const is_data = is().is_current.value;
 import SettingCard from './setting_components/SettingCard.vue';
+import { useStore } from 'vuex';
+import { is } from '@/utils/is';
+
+const { t } = useI18n();
+const is_data = is().is_current.value;
+const store = useStore();
 const types_list_default = [
   {
     label: t('setting.theme'),
@@ -225,7 +228,9 @@ const types_list_default = [
               type: 'button',
               text: t('action.click'),
               action: function () {
-                console.log(121212);
+                is_data.theme.background.type = "time";
+                is_data.theme.background.value = "";
+                store.dispatch('updateBgType', "time");
               }
             }, {
               text: t('setting.staticWallpaper_text.upload'),
@@ -567,12 +572,15 @@ const types_active_index = ref(0);
 }
 
 .xn-btn.primary {
+  --btn-bg: var(--theme-color_c, #0084ff12);
+  --btn-color: var(--theme-color, #0084ff);
   background: var(--btn-bg, #0084ff12);
   color: var(--btn-color, #0084ff);
   font-size: 12px;
 
   &:hover {
     color: white;
+    --btn-bg: var(--theme-color, #0084ff);
     background: var(--btn-color, #0084ff);
   }
 }

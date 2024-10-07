@@ -98,3 +98,10 @@ span.el-switch__core {
 .text_color {
     color: var(--font-1);
 }
+
+.el-upload-dragger{
+    --el-fill-color-blank:var(--theme-color_c,#0084ff1b);
+}
+.el-upload-dragger:hover,.el-upload-dragger .el-upload__text em {
+    --el-color-primary: var(--theme-color,#0084ff);
+}
