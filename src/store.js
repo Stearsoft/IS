@@ -2,24 +2,24 @@ import { createStore } from 'vuex';
 
 const store = createStore({
     state: {
+        background:{
+            type: '',
+            value: '',
+            base64:'',
+        },
         base64data: '', // 用于存储 Base64 数据
-        background_type: ''
+        background_type: '',
+        background_value:'',
     },
     mutations: {
-        setBase64Data(state, data) {
-            state.base64data = data; // 修改 Base64 数据
-        },
-        setBgType(state, data) {
-            state.background_type = data;
+        background(state, data) {
+            state.background = data;
         }
     },
     actions: {
-        updateBase64Data({ commit }, data) {
-            commit('setBase64Data', data); // 提交更改
+        background({ commit }, data) {
+            commit('background',data);
         },
-        updateBgType({ commit }, data) {
-            commit('setBgType', data);
-        }
     }
 });
 

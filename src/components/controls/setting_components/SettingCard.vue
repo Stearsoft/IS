@@ -43,20 +43,28 @@
                 </el-upload>
             </div>
             <div v-else-if="card === 'staticWallpaper_link'">
-                <input type="text" @blur="ref_state.bg_link_input_blur = true" v-model="ref_state.bg_link"
-                    @input="ref_state.bg_link_input_blur = false;" style="background-color: var(--bg-5);"
-                    value="https://" class=" xl-px-2 xl-py-2 xl-w-full xl-rounded xl-mb-1">
-                <p v-if="ref_state.bg_link_input_blur && ref_state.bg_link_input_is_error" class=" xl-text-red-600 xl-mb-5 xl-text-sm">{{ $t('input.msg.error.url')
-                    }}</p>
+                <SettingInputNecessary value="https://"
+                    :match="'(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]'"
+                    :errorMsg="$t('input.msg.error.url')" v-model="ref_state.bg_link" />
             </div>
             <div v-else-if="card === 'staticWallpaper_color'">
-                color
+                <p class="xl-mb-2">{{ $t('setting.staticWallpaper_text.color') }}</p>
+                <div class=" xl-flex xl-flex-wrap xl-items-center">
+                    <div v-for="(item, index) in colors" class="xl-rounded-full xl-size-6 xl-mx-1" :key="index" :style="{
+                        'background-color': item
+                    }" @click="theme.upload.color(item)"></div>
+                    <el-color-picker @change="theme.upload.color" v-model="ref_state.bg_color" />
+                </div>
             </div>
-            <div v-else-if="card === 'staticWallpaper_imgs'">
-                color
+            <div v-else-if="card === 'staticWallpaper_imgs'" class="xl-flex xl-flex-wrap">
+                <div class="bg_container" v-for="(item, index) in theme.in_background" :key="index" :style="{
+                    'background-image': `url(${item.thumb})`,
+                }" @click="theme.upload.background(item.full)"></div>
             </div>
-            <div v-else-if="card === 'staticWallpaper_random'">
-                color
+            <div v-else-if="card === 'staticWallpaper_random'" class="xl-flex xl-flex-wrap">
+                <div class="bg_container" v-for="(item, index) in theme.ra_background" :key="index" :style="{
+                    'background-image': `url(${item})`,
+                }" @click="theme.upload.background(item)"></div>
             </div>
             <div v-else-if="card === 'dynamicWallpaper_link'">
                 color
@@ -73,27 +81,35 @@
 </template>
 <script setup>
 defineProps(['card', 'title'])
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { UploadFilled } from '@element-plus/icons-vue';
 import { is } from '@/utils/is';
 import { useI18n } from 'vue-i18n';
 import ImageCompressor from 'image-compressor.js';
 import { useStore } from 'vuex';
+import SettingInputNecessary from './SettingInputNecessary.vue';
 
 const { t } = useI18n();
 const uploaded_img_url = ref(null);
 const uploaded = ref(false);
 const is_data = is().is_current.value;
 const store = useStore();
-const ref_state = ref({
-    bg_link_input_is_error: true,
-    bg_link_input_blur: false,
-    bg_link: ''
-})
-// 正则判断url
-if (ref_state.value.bg_link.match(/(https?|ftp|file):\/\/[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/)) {
-    ref_state.value.bg_link_input_is_error = false
-}
+const ref_state = ref({ bg_link: '', bg_color: '#4263eb' });
+const colors = ["#fa5252", "#e64980", "#be4bdb", "#7950f2", "#4263eb", "#1c7ed6", "#0ca678", "#37b24d", "#74b816", "#f59f00", "#f76707"];
+let debounceTimer = null;
+
+watch(() => ref_state.value.bg_link, () => {
+    if (debounceTimer) clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+        store.dispatch('background', {
+            type: "image",
+            value: ref_state.value.bg_link,
+            base64: ''
+        });
+        is_data.theme.background.type = "image";
+        is_data.theme.background.value = ref_state.value.bg_link;
+    }, 1000);
+});
 const theme = {
     colors: [
         [
@@ -152,6 +168,82 @@ const theme = {
             "#d9480f10"
         ]
     ],
+    in_background: [
+        {
+            "full": "/assets/imgs/default.webp",
+            "thumb": "/assets/imgs/background/resize/default.webp"
+        }, {
+            "full": "/assets/imgs/background/1.webp",
+            "thumb": "/assets/imgs/background/resize/1.webp"
+        }, {
+            "full": "/assets/imgs/background/acc.webp",
+            "thumb": "/assets/imgs/background/resize/acc.webp"
+        },
+        {
+            "full": "/assets/imgs/background/2.webp",
+            "thumb": "/assets/imgs/background/resize/2.webp"
+        },
+        {
+            "full": "/assets/imgs/background/3.webp",
+            "thumb": "/assets/imgs/background/resize/3.webp"
+        },
+        {
+            "full": "/assets/imgs/background/4.webp",
+            "thumb": "/assets/imgs/background/resize/4.webp"
+        },
+        {
+            "full": "/assets/imgs/background/5.webp",
+            "thumb": "/assets/imgs/background/resize/5.webp"
+        },
+        {
+            "full": "/assets/imgs/background/6.webp",
+            "thumb": "/assets/imgs/background/resize/6.webp"
+        },
+        {
+            "full": "/assets/imgs/background/7.webp",
+            "thumb": "/assets/imgs/background/resize/7.webp"
+        },
+        {
+            "full": "/assets/imgs/background/out-001.webp",
+            "thumb": "/assets/imgs/background/resize/out-001.webp"
+        },
+        {
+            "full": "/assets/imgs/background/out-002.webp",
+            "thumb": "/assets/imgs/background/resize/out-002.webp"
+        },
+        {
+            "full": "/assets/imgs/background/out-003.webp",
+            "thumb": "/assets/imgs/background/resize/out-003.webp"
+        },
+        {
+            "full": "/assets/imgs/background/out-004.webp",
+            "thumb": "/assets/imgs/background/resize/out-004.webp"
+        },
+        {
+            "full": "/assets/imgs/background/out-005.webp",
+            "thumb": "/assets/imgs/background/resize/out-005.webp"
+        },
+        {
+            "full": "/assets/imgs/background/out-006.webp",
+            "thumb": "/assets/imgs/background/resize/out-006.webp"
+        },
+        {
+            "full": "/assets/imgs/background/out-007.webp",
+            "thumb": "/assets/imgs/background/resize/out-007.webp"
+        },
+        {
+            "full": "/assets/imgs/background/out-009.webp",
+            "thumb": "/assets/imgs/background/resize/out-009.webp"
+        },
+        {
+            "full": "/assets/imgs/background/out-010.webp",
+            "thumb": "/assets/imgs/background/resize/out-010.webp"
+        }
+    ],
+    ra_background:[
+        'https://tfseek.top/api/bingWallpaper.php',
+        'https://www.loliapi.com/acg/'
+    ],
     upload: {
         async img(val) {
             if (val.type.indexOf("image") === -1) {
@@ -188,7 +280,11 @@ const theme = {
 
                             uploaded.value = true;
                             uploaded_img_url.value = base64data;
-                            store.dispatch('updateBase64Data', base64data);
+                            store.dispatch('background', {
+                                type: "image",
+                                value: 'is://type:base64',
+                                base64: base64data
+                            });
                             is_data.theme.background.type = "image";
                             is_data.theme.background.value = "";
                             localStorage.setItem("is_bg", base64data);
@@ -214,6 +310,20 @@ const theme = {
                 });
                 return false;
             }
+        },
+        color(val) {
+            store.dispatch('background', {
+                type: "color",
+                value: val,
+                base64: ''
+            });
+        },
+        background(val) {
+            store.dispatch('background', {
+                type: "image",
+                value: val,
+                base64: ''
+            });
         }
     }
 }
@@ -261,5 +371,17 @@ const theme = {
     &:hover {
         background-color: var(--c, #0084ff1a);
     }
+}
+
+.bg_container {
+    width: calc((100% - 30px) / 3);
+    height: 100px;
+    margin: 5px;
+    border-radius: 5px;
+    background-position: center;
+    background-attachment: inherit;
+    background-color: var(--bg-5);
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 </style>

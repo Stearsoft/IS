@@ -3,9 +3,9 @@
     <el-container>
       <el-aside class="aside">
         <ul class="type_list">
-          <li v-for="(item, index) in types_list" :key="index" :class="{ active: index === types_active_index }" 
+          <li v-for="(item, index) in types_list" :key="index" :class="{ active: index === types_active_index }"
             @click="types_active_index = index">
-            <i :class="item.icon" class="xl-transition-all"></i>
+            <SettingIcon  :icon="item.iconName"/>
             <span class="text_color" @click.stop="types_active_index = index">{{ item.label }}</span>
           </li>
         </ul>
@@ -94,6 +94,7 @@ import { useI18n } from 'vue-i18n';
 import SettingCard from './setting_components/SettingCard.vue';
 import { useStore } from 'vuex';
 import { is } from '@/utils/is';
+import SettingIcon from './setting_components/SettingIcon.vue';
 
 const { t } = useI18n();
 const is_data = is().is_current.value;
@@ -101,7 +102,7 @@ const store = useStore();
 const types_list_default = [
   {
     label: t('setting.theme'),
-    icon: 'fas fa-palette',
+    iconName: 'theme',
     contents: {
       group: true,
       default_page: 0,
@@ -229,8 +230,12 @@ const types_list_default = [
               text: t('action.click'),
               action: function () {
                 is_data.theme.background.type = "time";
-                is_data.theme.background.value = "";
-                store.dispatch('updateBgType', "time");
+                is_data.theme.background.value = "is://type:time";
+                store.dispatch('background', {
+                  type: "time",
+                  value: 'is://type:time',
+                  base64: ''
+                });
               }
             }, {
               text: t('setting.staticWallpaper_text.upload'),
@@ -307,7 +312,7 @@ const types_list_default = [
     }
   }, {
     label: '搜索设置',
-    icon: 'fa fa-search',
+    iconName: 'search',
     contents: {
       group: false,
       page: [
@@ -346,7 +351,7 @@ const types_list_default = [
     }
   }, {
     label: '更多功能',
-    icon: 'fas fa-plus',
+    iconName: 'more',
     contents: {
       group: false,
       default_page: 0,
@@ -368,7 +373,7 @@ const types_list_default = [
     }
   }, {
     label: '林中木',
-    icon: 'fa fa-search',
+    iconName: 'search',
     contents: {
       group: false,
       default_page: 0,

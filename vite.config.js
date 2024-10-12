@@ -50,7 +50,7 @@ export default defineConfig({
         manualChunks(id) {
           if (id.includes('node_modules')) {
             if (id.includes('element-plus')) {
-              return 'element-ui';
+              return 'element-plus';
             }
             return 'vendor';
           }

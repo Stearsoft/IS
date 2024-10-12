@@ -4,22 +4,22 @@
         'background-color': background_type == 'color' ? background_value : 'transparent',
     }">
         <div :style="{ opacity: focus ? 1 : 0 }"></div>
-        <img v-if="background_type == 'image'" :src="background_value" alt="background" class=" xl-object-cover xl-h-full xl-w-full">
-        <video v-if="background_type == 'video_url'" :src="background_value" autoplay muted loop @canplay="handleVideoPlayback" style="opacity: 0;"></video>
+        <img v-if="background_type == 'image'" :src="background_value" alt="background"
+            class=" xl-object-cover xl-h-full xl-w-full">
+        <video v-if="background_type == 'video_url'" :src="background_value" autoplay muted loop
+            @canplay="handleVideoPlayback" style="opacity: 0;"></video>
     </div>
 </template>
 
 <script setup>
-import { ElNotification } from 'element-plus';
-import { ref, onMounted, nextTick, watch, computed } from 'vue';
-import { is } from '@/utils/is';
+import { watch, computed, ref } from 'vue';
 import { useStore } from 'vuex';
-const store = useStore(); // 使用 Vuex store
+import { is } from '@/utils/is';
+const store = useStore();
 const is_data = is().is_current.value;
-const base64data = computed(() => store.state.base64data);
-const bgType = computed(() => store.state.background_type);
-const background_type = ref('image');
-const background_value = ref('');
+const background_type = ref(is_data.theme.background.type);
+const background_value = ref(is_data.theme.background.value);
+const background = computed(() => store.state.background);
 const background_time_interval = ref(null);
 defineProps({
     focus: {
@@ -27,29 +27,25 @@ defineProps({
         default: false
     }
 });
-
-const backgroundBox = ref(null);
-const setBackground = (bg) => {
-    // console.log(bg);
-    background_time_interval.value && clearInterval(background_time_interval.value);
-    background_type.value = bg.type;
-    background_value.value = bg.value;
-    const t = bg.type;
-    if (t === "image") {
-        background_value.value = localStorage.getItem("is_bg") || bg.value;
-        // console.log(bg.value);
-    } else if (t === "color") {
-        backgroundBox.value.style.backgroundColor = bg.value;
-    } else if (t === "time") {
-        background_type.value = "color";
-        background_value.value = bg.value;
-        background_time_interval.value = setInterval(() => {
-            background_value.value = "#" + getTime("HHHHMiMiSSSS");
-        }, 1000);
-    } else if (t === "video_file") {
-        openIndexedDBForVideo();
+if (background_type.value == 'time') {
+    background_type.value = "color";
+    background_time_interval.value = setInterval(() => {
+        background_value.value = "#" + getTime("HHHHMiMiSSSS");
+    }, 1000);
+}
+watch(background, (newValue) => {
+    if (newValue) {
+        background_type.value = newValue.type;
+        background_value.value = newValue.value == 'is://type:base64' ? newValue.base64 : newValue.value;
+        background_time_interval.value && clearInterval(background_time_interval.value);
+        if (newValue.type == 'time') {
+            background_type.value = "color";
+            background_time_interval.value = setInterval(() => {
+                background_value.value = "#" + getTime("HHHHMiMiSSSS");
+            }, 1000);
+        }
     }
-};
+});
 const getTime = (format) => {
     const now = new Date();
     const year = now.getFullYear();
@@ -65,67 +61,6 @@ const getTime = (format) => {
         .replace('MiMi', minute)
         .replace('SSSS', second);
 }
-const createMediaElement = (type, src, className, attributes) => {
-    const media = document.createElement(type);
-    media.src = src;
-    if (className) media.className = className;
-    Object.entries(attributes || {}).forEach(([key, value]) => {
-        media.setAttribute(key, value);
-    });
-    return media;
-};
-const handleVideoPlayback = (video) => {
-    video.oncanplay = () => {
-        video.play();
-        video.style.opacity = 1;
-    };
-};
-const openIndexedDBForVideo = () => {
-    const r = indexedDB.open("VideoDatabase", 1);
-    r.onsuccess = (ev) => {
-        const db = ev.target.result;
-        const transaction = db.transaction("videos", "readonly");
-        const store = transaction.objectStore("videos");
-        const request = store.getAll();
-
-        request.onsuccess = () => {
-            const videos = request.result;
-            if (videos.length > 0) {
-                const videoBlob = new Blob([videos[0].data], { type: "video/*" });
-                const video = createMediaElement('video', URL.createObjectURL(videoBlob), null, { autoplay: "autoplay", muted: "muted", loop: "loop" });
-                handleVideoPlayback(video);
-            } else {
-                showErrorNotification("IndexedDB中没有视频数据");
-            }
-        };
-        request.onerror = () => showErrorNotification("检索视频数据时发生错误");
-    };
-    r.onerror = () => showErrorNotification("无法打开IndexedDB数据库");
-};
-const showErrorNotification = (message) => {
-    ElNotification({
-        title: 'Error',
-        message,
-        type: 'error',
-    });
-};
-onMounted(async () => {
-    const bg = ref(is_data.theme.background);
-    setBackground(bg.value);
-    await nextTick();
-});
-watch(base64data, (newValue) => {
-    if (newValue) {
-        setBackground({ type: "image", value: newValue });
-    }
-});
-watch(bgType, (newValue) => {
-    if (newValue) {
-        background_type.value = newValue;
-        setBackground({ type: "time", value: '' });
-        console.log(background_type,background_value);
-    }
-});
 </script>
 
 
