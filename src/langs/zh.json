@@ -15,7 +15,10 @@
     "sentence": "让生活充满色彩，让梦想更加绚丽"
   },
   "background": {
-    "label": "背景"
+    "label": "背景",
+    "error": {
+      "load": "视频加载失败"
+    }
   },
   "url": {
     "translate": "https://fanyi.baidu.com/#zh/en/{text}"
@@ -77,7 +80,11 @@
     "msg": {
       "onlyImg": "只支持图片",
       "imgTooLarge": "图片太大了，我们只允许压缩后为 { limit } 的图片，但是您的是 { size } MB",
-      "imgSize": "我们只支持图片，并且图片在压缩后小于"
+      "imgSize": "我们只支持图片，并且图片在压缩后小于",
+      "video": "我们只支持上传视频类型文件",
+      "onlyVideo": "我们只支持图片类型文件",
+      "videoTooLarge": "视频不能超过400Mb",
+      "videoSaved": "背景上传成功"
     }
   },
   "action": {

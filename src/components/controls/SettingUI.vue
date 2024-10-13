@@ -25,9 +25,10 @@
                 <dl v-for="(ji, j) in ii.items" :key="j" :class="{
                   disabled: !ji.condition(),
                   card: ji.type === 'card',
+                  full: ji.card_mode == 'full'
                 }">
                   <template v-if="ji.type === 'card'">
-                    <SettingCard :card="ji.card_name" :title="ji.text" />
+                    <SettingCard :card="ji.card_name" :mode="ji.card_mode" :title="ji.text" />
                   </template>
                   <template v-else>
                     <dt>
@@ -56,9 +57,10 @@
               <dl v-for="(ji, j) in item.contents.page" :key="j" :class="{
                 disabled: !ji.condition(),
                 card: ji.type === 'card',
+                full: ji.card_mode == 'full'
               }">
                 <template v-if="ji.type === 'card'">
-                  <SettingCard :card="ji.card_name" :title="ji.text" />
+                  <SettingCard :card="ji.card_name" :mode="ji.card_mode" :title="ji.text" />
                 </template>
                 <template v-else>
                   <dt>
@@ -203,6 +205,7 @@ const types_list_default = [
               text: t('setting.colorPage_text.color_custom'),
               type: 'card',
               card_name: 'color_custom',
+              card_mode: 'default',
               condition: function () {
                 return true;
               }
@@ -211,6 +214,7 @@ const types_list_default = [
               text: t('setting.colorPage_text.color_default'),
               type: 'card',
               card_name: 'color_default',
+              card_mode: 'default',
               condition: function () {
                 return true;
               }
@@ -241,6 +245,7 @@ const types_list_default = [
               text: t('setting.staticWallpaper_text.upload'),
               type: 'card',
               card_name: 'staticWallpaper_upload',
+              card_mode: 'default',
               condition: function () {
                 return true;
               }
@@ -248,6 +253,7 @@ const types_list_default = [
               text: t('setting.staticWallpaper_text.link'),
               type: 'card',
               card_name: 'staticWallpaper_link',
+              card_mode: 'default',
               condition: function () {
                 return true;
               }
@@ -255,6 +261,7 @@ const types_list_default = [
               text: t('setting.staticWallpaper_text.color'),
               type: 'card',
               card_name: 'staticWallpaper_color',
+              card_mode: 'default',
               condition: function () {
                 return true;
               }
@@ -262,6 +269,7 @@ const types_list_default = [
               text: t('setting.staticWallpaper_text.imgs'),
               type: 'card',
               card_name: 'staticWallpaper_imgs',
+              card_mode: 'default',
               condition: function () {
                 return true;
               }
@@ -269,6 +277,7 @@ const types_list_default = [
               text: t('setting.staticWallpaper_text.random'),
               type: 'card',
               card_name: 'staticWallpaper_random',
+              card_mode: 'default',
               condition: function () {
                 return true;
               }
@@ -282,6 +291,7 @@ const types_list_default = [
               type: 'card',
               text: t('setting.dynamicWallpaper_text.link'),
               card_name: "dynamicWallpaper_link",
+              card_mode: 'default',
               condition: function () {
                 return true;
               }
@@ -289,6 +299,7 @@ const types_list_default = [
               type: 'card',
               text: t('setting.dynamicWallpaper_text.upload'),
               card_name: "dynamicWallpaper_upload",
+              card_mode: 'default',
               condition: function () {
                 return true;
               }
@@ -302,6 +313,7 @@ const types_list_default = [
               type: 'card',
               text: 'Wallhaven',
               card_name: "Wallhaven",
+              card_mode: 'full',
               condition: function () {
                 return true;
               }
@@ -319,7 +331,7 @@ const types_list_default = [
         {
           type: 'card',
           text: '点击我',
-          card_name: "Wallhaven",
+          card_name: "11",
           condition: function () {
             return true;
           }
@@ -520,7 +532,7 @@ const types_active_index = ref(0);
         }
       }
 
-      &.card {
+      &.card:not(.full) {
         padding: 10px;
         background: var(--bg-9);
         border-radius: 5px;
@@ -528,7 +540,11 @@ const types_active_index = ref(0);
         -webkit-box-shadow: 0 0 7px #00000029;
         box-shadow: 0 0 7px #00000029;
       }
-
+      &.full {
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+      }
       &.disabled {
         opacity: .4;
         pointer-events: none;

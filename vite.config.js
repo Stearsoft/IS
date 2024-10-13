@@ -54,14 +54,12 @@ export default defineConfig({
             }
             return 'vendor';
           }
-          // 对于你的主文件和语言文件
           if (id.includes('src/main.js')) {
             return 'main';
           }
-          if (id.includes('src/langs/')) { // 根据实际路径调整
+          if (id.includes('src/langs/')) { 
             return 'language';
           }
-          // 其余文件独立打包
         },        
         entryFileNames: 'assets/js/[name]-[hash].js',
         chunkFileNames: 'assets/js/[name]-[hash].js',

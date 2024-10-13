@@ -1,9 +1,11 @@
 <template>
     <div class="card">
-        <div class="card_title xl-transition-all">
+        <div class="card_title xl-transition-all" v-if="mode !== 'full'">
             <span>{{ title }}</span>
         </div>
-        <div class="card_container">
+        <div class="card_container" :class="{
+            full: mode == 'full'
+        }">
             <div v-if="card === 'color_custom'">
                 <div class="xl-flex xl-items-center">
                     <p>{{ $t("setting.colorPage_text.label") }}</p>
@@ -67,20 +69,45 @@
                 }" @click="theme.upload.background(item)"></div>
             </div>
             <div v-else-if="card === 'dynamicWallpaper_link'">
-                color
+                <SettingInputNecessary value="https://"
+                    :match="'(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]'"
+                    :errorMsg="$t('input.msg.error.url')" v-model="ref_state.bg_link_video" />
             </div>
             <div v-else-if="card === 'dynamicWallpaper_upload'">
-                color
+                <el-upload drag action="#" :before-upload="theme.upload.video" accept="video/*">
+                    <el-icon class="el-icon--upload">
+                        <upload-filled />
+                    </el-icon>
+                    <div class="el-upload__text">
+                        {{ $t("action.uploadFile_drop") }} / <em> {{ $t("action.uploadFile_drop_em") }} </em>
+                    </div>
+                    <template #tip>
+                        <div class="el-upload__tip">
+                            {{ $t("setting.msg.video") }}
+                        </div>
+                    </template>
+                </el-upload>
             </div>
             <div v-else-if="card === 'Wallhaven'">
-                color
+                <input type="text" class="xl-px-2 xl-py-2 xl-w-full xl-rounded xl-mb-1"
+                    style="background-color:var(--bg-5)">
+                <div class="xl-flex xl-flex-wrap">
+                    <div class="bg_container" v-for="(item, index) in ref_state.wallhaven_imgs.data" :key="index" :style="{
+                        'background-image': `url(${item.thumbs.small})`,
+                    }" @click="theme.upload.background('https://tfseek.top/api/wallhaven_img.php?size=full&id='+item.id+'&type='+item.file_type)"></div>
+                </div>
+                <div class=" xl-flex xl-mt-3 xl-justify-center">
+                    <el-pagination layout="prev, pager, next" :total="ref_state.wallhaven_imgs.meta.last_page" 
+                    @current-change="wallhaven_imgs_change"
+                    />
+                </div>
             </div>
         </div>
     </div>
 
 </template>
 <script setup>
-defineProps(['card', 'title'])
+const props = defineProps(['card', 'title', 'mode'])
 import { ref, watch } from 'vue';
 import { UploadFilled } from '@element-plus/icons-vue';
 import { is } from '@/utils/is';
@@ -94,21 +121,35 @@ const uploaded_img_url = ref(null);
 const uploaded = ref(false);
 const is_data = is().is_current.value;
 const store = useStore();
-const ref_state = ref({ bg_link: '', bg_color: '#4263eb' });
+const ref_state = ref({
+    bg_link: '',
+    bg_color: '#4263eb',
+    bg_link_video: '',
+    wallhaven_page: 1,
+    wallhaven_imgs: {meta:{last_page:1000}},
+});
 const colors = ["#fa5252", "#e64980", "#be4bdb", "#7950f2", "#4263eb", "#1c7ed6", "#0ca678", "#37b24d", "#74b816", "#f59f00", "#f76707"];
-let debounceTimer = null;
+let debounceTimer;
 
-watch(() => ref_state.value.bg_link, () => {
+const updateBackground = (type, value) => {
     if (debounceTimer) clearTimeout(debounceTimer);
     debounceTimer = setTimeout(() => {
         store.dispatch('background', {
-            type: "image",
-            value: ref_state.value.bg_link,
+            type,
+            value,
             base64: ''
         });
-        is_data.theme.background.type = "image";
-        is_data.theme.background.value = ref_state.value.bg_link;
+        is_data.theme.background.type = type;
+        is_data.theme.background.value = value;
     }, 1000);
+};
+
+watch(() => ref_state.value.bg_link_video, (newValue) => {
+    updateBackground("video_url", newValue);
+});
+
+watch(() => ref_state.value.bg_link, (newValue) => {
+    updateBackground("image", newValue);
 });
 const theme = {
     colors: [
@@ -240,7 +281,7 @@ const theme = {
             "thumb": "/assets/imgs/background/resize/out-010.webp"
         }
     ],
-    ra_background:[
+    ra_background: [
         'https://tfseek.top/api/bingWallpaper.php',
         'https://www.loliapi.com/acg/'
     ],
@@ -324,8 +365,131 @@ const theme = {
                 value: val,
                 base64: ''
             });
+            is_data.theme.background.type = "image";
+            is_data.theme.background.value = val;
+        },
+        video(val) {
+            if (val.type.indexOf("video") === -1) {
+                // eslint-disable-next-line no-undef
+                ElNotification({
+                    title: t("static.warning"),
+                    message: t("setting.msg.onlyVideo"),
+                    type: 'warning',
+                });
+                return false;
+            }
+
+            let request = indexedDB.open("VideoDatabase", 1);
+
+            request.onupgradeneeded = function (event) {
+                let db = event.target.result;
+                if (!db.objectStoreNames.contains("videos")) {
+                    // 创建对象存储来保存视频
+                    db.createObjectStore("videos", { keyPath: "id" });
+                }
+            };
+
+            request.onsuccess = function (event) {
+                let db = event.target.result;
+
+                // 开启事务
+                let transaction = db.transaction(["videos"], "readwrite");
+                let localStore = transaction.objectStore("videos");
+
+                // 检查是否有已有视频记录，使用与保存时一致的 id
+                let getRequest = localStore.get('xn:bg>background_video'); // 使用相同 id 来读取
+
+                getRequest.onsuccess = function (event) {
+                    let videoData = {
+                        id: 'xn:bg>background_video',  // 固定 ID
+                        videoFile: val,  // 文件对象
+                        timestamp: new Date().getTime()
+                    };
+
+                    // 如果有视频，更新它，否则添加新的记录
+                    if (event.target.result) {
+                        localStore.put(videoData); // 覆盖已有记录
+                    } else {
+                        localStore.add(videoData); // 添加新记录
+                    }
+
+                    // 确保事务完成后再进行下一步操作
+                    transaction.oncomplete = function () {
+                        // eslint-disable-next-line no-undef
+                        ElNotification({
+                            title: t("static.success"),
+                            message: t("setting.msg.videoSaved"),
+                            type: 'success',
+                        });
+
+                        // 使用新的视频数据更新背景
+                        store.dispatch('background', {
+                            type: "video_file",
+                            value: 'is://type:video_file',
+                            base64: ''
+                        });
+
+                        is_data.theme.background.value = "";
+                        is_data.theme.background.type = "video_file";
+
+                        db.close(); // 关闭数据库连接
+                    };
+                };
+
+                getRequest.onerror = function (event) {
+                    console.error("Error fetching video from IndexedDB", event);
+                };
+
+                transaction.onerror = function (event) {
+                    console.error("Transaction error:", event);
+                };
+            };
+
+            request.onerror = function (event) {
+                console.error("Error opening IndexedDB", event);
+            };
+            return false;
+        }
+
+
+
+    },
+    load() {
+
+        // https://tfseek.top/api/wallhaven.php?page=
+        const url = `https://tfseek.top/api/wallhaven.php?page=${ref_state.value.wallhaven_page}`;
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                ref_state.value.wallhaven_page += 1;
+                ref_state.value.wallhaven_imgs = data;
+            })
+            .catch(error => console.error(error));
+    }
+}
+if (props.card === "Wallhaven") {
+    theme.load();
+}
+const wallhaven_imgs_change = (val) => {
+    const data = {
+        data: [],
+        meta: {
+            last_page:1000
         }
     }
+    for (let i = 0; i < 24; i++) {
+        data.data.push({
+            id: 0,
+            thumbs: {
+                small: "",
+                large: "",
+                original: ""
+            }
+        })
+    }
+    ref_state.value.wallhaven_imgs = data;
+    ref_state.value.wallhaven_page = val;
+    theme.load();
 }
 </script>
 
@@ -356,9 +520,14 @@ const theme = {
         }
     }
 
-    .card_container {
+    .card_container:not(.full) {
         width: 100%;
         padding: 0 30px;
+    }
+
+    .card_container.full {
+        width: 100%;
+        padding: 0;
     }
 }
 
