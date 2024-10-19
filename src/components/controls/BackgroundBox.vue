@@ -5,7 +5,7 @@
     }">
         <div :style="{ opacity: focus ? 1 : 0 }"></div>
         <img v-if="background_type == 'image'" :src="background_value" alt="background"
-            class=" xl-object-cover xl-h-full xl-w-full">
+            class=" xl-object-cover xl-h-full xl-w-full" @load="NProgress.done()">
         <video v-else-if="background_type == 'video_url' || background_type == 'video_file'" :src="background_value" autoplay
             muted loop style="opacity: 0;" @canplay="handleVideoPlayback" class=" xl-size-full xl-object-cover"></video>
     </div>
@@ -15,6 +15,7 @@
 import { watch, computed, ref } from 'vue';
 import { useStore } from 'vuex';
 import { is } from '@/utils/is';
+import NProgress from 'nprogress'
 
 const store = useStore();
 const is_data = is().is_current.value;
@@ -22,6 +23,7 @@ const background_type = ref(is_data.theme.background.type);
 const background_value = ref(is_data.theme.background.value);
 const background = computed(() => store.state.background);
 const background_time_interval = ref(null);
+
 
 defineProps({
     focus: {

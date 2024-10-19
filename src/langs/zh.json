@@ -18,7 +18,8 @@
     "label": "背景",
     "error": {
       "load": "视频加载失败"
-    }
+    },
+    "loading": "背景图片加载中"
   },
   "url": {
     "translate": "https://fanyi.baidu.com/#zh/en/{text}"
@@ -33,7 +34,8 @@
   },
   "static": {
     "success": "成功",
-    "warning": "警告"
+    "warning": "警告",
+    "info": "提示"
   },
   "setting": {
     "drawer_title": "提示",
@@ -96,6 +98,9 @@
     "msg": {
       "error": {
         "url": "输入的类型必须为链接"
+      },
+      "enter": {
+        "wallhaven": "输入关键词来搜索Wallhaven壁纸"
       }
     }
   }

@@ -1,9 +1,11 @@
 .el-color-picker:hover:not(.is-disabled, .is-focused) .el-color-picker__trigger {
     border: none !important;
 }
-.el-color-picker__trigger{
+
+.el-color-picker__trigger {
     border: none !important;
 }
+
 .el-color-picker:focus-visible:not(.is-disabled) .el-color-picker__trigger {
     outline: none !important;
 }
@@ -99,16 +101,105 @@ span.el-switch__core {
     color: var(--font-1);
 }
 
-.el-upload-dragger{
-    --el-fill-color-blank:var(--theme-color_c,#0084ff1b);
+.el-upload-dragger {
+    --el-fill-color-blank: var(--theme-color_c, #0084ff1b);
 }
-.el-upload-dragger:hover,.el-upload-dragger .el-upload__text em {
-    --el-color-primary: var(--theme-color,#0084ff);
+
+.el-upload-dragger:hover,
+.el-upload-dragger .el-upload__text em {
+    --el-color-primary: var(--theme-color, #0084ff);
 }
-.el-pager li.is-active, .el-pager li:hover{
-    --el-pagination-hover-color: var(--theme-color,#0084ff);
+
+.el-pager li.is-active,
+.el-pager li:hover {
+    --el-pagination-hover-color: var(--theme-color, #0084ff);
 }
+
 .el-pager li,
-.el-pagination button{
+.el-pagination button {
     background: transparent !important;
+}
+
+#nprogress {
+    pointer-events: none;
+}
+
+#nprogress .bar {
+    background: var(--theme-color,#0084ff);
+
+    position: fixed;
+    z-index: 1031;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 4px;
+}
+
+/* Fancy blur effect */
+#nprogress .peg {
+    display: block;
+    position: absolute;
+    right: 0px;
+    width: 100px;
+    height: 100%;
+    box-shadow: 0 0 10px var(--theme-color,#0084ff), 0 0 5px var(--theme-color,#0084ff);
+    opacity: 1.0;
+
+    /* -webkit-transform: rotate(3deg) translate(0px, -4px);
+    -ms-transform: rotate(3deg) translate(0px, -4px);
+    transform: rotate(3deg) translate(0px, -4px); */
+}
+
+/* Remove these to get rid of the spinner */
+#nprogress .spinner {
+    display: block;
+    position: fixed;
+    z-index: 1031;
+    bottom: 15px;
+    right: 15px;
+}
+
+#nprogress .spinner-icon {
+    width: 18px;
+    height: 18px;
+    box-sizing: border-box;
+
+    border: solid 2px transparent;
+    border-top-color: var(--theme-color,#0084ff);
+    border-left-color: var(--theme-color,#0084ff);
+    border-radius: 50%;
+
+    -webkit-animation: nprogress-spinner 400ms linear infinite;
+    animation: nprogress-spinner 400ms linear infinite;
+}
+
+.nprogress-custom-parent {
+    overflow: hidden;
+    position: relative;
+}
+
+.nprogress-custom-parent #nprogress .spinner,
+.nprogress-custom-parent #nprogress .bar {
+    position: absolute;
+}
+
+@-webkit-keyframes nprogress-spinner {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes nprogress-spinner {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }

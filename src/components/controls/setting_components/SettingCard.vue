@@ -90,16 +90,25 @@
             </div>
             <div v-else-if="card === 'Wallhaven'">
                 <input type="text" class="xl-px-2 xl-py-2 xl-w-full xl-rounded xl-mb-1"
-                    style="background-color:var(--bg-5)">
+                    :placeholder="$t('input.msg.enter.wallhaven')" style="background-color:var(--bg-5)">
                 <div class="xl-flex xl-flex-wrap">
-                    <div class="bg_container" v-for="(item, index) in ref_state.wallhaven_imgs.data" :key="index" :style="{
-                        'background-image': `url(${item.thumbs.small})`,
-                    }" @click="theme.upload.background('https://tfseek.top/api/wallhaven_img.php?size=full&id='+item.id+'&type='+item.file_type)"></div>
+                    <div class="xl-group xl-relative xl-overflow-hidden"
+                        v-for="(item, index) in ref_state.wallhaven_imgs.data" :key="index" :class="{
+                            'skeleton': item.thumbs.small == '',
+                            'bg_container': item.thumbs.small != ''
+                        }">
+                        <div v-if="item.thumbs.small !== ''" @click="theme.wallhaven(item.id, item.file_type)"
+                            class=" xl-size-10 xl-top-1/2 xl-left-1/2 xl-transform xl-absolute -xl-translate-x-1/2 -xl-translate-y-1/2 group-hover:xl-opacity-100 xl-opacity-0 xl-z-50 hover:xl-scale-125 active:xl-scale-75 xl-transition-all">
+                            <IconTrue />
+                        </div>
+                        <el-image v-if="item.thumbs.small !== ''"
+                            class=" xl-size-full xl-rounded-md group-hover:xl-brightness-50 xl-transition-all group-hover:xl-scale-110"
+                            :src="item.thumbs.small" fit="cover" />
+                    </div>
                 </div>
                 <div class=" xl-flex xl-mt-3 xl-justify-center">
-                    <el-pagination layout="prev, pager, next" :total="ref_state.wallhaven_imgs.meta.last_page" 
-                    @current-change="wallhaven_imgs_change"
-                    />
+                    <el-pagination layout="prev, pager, next" :total="ref_state.wallhaven_imgs.meta.last_page"
+                        @current-change="wallhaven_imgs_change" />
                 </div>
             </div>
         </div>
@@ -108,6 +117,7 @@
 </template>
 <script setup>
 const props = defineProps(['card', 'title', 'mode'])
+import NProgress from 'nprogress'
 import { ref, watch } from 'vue';
 import { UploadFilled } from '@element-plus/icons-vue';
 import { is } from '@/utils/is';
@@ -115,6 +125,7 @@ import { useI18n } from 'vue-i18n';
 import ImageCompressor from 'image-compressor.js';
 import { useStore } from 'vuex';
 import SettingInputNecessary from './SettingInputNecessary.vue';
+import IconTrue from '@/components/icons/IconTrue.vue';
 
 const { t } = useI18n();
 const uploaded_img_url = ref(null);
@@ -126,10 +137,12 @@ const ref_state = ref({
     bg_color: '#4263eb',
     bg_link_video: '',
     wallhaven_page: 1,
-    wallhaven_imgs: {meta:{last_page:1000}},
+    wallhaven_imgs: { meta: { last_page: 1000 } },
+    wallhaven_imgs_list: [],
 });
 const colors = ["#fa5252", "#e64980", "#be4bdb", "#7950f2", "#4263eb", "#1c7ed6", "#0ca678", "#37b24d", "#74b816", "#f59f00", "#f76707"];
 let debounceTimer;
+NProgress.configure({ trickleSpeed: 50 });
 
 const updateBackground = (type, value) => {
     if (debounceTimer) clearTimeout(debounceTimer);
@@ -454,6 +467,18 @@ const theme = {
 
 
     },
+    wallhaven(id, type) {
+        theme.upload.background('https://tfseek.top/api/wallhaven_img.php?size=full&id=' + id + '&type=' + type);
+        NProgress.start();
+
+        // eslint-disable-next-line no-undef
+        ElNotification({
+            title: t("static.info"),
+            message: t("background.loading"),
+            type: 'info',
+        });
+        return false;
+    },
     load() {
 
         // https://tfseek.top/api/wallhaven.php?page=
@@ -461,20 +486,18 @@ const theme = {
         fetch(url)
             .then(response => response.json())
             .then(data => {
+                ref_state.value.wallhaven_imgs_list = [];
                 ref_state.value.wallhaven_page += 1;
                 ref_state.value.wallhaven_imgs = data;
             })
             .catch(error => console.error(error));
     }
 }
-if (props.card === "Wallhaven") {
-    theme.load();
-}
-const wallhaven_imgs_change = (val) => {
+const wallhaven_basic = () => {
     const data = {
         data: [],
         meta: {
-            last_page:1000
+            last_page: 1000
         }
     }
     for (let i = 0; i < 24; i++) {
@@ -488,6 +511,13 @@ const wallhaven_imgs_change = (val) => {
         })
     }
     ref_state.value.wallhaven_imgs = data;
+}
+if (props.card === "Wallhaven") {
+    wallhaven_basic();
+    theme.load();
+}
+const wallhaven_imgs_change = (val) => {
+    wallhaven_basic();
     ref_state.value.wallhaven_page = val;
     theme.load();
 }
@@ -542,15 +572,39 @@ const wallhaven_imgs_change = (val) => {
     }
 }
 
-.bg_container {
+.bg_container,
+.skeleton {
     width: calc((100% - 30px) / 3);
     height: 100px;
     margin: 5px;
     border-radius: 5px;
+}
+
+.bg_container {
+    background: var(--bg);
     background-position: center;
     background-attachment: inherit;
     background-color: var(--bg-5);
     background-repeat: no-repeat;
     background-size: cover;
+
+}
+
+.skeleton {
+    background: linear-gradient(100deg,
+            rgba(255, 255, 255, 0) 20%,
+            rgba(255, 255, 255, 0.5) 50%,
+            rgba(255, 255, 255, 0) 80%) var(--ske-back-color);
+    background-size: 200% 100%;
+    background-position: 100% 50%;
+    background-position-x: 180%;
+    animation: 1s _ske_loading infinite;
+    --ske-back-color: var(--bg-5);
+}
+
+@keyframes _ske_loading {
+    to {
+        background-position-x: -20%;
+    }
 }
 </style>

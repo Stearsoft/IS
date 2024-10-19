@@ -21,6 +21,7 @@
     "image-compressor": "^2.0.3",
     "image-compressor.js": "^1.1.4",
     "localforage": "^1.10.0",
+    "nprogress": "^0.2.0",
     "postcss": "^8.4.47",
     "postcss-pxtorem": "^6.1.0",
     "unplugin-auto-import": "^0.18.3",
@@ -33,6 +34,7 @@
     "vuex": "^4.0.2"
   },
   "devDependencies": {
+    "@types/nprogress": "^0.2.3",
     "@vitejs/plugin-vue": "^5.0.5",
     "eslint": "^8.57.0",
     "eslint-plugin-vue": "^9.23.0",
