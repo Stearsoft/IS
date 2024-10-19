@@ -87,7 +87,14 @@
       "onlyVideo": "我们只支持图片类型文件",
       "videoTooLarge": "视频不能超过400Mb",
       "videoSaved": "背景上传成功"
-    }
+    },
+    "autoCleanInput": "自动清空搜索框",
+    "autoCleanInputDescription": "在搜索框失焦时候清除搜索框内容",
+    "disableAutoGo": "关闭自动跳转",
+    "disableAutoGoDescription": "在点击搜索提示时候不跳转",
+    "autoFocus": "自动聚焦",
+    "autoFocusDescription": "在页面开始的时候自动聚焦",
+    "searchEngineList": "搜索引擎列表"
   },
   "action": {
     "click": "点我",

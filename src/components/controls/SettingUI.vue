@@ -329,36 +329,46 @@ const types_list_default = [
       group: false,
       page: [
         {
-          type: 'card',
-          text: '点击我',
-          card_name: "11",
-          condition: function () {
-            return true;
-          }
-        }, {
-          label: '暗黑模式',
-          description: '开启暗黑模式',
-          type: 'button',
-          text: '点击我',
-          default: false,
-          condition: function () {
-            return true; // 这里可以写一些条件，如果条件不满足，则不显示这个选项
-          },
-          action: function () {
-            console.log(121212);
-          }
-        }, {
-          label: '暗黑模式',
-          description: '开启暗黑模式',
+          label: t('setting.autoCleanInput'),
+          description: t('setting.autoCleanInputDescription'),
           type: 'switch',
           default: false,
           condition: function () {
-            return false;
+            return true;
           },
           action: function (value) {
             console.log(value);
           }
-        }
+        },{
+          label: t('setting.disableAutoGo'),
+          description: t('setting.disableAutoGoDescription'),
+          type: 'switch',
+          default: false,
+          condition: function () {
+            return true;
+          },
+          action: function (value) {
+            console.log(value);
+          }
+        },{
+          label: t('setting.autoFocus'),
+          description: t('setting.autoFocusDescription'),
+          type: 'switch',
+          default: false,
+          condition: function () {
+            return true;
+          },
+          action: function (value) {
+            console.log(value);
+          }
+        },{
+          type: 'card',
+          text: t('setting.searchEngineList'),
+          card_name: "search_engine",
+          condition: function () {
+            return true;
+          }
+        }, 
       ]
     }
   }, {

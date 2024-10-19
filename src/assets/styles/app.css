@@ -145,10 +145,6 @@ span.el-switch__core {
     height: 100%;
     box-shadow: 0 0 10px var(--theme-color,#0084ff), 0 0 5px var(--theme-color,#0084ff);
     opacity: 1.0;
-
-    /* -webkit-transform: rotate(3deg) translate(0px, -4px);
-    -ms-transform: rotate(3deg) translate(0px, -4px);
-    transform: rotate(3deg) translate(0px, -4px); */
 }
 
 /* Remove these to get rid of the spinner */
