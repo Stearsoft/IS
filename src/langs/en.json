@@ -6,14 +6,19 @@
     "sentence": "Add color to life and make dreams vibrant"
   },
   "background": {
-    "label": "Background"
+    "label": "Background",
+    "error": {
+      "load": "Video loading failed"
+    },
+    "loading": "Background image loading"
   },
   "menu": {
     "accountSetting": "Account settings",
     "feedback": "Feedback",
     "language": "Language",
     "logout": "Log out",
-    "setting": "Setting"
+    "setting": "Setting",
+    "switchLanguageSuccess": "Language switch successful"
   },
   "search": {
     "input": "search box",
@@ -26,5 +31,84 @@
   },
   "url": {
     "translate": "https://translate.google.com/?sl=auto&tl=en&op=translate&text="
+  },
+  "action": {
+    "click": "Click me",
+    "uploadFile_drop": "Drag and drop upload",
+    "uploadFile_drop_em": "Click to upload"
+  },
+  "input": {
+    "msg": {
+      "error": {
+        "url": "Input type must be link"
+      },
+      "enter": {
+        "wallhaven": "Enter keywords to search for Wallhaven wallpapers"
+      }
+    }
+  },
+  "setting": {
+    "autoCleanInputDescription": "Clear the search box content when the search box is out of focus",
+    "autoFocus": "autofocus",
+    "autoFocusDescription": "Automatically focus at the beginning of the page",
+    "background_blur": "background blur",
+    "background_blur_description": "Set blur",
+    "baseTheme": "Basic style",
+    "closeCover": "Turn on mask",
+    "closeCoverDescription": "When turned on, a dark mask will be added to the background",
+    "colorPage": "theme color",
+    "colorPage_text": {
+      "color_custom": "Custom theme color",
+      "color_default": "built-in colors",
+      "default": "Set the built-in color as the theme color. The first color is the main color, the second is the mouse hover font color, and the third is the hover background color.",
+      "default_2": "If the main color does not meet your aesthetic, you can first click on the pre-selected color below, and then customize your favorite main color that is similar to the pre-selected color above.",
+      "label": "Choose your favorite color, this color will be the main color"
+    },
+    "darkMode": "dark mode",
+    "darkModeDescription": "Turn on dark eye protection mode",
+    "disableAutoGo": "Turn off automatic jump",
+    "disableAutoGoDescription": "Don’t jump when clicking the search prompt",
+    "drawer_cancel": "Cancel",
+    "drawer_confirm": "confirm",
+    "drawer_open": "set up",
+    "drawer_title": "hint",
+    "dynamic": "dynamic",
+    "dynamicDescription": "When turned on, the start page will have dynamic effects",
+    "dynamicWallpaper": "video wallpaper",
+    "dynamicWallpaper_text": {
+      "link": "Set link as video wallpaper",
+      "upload": "Upload video wallpaper"
+    },
+    "maskOpacity": "Mask transparency",
+    "minimalModeDescription": "When turned on, all decorative elements will be removed",
+    "msg": {
+      "imgSize": "We only support images, and the images after compression are smaller than",
+      "imgTooLarge": "The image is too large, we only allow images that are compressed to { limit }, but yours is { size } MB",
+      "onlyImg": "Only supports pictures",
+      "onlyVideo": "We only support image type files",
+      "video": "We only support uploading video type files",
+      "videoSaved": "Background uploaded successfully",
+      "videoTooLarge": "Video cannot exceed 400Mb"
+    },
+    "searchEngineList": "Search engine list",
+    "staticWallpaper": "static wallpaper",
+    "staticWallpaper_text": {
+      "imgs": "Use recommended wallpapers",
+      "link": "use link",
+      "random": "Random wallpaper",
+      "time": "time",
+      "time_description": "Use with",
+      "upload": "Upload wallpaper",
+      "color": "Set color as wallpaper"
+    },
+    "theme": "Theme settings",
+    "autoCleanInput": "Automatically clear search box",
+    "maskOpacityDescription": "Set mask transparency",
+    "minimalMode": "minimalist mode"
+  },
+  "static": {
+    "info": "hint",
+    "success": "success",
+    "warning": "warn"
   }
 }
