@@ -365,6 +365,7 @@ const types_list_default = [
           type: 'card',
           text: t('setting.searchEngineList'),
           card_name: "search_engine",
+          card_mode: 'noPadding',
           condition: function () {
             return true;
           }

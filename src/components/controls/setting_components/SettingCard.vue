@@ -4,7 +4,8 @@
             <span>{{ title }}</span>
         </div>
         <div class="card_container" :class="{
-            full: mode == 'full'
+            full: mode == 'full',
+            noPadding: mode == 'noPadding'
         }">
             <div v-if="card === 'color_custom'">
                 <div class="xl-flex xl-items-center">
@@ -111,6 +112,13 @@
                         @current-change="wallhaven_imgs_change" />
                 </div>
             </div>
+            <div v-else-if="card === 'search_engine'">
+                <div v-for="(item, index) in engine" :key="index" class=" xl-flex xl-h-9 xl-px-2.5 xl-rounded xl-transition-all xl-items-center search_engine_item">
+                    <img class=" xl-size-5" :src="item.icon" :alt="item.name">
+                    <span class=" xl-mx-8 xl-opacity-60">{{ item.title }}</span>
+                    <span class=" xl-opacity-50 xl-ml-5">{{ item.url }}</span>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -140,6 +148,54 @@ const ref_state = ref({
     wallhaven_imgs: { meta: { last_page: 1000 } },
     wallhaven_imgs_list: [],
 });
+const engine = [
+    {
+        title: '林中木',
+        url: 'https://tfseek.top/search?q=',
+        icon: '/assets/imgs/engine_ico/tif.png',
+        name:'tif'
+    },{
+        title: 'Google',
+        url: 'https://www.google.com/search?q=',
+        icon: '/assets/imgs/engine_ico/google.png',
+        name:'google'
+    },{
+        title: 'Bing',
+        url: 'https://www.bing.com/search?q=',
+        icon: '/assets/imgs/engine_ico/bing.png',
+        name:'bing'
+    },{
+        title: 'Baidu',
+        url: 'https://www.baidu.com/s?wd=',
+        icon: '/assets/imgs/engine_ico/baidu.png',
+        name:'baidu'
+    },{
+        title: '360',
+        url: 'https://www.so.com/s?q=',
+        icon: '/assets/imgs/engine_ico/360.png',
+        name:'360'
+    },{
+        title: 'Sogou',
+        url: 'https://www.sogou.com/web?query=',
+        icon: '/assets/imgs/engine_ico/sogou.png',
+        name:'sogou'
+    },{
+        title: 'DuckDuckGo',
+        url: 'https://duckduckgo.com/?q=',
+        icon: '/assets/imgs/engine_ico/duckduckgo.png',
+        name:'DuckDuckGo'
+    },{
+        title: 'Yandex',
+        url: 'https://yandex.com/search/?text=',
+        icon: '/assets/imgs/engine_ico/yandex.png',
+        name:'Yandex'
+    },{
+        title: 'GitHub',
+        url: 'https://github.com/search?q=',
+        icon: '/assets/imgs/engine_ico/github.png',
+        name:'github'
+    }
+]
 const colors = ["#fa5252", "#e64980", "#be4bdb", "#7950f2", "#4263eb", "#1c7ed6", "#0ca678", "#37b24d", "#74b816", "#f59f00", "#f76707"];
 let debounceTimer;
 NProgress.configure({ trickleSpeed: 50 });
@@ -555,6 +611,10 @@ const wallhaven_imgs_change = (val) => {
         padding: 0 30px;
     }
 
+    .card_container.noPadding {
+        padding: 0;
+    }
+
     .card_container.full {
         width: 100%;
         padding: 0;
@@ -606,5 +666,9 @@ const wallhaven_imgs_change = (val) => {
     to {
         background-position-x: -20%;
     }
+}
+
+.search_engine_item:hover{
+    background-color: var(--theme-color_c);
 }
 </style>
