@@ -115,7 +115,7 @@
             <div v-else-if="card === 'search_engine'">
                 <div v-for="(item, index) in engine" :key="index" class=" xl-flex xl-h-9 xl-px-2.5 xl-rounded xl-transition-all xl-items-center search_engine_item">
                     <img class=" xl-size-5" :src="item.icon" :alt="item.name">
-                    <span class=" xl-mx-8 xl-opacity-60">{{ item.title }}</span>
+                    <span class=" xl-mx-8 xl-opacity-60 xl-w-24">{{ item.title }}</span>
                     <span class=" xl-opacity-50 xl-ml-5">{{ item.url }}</span>
                 </div>
             </div>

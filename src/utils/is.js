@@ -57,9 +57,12 @@ const is_default = local_is ? JSON.parse(local_is) : {
 const is_current = ref (is_default);
 const renderSetting = (config) => {
     document.documentElement.setAttribute("data-theme", config.theme.lightMode ? "light" : "dark");
+    document.documentElement.setAttribute("data-dynamic", config.theme.dynamic ? "dynamic" : "no-dynamic");
+    document.documentElement.setAttribute("data-minimal", config.theme.minimal_mode ? "minimal" : "");
     document.documentElement.style.setProperty("--theme-color", config.theme.main_color[0]);
     document.documentElement.style.setProperty("--theme-color_b", config.theme.main_color[1]);
     document.documentElement.style.setProperty("--theme-color_c", config.theme.main_color[2]);
+    document.documentElement.style.setProperty("--blur", config.theme.background.blur + "px");
 
 }
 renderSetting(is_current.value);

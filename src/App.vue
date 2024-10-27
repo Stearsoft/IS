@@ -11,6 +11,9 @@ const onSearchBlur = () => {SearchInput.value = false;};
 const startUI = (ui_name) => {
   Windows_UI.value[ui_name] = !Windows_UI.value[ui_name];
 }
+const closeUI = (ui_name) => {
+  Windows_UI.value[ui_name] = !Windows_UI.value[ui_name];
+}
 const Windows_UI = ref({
   'setting': false,
 });
@@ -20,6 +23,6 @@ const Windows_UI = ref({
   <SearchBox @focused="onSearchFocus" @blurred="onSearchBlur"></SearchBox>
   <BackgroundBox :focus="SearchInput"></BackgroundBox>
   <MenuIcon @open="startUI"></MenuIcon>
-  <SettingUI v-if="Windows_UI.setting"></SettingUI>
+  <SettingUI v-if="Windows_UI.setting" @close="closeUI"></SettingUI>
   <BarCopyright></BarCopyright>
 </template>

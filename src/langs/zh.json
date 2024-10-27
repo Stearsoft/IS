@@ -94,7 +94,17 @@
     "disableAutoGoDescription": "在点击搜索提示时候不跳转",
     "autoFocus": "自动聚焦",
     "autoFocusDescription": "在页面开始的时候自动聚焦",
-    "searchEngineList": "搜索引擎列表"
+    "searchEngineList": "搜索引擎列表",
+    "autoHideBookmark": "自动隐藏书签",
+    "autoHideBookmarkDescription": "自动隐藏书签",
+    "airCopyDescription": "当登录时候提示隔空取义内容",
+    "weather": "天气",
+    "weatherDescription": "显示当地天气",
+    "aword": "一言",
+    "awordDescription": "显示随机一言",
+    "timeStyle": "时间样式",
+    "timeStyleDescription": "设置不同的时间样式",
+    "airCopy": "隔空取义"
   },
   "action": {
     "click": "点我",

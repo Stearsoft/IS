@@ -1,11 +1,16 @@
 <template>
-  <div class="settingContainer">
+  <div class="settingContainer" :class="settingUIclass">
+    <div
+      class=" xl-absolute xl-right-2 xl-top-2 xl-size-6 xl-group hover:xl-bg-red-400 xl-transition-all xl-rounded-full"
+      @click="closeSetting">
+      <IconClose class="group-hover:xl-fill-white xl-transition-all" />
+    </div>
     <el-container>
       <el-aside class="aside">
         <ul class="type_list">
           <li v-for="(item, index) in types_list" :key="index" :class="{ active: index === types_active_index }"
             @click="types_active_index = index">
-            <SettingIcon  :icon="item.iconName"/>
+            <SettingIcon :icon="item.iconName" />
             <span class="text_color" @click.stop="types_active_index = index">{{ item.label }}</span>
           </li>
         </ul>
@@ -25,7 +30,8 @@
                 <dl v-for="(ji, j) in ii.items" :key="j" :class="{
                   disabled: !ji.condition(),
                   card: ji.type === 'card',
-                  full: ji.card_mode == 'full'
+                  full: ji.card_mode == 'full',
+                  slider: ji.type === 'slider'
                 }">
                   <template v-if="ji.type === 'card'">
                     <SettingCard :card="ji.card_name" :mode="ji.card_mode" :title="ji.text" />
@@ -97,7 +103,15 @@ import SettingCard from './setting_components/SettingCard.vue';
 import { useStore } from 'vuex';
 import { is } from '@/utils/is';
 import SettingIcon from './setting_components/SettingIcon.vue';
-
+import IconClose from '../icons/IconClose.vue';
+const settingUIclass = ref('');
+const emit = defineEmits(['close']);
+const closeSetting = () => {
+  settingUIclass.value = 'hide';
+  setTimeout(() => {
+    emit('close',"setting");
+  }, 300);
+}
 const { t } = useI18n();
 const is_data = is().is_current.value;
 const store = useStore();
@@ -136,15 +150,15 @@ const types_list_default = [
                 is_data.theme.dynamic = value;
               }
             }, {
-              label: t('setting.closeCover'),
-              description: t('setting.closeCoverDescription'),
+              label: t('setting.minimalMode'),
+              description: t('setting.minimalModeDescription'),
               type: 'switch',
-              default: is_data.theme.background.mark,
+              default: is_data.theme.minimal_mode,
               condition: function () {
                 return true;
               },
               action: function (value) {
-                is_data.theme.background.mark = value;
+                is_data.theme.minimal_mode = value;
               }
             }, {
               label: t('setting.maskOpacity'),
@@ -164,17 +178,6 @@ const types_list_default = [
               },
               done: function (value) {
                 is_data.theme.background.mark_opacity = value / 100;
-              }
-            }, {
-              label: t('setting.minimalMode'),
-              description: t('setting.minimalModeDescription'),
-              type: 'switch',
-              default: is_data.theme.minimal_mode,
-              condition: function () {
-                return true;
-              },
-              action: function (value) {
-                is_data.theme.minimal_mode = value;
               }
             }, {
               label: t('setting.background_blur'),
@@ -339,7 +342,7 @@ const types_list_default = [
           action: function (value) {
             console.log(value);
           }
-        },{
+        }, {
           label: t('setting.disableAutoGo'),
           description: t('setting.disableAutoGoDescription'),
           type: 'switch',
@@ -350,7 +353,7 @@ const types_list_default = [
           action: function (value) {
             console.log(value);
           }
-        },{
+        }, {
           label: t('setting.autoFocus'),
           description: t('setting.autoFocusDescription'),
           type: 'switch',
@@ -361,7 +364,7 @@ const types_list_default = [
           action: function (value) {
             console.log(value);
           }
-        },{
+        }, {
           type: 'card',
           text: t('setting.searchEngineList'),
           card_name: "search_engine",
@@ -369,7 +372,7 @@ const types_list_default = [
           condition: function () {
             return true;
           }
-        }, 
+        },
       ]
     }
   }, {
@@ -377,19 +380,61 @@ const types_list_default = [
     iconName: 'more',
     contents: {
       group: false,
-      default_page: 0,
       page: [
         {
-          label: '暗黑模式',
-          description: '开启暗黑模式',
-          type: 'button',
-          text: '点击我',
+          label: t('setting.autoHideBookmark'),
+          description: t('setting.autoHideBookmarkDescription'),
+          type: 'switch',
+          default: true,
+          condition: function () {
+            return true;
+          },
+          action: function (value) {
+            console.log(value);
+          }
+        }, {
+          label: t('setting.weather'),
+          description: t('setting.weatherDescription'),
+          type: 'switch',
           default: false,
           condition: function () {
-            return true; // 这里可以写一些条件，如果条件不满足，则不显示这个选项
+            return true;
           },
-          action: function () {
-            console.log(121212);
+          action: function (value) {
+            console.log(value);
+          }
+        }, {
+          label: t('setting.aword'),
+          description: t('setting.awordDescription'),
+          type: 'switch',
+          default: false,
+          condition: function () {
+            return true;
+          },
+          action: function (value) {
+            console.log(value);
+          }
+        }, {
+          label: t('setting.timeStyle'),
+          description: t('setting.timeStyleDescription'),
+          type: 'switch',
+          default: false,
+          condition: function () {
+            return true;
+          },
+          action: function (value) {
+            console.log(value);
+          }
+        }, {
+          label: t('setting.airCopy'),
+          description: t('setting.airCopyDescription'),
+          type: 'switch',
+          default: true,
+          condition: function () {
+            return false;
+          },
+          action: function (value) {
+            console.log(value);
           }
         }
       ]
@@ -431,6 +476,12 @@ const types_active_index = ref(0);
   animation: fadeInScale 0.3s;
   max-height: 600px;
   min-height: 450px;
+
+
+  &.hide {
+    opacity: 0;
+    transform: scale(0.8);
+  }
 
   .aside {
     width: 24%;
@@ -551,14 +602,28 @@ const types_active_index = ref(0);
         -webkit-box-shadow: 0 0 7px #00000029;
         box-shadow: 0 0 7px #00000029;
       }
+
       &.full {
         padding: 10px;
         border-radius: 5px;
         margin-bottom: 10px;
       }
+
       &.disabled {
         opacity: .4;
         pointer-events: none;
+      }
+
+      &.slider {
+        flex-direction: column;
+
+        &>dd {
+          max-width: 100%;
+          margin-top: 10px;
+          background: var(--bg-5);
+          border-radius: 3px;
+          padding: 10px;
+        }
       }
     }
 
@@ -614,6 +679,34 @@ const types_active_index = ref(0);
     color: white;
     --btn-bg: var(--theme-color, #0084ff);
     background: var(--btn-color, #0084ff);
+  }
+}
+
+@-webkit-keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    -webkit-transform: scale(0.8);
+    transform: scale(0.8);
+  }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    -webkit-transform: scale(0.8);
+    transform: scale(0.8);
+  }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    transform: scale(1);
   }
 }
 </style>

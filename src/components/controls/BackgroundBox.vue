@@ -3,11 +3,12 @@
     <div ref="backgroundBox" :class="'background-box' + (focus ? ' focus' : '')" :style="{
         'background-color': background_type == 'color' ? background_value : 'transparent',
     }">
-        <div :style="{ opacity: focus ? 1 : 0 }"></div>
+        <div :style="{ opacity: is_data_r.theme.background.mark_opacity }"></div>
         <img v-if="background_type == 'image'" :src="background_value" alt="background"
             class=" xl-object-cover xl-h-full xl-w-full" @load="NProgress.done()">
-        <video v-else-if="background_type == 'video_url' || background_type == 'video_file'" :src="background_value" autoplay
-            muted loop style="opacity: 0;" @canplay="handleVideoPlayback" class=" xl-size-full xl-object-cover"></video>
+        <video v-else-if="background_type == 'video_url' || background_type == 'video_file'" :src="background_value"
+            autoplay muted loop style="opacity: 0;" @canplay="handleVideoPlayback"
+            class=" xl-size-full xl-object-cover"></video>
     </div>
 </template>
 
@@ -19,11 +20,15 @@ import NProgress from 'nprogress'
 
 const store = useStore();
 const is_data = is().is_current.value;
+const is_data_r = ref(is_data);
 const background_type = ref(is_data.theme.background.type);
 const background_value = ref(is_data.theme.background.value);
 const background = computed(() => store.state.background);
 const background_time_interval = ref(null);
-
+watch(is_data, (newValue) => {
+    is_data_r.value = newValue;
+    console.log("背景检测到is_data变化");
+})
 
 defineProps({
     focus: {
@@ -153,8 +158,13 @@ const handleVideoPlayback = (video) => {
 
     div {
         opacity: 0;
-        background: radial-gradient(rgba(0, 0, 0, 0.24) 0px, rgba(0, 0, 0, 0.57) 93%),
-            radial-gradient(rgba(0, 0, 0, 0.25) 33%, rgb(0, 0, 0) 166%);
+        background: -webkit-radial-gradient(rgba(0, 0, 0, 0.24) 0, rgba(0, 0, 0, 0.57) 93%), -webkit-radial-gradient(rgba(0, 0, 0, 0.25) 33%, #000000 166%);
+        background: radial-gradient(rgba(0, 0, 0, 0.24) 0, rgba(0, 0, 0, 0.57) 93%), radial-gradient(rgba(0, 0, 0, 0.25) 33%, #000000 166%);
+        height: 100%;
+        transition: all 0.3s ease-in-out;
+        z-index: 0;
+        position: absolute;
+        width: 100%;
     }
 }
 </style>

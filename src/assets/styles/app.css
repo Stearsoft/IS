@@ -63,6 +63,15 @@ span.el-switch__core {
     background: var(--theme-color, #0084ff);
 }
 
+.el-slider__button{
+    border-color: var(--theme-color, #0084ff) !important;
+}
+.el-slider__bar{
+    --el-slider-main-bg-color: var(--theme-color, #0084ff);
+}
+.el-slider__runway{
+    --el-slider-runway-bg-color:var(--theme-color_c);
+}
 .slider-demo-block {
     max-width: 600px;
     display: flex;
