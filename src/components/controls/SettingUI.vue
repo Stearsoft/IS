@@ -708,5 +708,5 @@ const types_active_index = ref(0);
     -webkit-transform: scale(1);
     transform: scale(1);
   }
-}
+};
 </style>
