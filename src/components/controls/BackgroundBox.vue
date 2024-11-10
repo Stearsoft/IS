@@ -5,7 +5,9 @@
     }">
         <div :style="{ opacity: is_data_r.theme.background.mark_opacity }"></div>
         <img v-if="background_type == 'image'" :src="background_value" alt="background"
-            class=" xl-object-cover xl-h-full xl-w-full" @load="NProgress.done()">
+            class=" xl-object-cover xl-h-full xl-w-full xl-transition-opacity" @load="NProgress.done();bgLoaded()" :class="{
+                'xl-opacity-0':!bgLoaded_mode
+            }">
         <video v-else-if="background_type == 'video_url' || background_type == 'video_file'" :src="background_value"
             autoplay muted loop style="opacity: 0;" @canplay="handleVideoPlayback"
             class=" xl-size-full xl-object-cover"></video>
@@ -22,9 +24,10 @@ const store = useStore();
 const is_data = is().is_current.value;
 const is_data_r = ref(is_data);
 const background_type = ref(is_data.theme.background.type);
-const background_value = ref(is_data.theme.background.value);
+const background_value = ref(is_data.theme.background.value == '' ? localStorage.getItem('is_bg') : is_data.theme.background.value);
 const background = computed(() => store.state.background);
 const background_time_interval = ref(null);
+const bgLoaded_mode = ref(false);
 watch(is_data, (newValue) => {
     is_data_r.value = newValue;
     console.log("背景检测到is_data变化");
@@ -85,7 +88,10 @@ const getIndexDBvideo = () => {
         console.error("Error opening IndexedDB", event);
     };
 };
-
+const bgLoaded = () => {
+    console.log("背景图片已加载完毕");
+    bgLoaded_mode.value = true;
+}
 if (background_type.value == 'time') {
     background_type.value = "color";
     background_time_interval.value = setInterval(() => {

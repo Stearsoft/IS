@@ -9,13 +9,13 @@
         }">
             <div v-if="card === 'color_custom'">
                 <div class="xl-flex xl-items-center">
-                    <p>{{ $t("setting.colorPage_text.label") }}</p>
+                    <p class="text_color">{{ $t("setting.colorPage_text.label") }}</p>
                     <el-color-picker class="xl-ml-2" v-model="is_data.theme.main_color[0]" />
                 </div>
             </div>
             <div v-else-if="card === 'color_default'">
-                <p class=" xl-indent-7 xl-leading-6 xl-mb-2">{{ $t("setting.colorPage_text.default") }}</p>
-                <p class=" xl-indent-7 xl-leading-6">{{ $t("setting.colorPage_text.default_2") }}</p>
+                <p class=" xl-indent-7 xl-leading-6 xl-mb-2 text_color">{{ $t("setting.colorPage_text.default") }}</p>
+                <p class=" xl-indent-7 xl-leading-6 text_color">{{ $t("setting.colorPage_text.default_2") }}</p>
                 <div class="xl-flex xl-my-8 xl-flex-wrap">
                     <div class="color_box xl-rounded-md" v-for="(color, index) in theme.colors" :key="index"
                         :style="{ '--c': color[2] }" @click="is_data.theme.main_color = color">
@@ -51,7 +51,7 @@
                     :errorMsg="$t('input.msg.error.url')" v-model="ref_state.bg_link" />
             </div>
             <div v-else-if="card === 'staticWallpaper_color'">
-                <p class="xl-mb-2">{{ $t('setting.staticWallpaper_text.color') }}</p>
+                <p class="xl-mb-2 text_color">{{ $t('setting.staticWallpaper_text.color') }}</p>
                 <div class=" xl-flex xl-flex-wrap xl-items-center">
                     <div v-for="(item, index) in colors" class="xl-rounded-full xl-size-6 xl-mx-1" :key="index" :style="{
                         'background-color': item
@@ -117,6 +117,11 @@
                     <img class=" xl-size-5" :src="item.icon" :alt="item.name">
                     <span class=" xl-mx-8 xl-opacity-60 xl-w-24">{{ item.title }}</span>
                     <span class=" xl-opacity-50 xl-ml-5">{{ item.url }}</span>
+                </div>
+                <div class=" xl-flex xl-h-9 xl-px-2.5 xl-rounded xl-transition-all xl-items-center search_engine_item">
+                    <img class=" xl-size-5" src="/assets/imgs/engine_ico/search.png" alt="custom">
+                    <span class=" xl-mx-8 xl-opacity-60 xl-w-24">{{ $t('setting.customSE') }}</span>
+                    <span class=" xl-opacity-50 xl-ml-5">https://</span>
                 </div>
             </div>
         </div>
@@ -427,6 +432,8 @@ const theme = {
                 value: val,
                 base64: ''
             });
+            is_data.theme.background.type = "color";
+            is_data.theme.background.value = val;
         },
         background(val) {
             store.dispatch('background', {
@@ -667,7 +674,9 @@ const wallhaven_imgs_change = (val) => {
         background-position-x: -20%;
     }
 }
-
+.search_engine_item{
+    color: var(--font-1);
+}
 .search_engine_item:hover{
     background-color: var(--theme-color_c);
 }

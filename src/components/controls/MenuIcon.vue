@@ -91,9 +91,14 @@ const switchLanguage = (language) => {
         message: t("menu.switchLanguageSuccess"),
         type: 'success',
     })
+
     locale.value = language;
     localStorage.setItem("language", language)
     subMenu_class_language.value = 'hide';
+
+    setTimeout(() => {
+        location.reload();
+    }, 300);
 }
 </script>
 <style scoped lang="less">

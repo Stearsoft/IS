@@ -104,7 +104,8 @@
     "awordDescription": "显示随机一言",
     "timeStyle": "时间样式",
     "timeStyleDescription": "设置不同的时间样式",
-    "airCopy": "隔空取义"
+    "airCopy": "隔空取义",
+    "customSE": "自定义"
   },
   "action": {
     "click": "点我",

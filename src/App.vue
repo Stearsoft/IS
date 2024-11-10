@@ -10,9 +10,11 @@ const onSearchFocus = () => {SearchInput.value = true;};
 const onSearchBlur = () => {SearchInput.value = false;};
 const startUI = (ui_name) => {
   Windows_UI.value[ui_name] = !Windows_UI.value[ui_name];
+  SearchInput.value = true;
 }
 const closeUI = (ui_name) => {
   Windows_UI.value[ui_name] = !Windows_UI.value[ui_name];
+  SearchInput.value = false;
 }
 const Windows_UI = ref({
   'setting': false,

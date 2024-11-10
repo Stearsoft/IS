@@ -106,7 +106,10 @@ span.el-switch__core {
     max-width: 500px;
 }
 
-.text_color {
+.text_color ,
+.el-pager li,
+.el-pagination button{
+    --el-pagination-button-color:var(--font-1);
     color: var(--font-1);
 }
 

@@ -1,7 +1,7 @@
 <template>
     <div>
         <input type="text" v-model="inputValue" @input="handleInput"
-            class="xl-px-2 xl-py-2 xl-w-full xl-rounded xl-mb-1" style="background-color:var(--bg-5)" />
+            class="xl-px-2 xl-py-2 xl-w-full xl-rounded xl-mb-1 text_color" style="background-color:var(--bg-5)" />
         <p class="xl-text-red-600 xl-mb-5 xl-text-sm xl-transition-opacity"
             :class="{ 'xl-opacity-0': valueIsConsistent }">
             {{ errorMsg }}
