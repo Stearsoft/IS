@@ -3,7 +3,7 @@
     <div ref="backgroundBox" :class="'background-box' + (focus ? ' focus' : '')" :style="{
         'background-color': background_type == 'color' ? background_value : 'transparent',
     }">
-        <div :style="{ opacity: is_data_r.theme.background.mark_opacity }"></div>
+        <div :style="{ '--opacity':is_data_r.theme.background.mark_opacity}"></div>
         <img v-if="background_type == 'image'" :src="background_value" alt="background"
             class=" xl-object-cover xl-h-full xl-w-full xl-transition-opacity" @load="NProgress.done();bgLoaded()" :class="{
                 'xl-opacity-0':!bgLoaded_mode
@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-import { watch, computed, ref } from 'vue';
+import { watch, computed, ref ,onMounted} from 'vue';
 import { useStore } from 'vuex';
 import { is } from '@/utils/is';
 import NProgress from 'nprogress'
@@ -23,12 +23,14 @@ import NProgress from 'nprogress'
 const store = useStore();
 const is_data = is().is_current.value;
 const is_data_r = ref(is_data);
+const current_bg_opacity = ref(0);
 const background_type = ref(is_data.theme.background.type);
 const background_value = ref(is_data.theme.background.value == '' ? localStorage.getItem('is_bg') : is_data.theme.background.value);
 const background = computed(() => store.state.background);
 const background_time_interval = ref(null);
 const bgLoaded_mode = ref(false);
 watch(is_data, (newValue) => {
+    current_bg_opacity.value = is_data_r.value.theme.background.mark_opacity;
     is_data_r.value = newValue;
     console.log("背景检测到is_data变化");
 })
@@ -140,7 +142,11 @@ const handleVideoPlayback = (video) => {
     video.target.style.opacity = 1;
     video.target.removeEventListener("canplay", handleVideoPlayback);
 };
-
+onMounted(() => {
+setTimeout(() => {
+}, 160);
+    console.log("object");
+})
 
 </script>
 
@@ -163,14 +169,26 @@ const handleVideoPlayback = (video) => {
     }
 
     div {
-        opacity: 0;
+        opacity: var(--opacity, 0);
         background: -webkit-radial-gradient(rgba(0, 0, 0, 0.24) 0, rgba(0, 0, 0, 0.57) 93%), -webkit-radial-gradient(rgba(0, 0, 0, 0.25) 33%, #000000 166%);
         background: radial-gradient(rgba(0, 0, 0, 0.24) 0, rgba(0, 0, 0, 0.57) 93%), radial-gradient(rgba(0, 0, 0, 0.25) 33%, #000000 166%);
         height: 100%;
         transition: all 0.3s ease-in-out;
-        z-index: 0;
+        z-index: 1;
         position: absolute;
         width: 100%;
+    }
+
+    img,video {
+        animation: fade-in 0.6s ease-in-out;
+        @keyframes fade-in {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
     }
 }
 </style>

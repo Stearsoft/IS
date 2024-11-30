@@ -110,7 +110,7 @@ const closeSetting = () => {
   settingUIclass.value = 'hide';
   setTimeout(() => {
     emit('close',"setting");
-  }, 300);
+  }, 50);
 }
 const { t } = useI18n();
 const is_data = is().is_current.value;
@@ -335,34 +335,34 @@ const types_list_default = [
           label: t('setting.autoCleanInput'),
           description: t('setting.autoCleanInputDescription'),
           type: 'switch',
-          default: false,
+          default: is_data.search.auto_clear,
           condition: function () {
             return true;
           },
           action: function (value) {
-            console.log(value);
+            is_data.search.auto_clear = value;
           }
         }, {
           label: t('setting.disableAutoGo'),
           description: t('setting.disableAutoGoDescription'),
           type: 'switch',
-          default: false,
+          default: is_data.search.disable_auto_redirect,
           condition: function () {
             return true;
           },
           action: function (value) {
-            console.log(value);
+            is_data.search.disable_auto_redirect = value;
           }
         }, {
           label: t('setting.autoFocus'),
           description: t('setting.autoFocusDescription'),
           type: 'switch',
-          default: false,
+          default: is_data.search.auto_focus,
           condition: function () {
             return true;
           },
           action: function (value) {
-            console.log(value);
+            is_data.search.auto_focus = value;
           }
         }, {
           type: 'card',

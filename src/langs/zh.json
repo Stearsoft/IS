@@ -6,6 +6,14 @@
       "love": "收藏",
       "url": "网址",
       "translate": "翻译"
+    },
+    "engine_saved": "搜索引擎修改成功，当前搜索引擎 { name }",
+    "engine_list": {
+      "google": "谷歌",
+      "tif": "林中木",
+      "bing": "必应",
+      "baidu": "百度",
+      "sogou": "搜狗"
     }
   },
   "footer": {
@@ -35,7 +43,8 @@
   "static": {
     "success": "成功",
     "warning": "警告",
-    "info": "提示"
+    "info": "提示",
+    "error": "错误"
   },
   "setting": {
     "drawer_title": "提示",

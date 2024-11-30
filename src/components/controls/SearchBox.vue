@@ -1,7 +1,7 @@
 <template>
     <div id="timeContainer" style="opacity: 1;" aria-hidden="true">
         <div id="timeText" :style="{
-            padding:current_time == '/logo_xn/' || current_time == '/logo_tif/' ? '0' : '10px',
+            padding: current_time == '/logo_xn/' || current_time == '/logo_tif/' ? '0' : '10px',
         }">
             <img src="../../assets/imgs/xn.webp" v-if="current_time == '/logo_xn/'" alt="LOGO">
             <img src="../../assets/imgs/tif.png" v-else-if="current_time == '/logo_tif/'" alt="LOGO">
@@ -45,7 +45,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { is } from '@/utils/is';
 import IconTranslate from '../icons/IconTranslate.vue';
 import IconLove from '../icons/IconLove.vue';
@@ -61,8 +61,11 @@ const searchFocus = () => {
     emit('focused');
 };
 const searchBlur = () => {
+    if (is_data.search.auto_clear) searchInputDom.value.value = '';
     emit('blurred');
-    suggestions.value = [];
+    setTimeout(() => {
+        suggestions.value = [];
+    }, 200);
 };
 const searchInput = (e) => {
     currentIndex.value = -1;
@@ -162,6 +165,7 @@ const triggerItem = (e) => {
     if (currentIndex.value != -1) searchInputDom.value.value = suggestions.value[currentIndex.value].text;
 }
 function visit(json) {
+    console.log(json);
     currentIndex.value = -1;
     if (json.type == "url") {
         window.open(json.text, "_blank");
@@ -180,12 +184,17 @@ function visit(json) {
     }
 }
 function goSearch(text) {
+    console.log(text);
     if (currentIndex.value !== -1) {
         visit(suggestions.value[currentIndex.value]);
     } else {
         let target = "_blank";
         if (is_data.search.engine_url == location.href + "search?q=") target = "_self";
-        window.open(is_data.search.engine_url + text, target);
+        if(!is_data.search.disable_auto_redirect) {
+            window.open(is_data.search.engine_url + text, target);
+        } else {
+            searchInputDom.value.value = text;
+        }
     }
 }
 const getTime = (format) => {
@@ -209,6 +218,10 @@ setInterval(() => {
         current_time.value = getTime(format);
     }
 }, 1000);
+
+onMounted(() => {
+    if(is_data.search.auto_focus) searchInputDom.value.focus();
+})
 </script>
 
 
@@ -322,7 +335,7 @@ div#timeContainer {
         padding: 10px;
         text-shadow: 0 0 1px black;
 
-        img{
+        img {
             height: 50px;
         }
     }

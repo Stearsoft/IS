@@ -113,7 +113,8 @@
                 </div>
             </div>
             <div v-else-if="card === 'search_engine'">
-                <div v-for="(item, index) in engine" :key="index" class=" xl-flex xl-h-9 xl-px-2.5 xl-rounded xl-transition-all xl-items-center search_engine_item">
+                <div v-for="(item, index) in engine" :key="index" @click="engine_toggle.change(item)"
+                    class=" xl-flex xl-h-9 xl-px-2.5 xl-rounded xl-transition-all xl-items-center search_engine_item">
                     <img class=" xl-size-5" :src="item.icon" :alt="item.name">
                     <span class=" xl-mx-8 xl-opacity-60 xl-w-24">{{ item.title }}</span>
                     <span class=" xl-opacity-50 xl-ml-5">{{ item.url }}</span>
@@ -121,7 +122,11 @@
                 <div class=" xl-flex xl-h-9 xl-px-2.5 xl-rounded xl-transition-all xl-items-center search_engine_item">
                     <img class=" xl-size-5" src="/assets/imgs/engine_ico/search.png" alt="custom">
                     <span class=" xl-mx-8 xl-opacity-60 xl-w-24">{{ $t('setting.customSE') }}</span>
-                    <span class=" xl-opacity-50 xl-ml-5">https://</span>
+                    <input class=" xl-opacity-50 xl-ml-5 xl-bg-transparent" @blur="engine_toggle.change({
+                        title: $t('setting.customSE'),
+                        url: search_custom_engine.valueOf(),
+                        name: 'custom'
+                    })" v-model="search_custom_engine">
                 </div>
             </div>
         </div>
@@ -144,6 +149,7 @@ const { t } = useI18n();
 const uploaded_img_url = ref(null);
 const uploaded = ref(false);
 const is_data = is().is_current.value;
+const search_custom_engine = ref(is_data.search.engine_name == 'custom' ? is_data.search.engine_url : 'https://');
 const store = useStore();
 const ref_state = ref({
     bg_link: '',
@@ -155,50 +161,50 @@ const ref_state = ref({
 });
 const engine = [
     {
-        title: '林中木',
+        title: t('search.engine_list.tif'),
         url: 'https://tfseek.top/search?q=',
         icon: '/assets/imgs/engine_ico/tif.png',
-        name:'tif'
-    },{
-        title: 'Google',
+        name: 'tif'
+    }, {
+        title: t('search.engine_list.google'),
         url: 'https://www.google.com/search?q=',
         icon: '/assets/imgs/engine_ico/google.png',
-        name:'google'
-    },{
-        title: 'Bing',
+        name: 'google'
+    }, {
+        title: t('search.engine_list.bing'),
         url: 'https://www.bing.com/search?q=',
         icon: '/assets/imgs/engine_ico/bing.png',
-        name:'bing'
-    },{
-        title: 'Baidu',
+        name: 'bing'
+    }, {
+        title: t('search.engine_list.baidu'),
         url: 'https://www.baidu.com/s?wd=',
         icon: '/assets/imgs/engine_ico/baidu.png',
-        name:'baidu'
-    },{
+        name: 'baidu'
+    }, {
         title: '360',
         url: 'https://www.so.com/s?q=',
         icon: '/assets/imgs/engine_ico/360.png',
-        name:'360'
-    },{
-        title: 'Sogou',
+        name: '360'
+    }, {
+        title: t('search.engine_list.sogou'),
         url: 'https://www.sogou.com/web?query=',
         icon: '/assets/imgs/engine_ico/sogou.png',
-        name:'sogou'
-    },{
+        name: 'sogou'
+    }, {
         title: 'DuckDuckGo',
         url: 'https://duckduckgo.com/?q=',
         icon: '/assets/imgs/engine_ico/duckduckgo.png',
-        name:'DuckDuckGo'
-    },{
+        name: 'DuckDuckGo'
+    }, {
         title: 'Yandex',
         url: 'https://yandex.com/search/?text=',
         icon: '/assets/imgs/engine_ico/yandex.png',
-        name:'Yandex'
-    },{
+        name: 'Yandex'
+    }, {
         title: 'GitHub',
         url: 'https://github.com/search?q=',
         icon: '/assets/imgs/engine_ico/github.png',
-        name:'github'
+        name: 'github'
     }
 ]
 const colors = ["#fa5252", "#e64980", "#be4bdb", "#7950f2", "#4263eb", "#1c7ed6", "#0ca678", "#37b24d", "#74b816", "#f59f00", "#f76707"];
@@ -530,8 +536,9 @@ const theme = {
 
 
     },
+
     wallhaven(id, type) {
-        theme.upload.background('https://tfseek.top/api/wallhaven_img.php?size=full&id=' + id + '&type=' + type);
+        const url = 'https://tfseek.top/api/wallhaven_img.php?size=full&id=' + id + '&type=' + type;
         NProgress.start();
 
         // eslint-disable-next-line no-undef
@@ -540,6 +547,55 @@ const theme = {
             message: t("background.loading"),
             type: 'info',
         });
+        const imageUrl = url;
+
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            canvas.width = img.width;
+            canvas.height = img.height;
+
+            ctx.drawImage(img, 0, 0);
+
+            canvas.toBlob((blob) => {
+                if (blob) {
+                    // 进行压缩
+                    new ImageCompressor(blob, {
+                        quality: 0.5,
+                        success(result) {
+                            const reader = new FileReader();
+                            reader.onloadend = () => {
+                                const compressedBase64 = reader.result;
+                                store.dispatch('background', {
+                                    type: "image",
+                                    value: 'is://type:base64',
+                                    base64: compressedBase64
+                                });
+                                is_data.theme.background.type = "image";
+                                is_data.theme.background.value = "";
+                                localStorage.setItem("is_bg", compressedBase64);
+                                NProgress.done();
+                            };
+                            reader.readAsDataURL(result);
+                        },
+                        error(err) {
+                            console.error('压缩失败:', err);
+                        },
+                    });
+                } else {
+                    console.error('Canvas to Blob failed');
+                }
+            }, 'image/jpeg', 0.8);
+
+
+
+        };
+        img.src = imageUrl;
+
         return false;
     },
     load() {
@@ -554,6 +610,18 @@ const theme = {
                 ref_state.value.wallhaven_imgs = data;
             })
             .catch(error => console.error(error));
+    }
+}
+const engine_toggle = {
+    change: function (json) {
+        is_data.search.engine_url = json.url;
+        is_data.search.engine_name = json.name;
+        // eslint-disable-next-line no-undef
+        ElNotification({
+            title: t("static.success"),
+            message: t("search.engine_saved", {name:json.title}),
+            type: 'success',
+        });
     }
 }
 const wallhaven_basic = () => {
@@ -674,10 +742,12 @@ const wallhaven_imgs_change = (val) => {
         background-position-x: -20%;
     }
 }
-.search_engine_item{
+
+.search_engine_item {
     color: var(--font-1);
 }
-.search_engine_item:hover{
+
+.search_engine_item:hover {
     background-color: var(--theme-color_c);
 }
 </style>
