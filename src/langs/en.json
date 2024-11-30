@@ -27,7 +27,15 @@
       "translate": "Translate",
       "url": "URL"
     },
-    "suggestion_list": "Search result list"
+    "suggestion_list": "Search result list",
+    "engine_list": {
+      "baidu": "Baidu",
+      "bing": "Bing",
+      "google": "Google",
+      "sogou": "Sogou",
+      "tif": "Tree in Forest"
+    },
+    "engine_saved": "Search engine modification successful, current search engine { name }"
   },
   "url": {
     "translate": "https://translate.google.com/?sl=auto&tl=en&op=translate&text="
@@ -104,11 +112,23 @@
     "theme": "Theme settings",
     "autoCleanInput": "Automatically clear search box",
     "maskOpacityDescription": "Set mask transparency",
-    "minimalMode": "minimalist mode"
+    "minimalMode": "minimalist mode",
+    "airCopy": "Take meaning from a distance",
+    "airCopyDescription": "When logging in, it prompts to extract content from the air.",
+    "autoHideBookmark": "Automatically hide bookmarks",
+    "autoHideBookmarkDescription": "Automatically hide bookmarks",
+    "aword": "One word",
+    "awordDescription": "Show random words",
+    "customSE": "Customize",
+    "timeStyle": "time style",
+    "timeStyleDescription": "Set different time styles",
+    "weather": "weather",
+    "weatherDescription": "Show local weather"
   },
   "static": {
     "info": "hint",
     "success": "success",
-    "warning": "warn"
+    "warning": "warn",
+    "error": "mistake"
   }
 }
