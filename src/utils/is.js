@@ -70,7 +70,7 @@ watch(
     is_current,
     (newValue) => {
         if (newValue) {
-            console.log("来自is.js的检测，检测到有变化");
+            console.log("来自is.js的检测，检测到有变化",newValue,"已保存");
             localStorage.setItem("is", JSON.stringify(newValue));
             renderSetting(newValue);
         }

@@ -56,7 +56,7 @@ const emit = defineEmits(['focused', 'blurred', 'enter']);
 const searchSuggestionContainer = ref(null);
 const searchInputDom = ref(null);
 const currentIndex = ref(-1);
-const current_time = ref('10:00');
+const current_time = ref(is_data.time.base);
 const searchFocus = () => {
     emit('focused');
 };

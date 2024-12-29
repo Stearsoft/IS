@@ -126,9 +126,9 @@
     "weatherDescription": "Show local weather"
   },
   "static": {
-    "info": "hint",
-    "success": "success",
-    "warning": "warn",
-    "error": "mistake"
+    "info": "Info",
+    "success": "Success",
+    "warning": "Warn",
+    "error": "Error"
   }
 }

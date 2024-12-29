@@ -114,7 +114,9 @@
     "timeStyle": "时间样式",
     "timeStyleDescription": "设置不同的时间样式",
     "airCopy": "隔空取义",
-    "customSE": "自定义"
+    "customSE": "自定义",
+    "setting": "设置",
+    "emptyValue": "空"
   },
   "action": {
     "click": "点我",
@@ -130,5 +132,14 @@
         "wallhaven": "输入关键词来搜索Wallhaven壁纸"
       }
     }
+  },
+  "date": {
+    "year": "年",
+    "month": "月",
+    "day": "日"
+  },
+  "logo": {
+    "tif": "林中木",
+    "xn": "星柠"
   }
 }

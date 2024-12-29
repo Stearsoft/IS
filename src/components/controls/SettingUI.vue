@@ -52,6 +52,13 @@
                         <el-slider v-model="ji.default" :min="ji.min" :max="ji.max" :format-tooltip="ji.format_tooltip"
                           @change="ji.done(ji.default)" @input="ji.input(ji.default)"></el-slider>
                       </template>
+                      <template v-else-if="ji.type === 'select'">
+                        <el-select v-model="ji.value" :placeholder="ji.placeholder" style="width: 150px"
+                          @change="ji.action">
+                          <el-option v-for="item in ji.options" :key="item.value" :label="item.label"
+                            :value="item.value" />
+                        </el-select>
+                      </template>
                     </dd>
                   </template>
                 </dl>
@@ -84,6 +91,13 @@
                       <el-slider v-model="ji.default" :min="ji.min" :max="ji.max" :format-tooltip="ji.format_tooltip"
                         @change="ji.done(ji.default)" @input="ji.input(ji.default)"></el-slider>
                     </template>
+                    <template v-else-if="ji.type === 'select'">
+                      <el-select v-model="ji.value" :placeholder="ji.placeholder" style="width: 150px"
+                        @change="ji.action">
+                        <el-option v-for="item in ji.options" :key="item.value" :label="item.label"
+                          :value="item.value" />
+                      </el-select>
+                    </template>
                   </dd>
                 </template>
               </dl>
@@ -109,7 +123,7 @@ const emit = defineEmits(['close']);
 const closeSetting = () => {
   settingUIclass.value = 'hide';
   setTimeout(() => {
-    emit('close',"setting");
+    emit('close', "setting");
   }, 50);
 }
 const { t } = useI18n();
@@ -417,13 +431,55 @@ const types_list_default = [
         }, {
           label: t('setting.timeStyle'),
           description: t('setting.timeStyleDescription'),
-          type: 'switch',
+          type: 'select',
+          value: "10:30",
+          placeholder: t("setting.setting"),
+          options: [
+            {
+              value: 'MiMi:SSSS',
+              label: '10:30'
+            }, {
+              value: 'HHHH:MiMi:SSSS',
+              label: "10:30:00"
+            }, {
+              value: 'YYYY' + t('date.year') + 'MoMo' + t('date.month') + 'DDDD' + t('date.day'),
+              label: '2025' + t('date.year') + '10' + t('date.month') + '1' + t('date.day')
+            }, {
+              value: 'YYYY' + t('date.year') + 'MoMo' + t('date.month') + 'DDDD' + t('date.day') + ' HHHH:MiMi',
+              label: '2025' + t('date.year') + '10' + t('date.month') + '1' + t('date.day') + ' 10:30'
+            }, {
+              value: ' ',
+              label: t("setting.emptyValue")
+            }, {
+              value:'/logo_tif/',
+              label: t('logo.tif')
+            }, {
+              value:'/logo_xn/',
+              label: t('logo.xn')
+            }
+          ],
           default: false,
           condition: function () {
             return true;
           },
           action: function (value) {
-            console.log(value);
+            const getTime = (format) => {
+              const now = new Date();
+              const year = now.getFullYear();
+              const month = String(now.getMonth() + 1).padStart(2, '0');
+              const day = String(now.getDate()).padStart(2, '0');
+              const hour = String(now.getHours()).padStart(2, '0');
+              const minute = String(now.getMinutes()).padStart(2, '0');
+              const second = String(now.getSeconds()).padStart(2, '0');
+              return format.replace('YYYY', year)
+                .replace('MoMo', month)
+                .replace('DDDD', day)
+                .replace('HHHH', hour)
+                .replace('MiMi', minute)
+                .replace('SSSS', second);
+            }
+            is_data.time.form = value;
+            is_data.time.base = getTime(value);
           }
         }, {
           label: t('setting.airCopy'),
@@ -708,5 +764,7 @@ const types_active_index = ref(0);
     -webkit-transform: scale(1);
     transform: scale(1);
   }
-};
+}
+
+;
 </style>
