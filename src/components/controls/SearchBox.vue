@@ -2,6 +2,8 @@
     <div id="timeContainer" style="opacity: 1;" aria-hidden="true">
         <div id="timeText" :style="{
             padding: current_time == '/logo_xn/' || current_time == '/logo_tif/' ? '0' : '10px',
+        }" :class="{
+            minimal_mode: is_data.theme.minimal_mode
         }">
             <img src="../../assets/imgs/xn.webp" v-if="current_time == '/logo_xn/'" alt="LOGO">
             <img src="../../assets/imgs/tif.png" v-else-if="current_time == '/logo_tif/'" alt="LOGO">
@@ -9,7 +11,9 @@
         </div>
     </div>
     <div id="searchBox">
-        <div id="inputContainer">
+        <div id="inputContainer" :class="{
+            minimal_mode: is_data.theme.minimal_mode
+        }">
             <input type="text" ref="searchInputDom" name="" :placeholder="is_data.search.placeholder" autocomplete="off"
                 :aria-label="$t('search.input')" id="search" class="searchInput" @focus="searchFocus" @blur="searchBlur"
                 @input="searchInput" @keyup.enter="searchEnter" @keydown="triggerItem" />
@@ -190,7 +194,7 @@ function goSearch(text) {
     } else {
         let target = "_blank";
         if (is_data.search.engine_url == location.href + "search?q=") target = "_self";
-        if(!is_data.search.disable_auto_redirect) {
+        if (!is_data.search.disable_auto_redirect) {
             window.open(is_data.search.engine_url + text, target);
         } else {
             searchInputDom.value.value = text;
@@ -220,7 +224,7 @@ setInterval(() => {
 }, 1000);
 
 onMounted(() => {
-    if(is_data.search.auto_focus) searchInputDom.value.focus();
+    if (is_data.search.auto_focus) searchInputDom.value.focus();
 })
 </script>
 
@@ -247,6 +251,11 @@ div#searchBox {
         backdrop-filter: blur(10px);
         transition: all 0.2s cubic-bezier(1, 0.4, 0, 0.59);
         box-shadow: 0 2px 10px var(--shadow-1);
+
+        &.minimal_mode {
+            box-shadow: none;
+            border: 1px solid var(--border-2);
+        }
 
         input {
             background: transparent;
@@ -334,6 +343,10 @@ div#timeContainer {
         color: #f9fcff;
         padding: 10px;
         text-shadow: 0 0 1px black;
+
+        &.minimal_mode {
+            color: var(--font-1);
+        }
 
         img {
             height: 50px;

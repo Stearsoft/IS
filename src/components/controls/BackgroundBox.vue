@@ -2,7 +2,7 @@
 
     <div ref="backgroundBox" :class="'background-box' + (focus ? ' focus' : '')" :style="{
         'background-color': background_type == 'color' ? background_value : 'transparent',
-    }">
+    }" v-if="!is_data_r.theme.minimal_mode">
         <div :style="{ '--opacity':is_data_r.theme.background.mark_opacity}"></div>
         <img v-if="background_type == 'image'" :src="background_value" alt="background"
             class=" xl-object-cover xl-h-full xl-w-full xl-transition-opacity" @load="NProgress.done();bgLoaded()" :class="{

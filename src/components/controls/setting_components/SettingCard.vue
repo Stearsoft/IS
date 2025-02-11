@@ -5,7 +5,7 @@
         </div>
         <div class="card_container" :class="{
             full: mode == 'full',
-            noPadding: mode == 'noPadding'
+            noPadding: mode == 'noPadding',
         }">
             <div v-if="card === 'color_custom'">
                 <div class="xl-flex xl-items-center">
@@ -61,8 +61,8 @@
             </div>
             <div v-else-if="card === 'staticWallpaper_imgs'" class="xl-flex xl-flex-wrap">
                 <div class="bg_container" v-for="(item, index) in theme.in_background" :key="index" :style="{
-                    'background-image': `url(${item.thumb})`,
-                }" @click="theme.upload.background(item.full)"></div>
+                    'background-image': `url(/assets/imgs/background/resize/${item}.webp)`,
+                }" @click="theme.upload.background('/assets/imgs/background/'+item+'.webp')"></div>
             </div>
             <div v-else-if="card === 'staticWallpaper_random'" class="xl-flex xl-flex-wrap">
                 <div class="bg_container" v-for="(item, index) in theme.ra_background" :key="index" :style="{
@@ -290,76 +290,7 @@ const theme = {
         ]
     ],
     in_background: [
-        {
-            "full": "/assets/imgs/default.webp",
-            "thumb": "/assets/imgs/background/resize/default.webp"
-        }, {
-            "full": "/assets/imgs/background/1.webp",
-            "thumb": "/assets/imgs/background/resize/1.webp"
-        }, {
-            "full": "/assets/imgs/background/acc.webp",
-            "thumb": "/assets/imgs/background/resize/acc.webp"
-        },
-        {
-            "full": "/assets/imgs/background/2.webp",
-            "thumb": "/assets/imgs/background/resize/2.webp"
-        },
-        {
-            "full": "/assets/imgs/background/3.webp",
-            "thumb": "/assets/imgs/background/resize/3.webp"
-        },
-        {
-            "full": "/assets/imgs/background/4.webp",
-            "thumb": "/assets/imgs/background/resize/4.webp"
-        },
-        {
-            "full": "/assets/imgs/background/5.webp",
-            "thumb": "/assets/imgs/background/resize/5.webp"
-        },
-        {
-            "full": "/assets/imgs/background/6.webp",
-            "thumb": "/assets/imgs/background/resize/6.webp"
-        },
-        {
-            "full": "/assets/imgs/background/7.webp",
-            "thumb": "/assets/imgs/background/resize/7.webp"
-        },
-        {
-            "full": "/assets/imgs/background/out-001.webp",
-            "thumb": "/assets/imgs/background/resize/out-001.webp"
-        },
-        {
-            "full": "/assets/imgs/background/out-002.webp",
-            "thumb": "/assets/imgs/background/resize/out-002.webp"
-        },
-        {
-            "full": "/assets/imgs/background/out-003.webp",
-            "thumb": "/assets/imgs/background/resize/out-003.webp"
-        },
-        {
-            "full": "/assets/imgs/background/out-004.webp",
-            "thumb": "/assets/imgs/background/resize/out-004.webp"
-        },
-        {
-            "full": "/assets/imgs/background/out-005.webp",
-            "thumb": "/assets/imgs/background/resize/out-005.webp"
-        },
-        {
-            "full": "/assets/imgs/background/out-006.webp",
-            "thumb": "/assets/imgs/background/resize/out-006.webp"
-        },
-        {
-            "full": "/assets/imgs/background/out-007.webp",
-            "thumb": "/assets/imgs/background/resize/out-007.webp"
-        },
-        {
-            "full": "/assets/imgs/background/out-009.webp",
-            "thumb": "/assets/imgs/background/resize/out-009.webp"
-        },
-        {
-            "full": "/assets/imgs/background/out-010.webp",
-            "thumb": "/assets/imgs/background/resize/out-010.webp"
-        }
+        "default","la60d5xp","1ea3qu53","cd4vpsk9","tg7fqy8w","9xujr4oc","4d8mzovo","d9tc5737","jk92agji","mc15tfz5","o6qz8zzr","o1gpeoqb","due321vq","9hc56mo0","ciuxyhc4","fbsdpiay","v9dt8l9d","apkhh598","gjvvqstw","mmsuugp6","qht6byw8","jepy8405","pn8svzxo","w4cs2tbb","pyh8n3o8",
     ],
     ra_background: [
         'https://tfseek.top/api/bingWallpaper.php',

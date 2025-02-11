@@ -1,6 +1,9 @@
 <template>
     <div class="top_menu item" @click="openMenu">
-        <div class="menu" :class="current_class">
+        <div class="menu" :class="{
+                minimal_mode: is_data.theme.minimal_mode,
+                [current_class]:true
+            }">
             <slot name="menu"></slot>
         </div>
         <slot></slot>
@@ -9,6 +12,8 @@
 
 <script setup>
 import { ref, watch } from 'vue';
+import { is } from '@/utils/is';
+const is_data = is().is_current.value;
 
 const current_class = ref('hide');
 const emit = defineEmits(['change']);
@@ -90,6 +95,10 @@ watch(
         }
     }
 
+    &.minimal_mode{
+        box-shadow: none;
+        border: 1px solid var(--border-2);
+    }
 }
 
 .menu.hide {

@@ -1,5 +1,8 @@
 <template>
-  <div class="settingContainer" :class="settingUIclass">
+  <div class="settingContainer" :class="{
+    [settingUIclass]:true,
+    minimal_mode: is_data.theme.minimal_mode
+  }">
     <div
       class=" xl-absolute xl-right-2 xl-top-2 xl-size-6 xl-group hover:xl-bg-red-400 xl-transition-all xl-rounded-full"
       @click="closeSetting">
@@ -7,7 +10,9 @@
     </div>
     <el-container>
       <el-aside class="aside">
-        <ul class="type_list">
+        <ul class="type_list" :class="{
+          minimal_mode: is_data.theme.minimal_mode
+        }">
           <li v-for="(item, index) in types_list" :key="index" :class="{ active: index === types_active_index }"
             @click="types_active_index = index">
             <SettingIcon :icon="item.iconName" />
@@ -15,13 +20,20 @@
           </li>
         </ul>
       </el-aside>
-      <el-main class="main">
+      <el-main class="main" :class="{
+        minimal_mode: is_data.theme.minimal_mode
+      }">
         <div v-for="(item, index) in types_list" :class="{ active: index === types_active_index }" :key="index"
           class="type_content">
           <template v-if="item.contents.group">
             <el-header class="group">
               <span class="text_color" v-for="(ii, i) in item.contents.pages" :key="i"
-                :class="{ active: i === item.contents.default_page }" @click.stop="item.contents.default_page = i">{{
+                :class="{ 
+                  active: i === item.contents.default_page,
+                  'xl-opacity-30': ii.minimal_mode_hide && is_data.theme.minimal_mode,
+                  'xl-pointer-events-none': ii.minimal_mode_hide && is_data.theme.minimal_mode,
+                  'xl-cursor-none': ii.minimal_mode_hide && is_data.theme.minimal_mode,
+                }" @click.stop="item.contents.default_page = i">{{
                   ii.label }}</span>
             </el-header>
             <el-main class="pages">
@@ -31,7 +43,11 @@
                   disabled: !ji.condition(),
                   card: ji.type === 'card',
                   full: ji.card_mode == 'full',
-                  slider: ji.type === 'slider'
+                  slider: ji.type === 'slider',
+                  minimal_mode: is_data.theme.minimal_mode,
+                  'xl-opacity-30': ji.minimal_mode_hide && is_data.theme.minimal_mode,
+                  'xl-pointer-events-none': ji.minimal_mode_hide && is_data.theme.minimal_mode,
+                  'xl-cursor-none': ji.minimal_mode_hide && is_data.theme.minimal_mode,
                 }">
                   <template v-if="ji.type === 'card'">
                     <SettingCard :card="ji.card_name" :mode="ji.card_mode" :title="ji.text" />
@@ -70,7 +86,8 @@
               <dl v-for="(ji, j) in item.contents.page" :key="j" :class="{
                 disabled: !ji.condition(),
                 card: ji.type === 'card',
-                full: ji.card_mode == 'full'
+                full: ji.card_mode == 'full',
+                minimal_mode: is_data.theme.minimal_mode
               }">
                 <template v-if="ji.type === 'card'">
                   <SettingCard :card="ji.card_name" :mode="ji.card_mode" :title="ji.text" />
@@ -181,6 +198,7 @@ const types_list_default = [
               default: is_data.theme.background.mark_opacity * 100,
               max: 100,
               min: 0,
+              minimal_mode_hide: true,
               format_tooltip: function (value) {
                 return value + '%';
               },
@@ -200,6 +218,7 @@ const types_list_default = [
               default: is_data.theme.background.blur,
               max: 100,
               min: 0,
+              minimal_mode_hide: true,
               format_tooltip: function (value) {
                 return value + 'px';
               },
@@ -240,6 +259,7 @@ const types_list_default = [
         }, {
           label: t('setting.staticWallpaper'),
           icon: 'fas fa-palette',
+          minimal_mode_hide: true,
           items: [
             {
               condition: function () {
@@ -303,6 +323,7 @@ const types_list_default = [
         }, {
           label: t('setting.dynamicWallpaper'),
           icon: 'fas fa-palette',
+          minimal_mode_hide: true,
           items: [
             {
               type: 'card',
@@ -325,6 +346,7 @@ const types_list_default = [
         }, {
           label: 'Wallhaven',
           icon: 'fas fa-palette',
+          minimal_mode_hide: true,
           items: [
             {
               type: 'card',
@@ -436,7 +458,7 @@ const types_list_default = [
           placeholder: t("setting.setting"),
           options: [
             {
-              value: 'MiMi:SSSS',
+              value: 'HHHH:MiMi',
               label: '10:30'
             }, {
               value: 'HHHH:MiMi:SSSS',
@@ -451,10 +473,10 @@ const types_list_default = [
               value: ' ',
               label: t("setting.emptyValue")
             }, {
-              value:'/logo_tif/',
+              value: '/logo_tif/',
               label: t('logo.tif')
             }, {
-              value:'/logo_xn/',
+              value: '/logo_xn/',
               label: t('logo.xn')
             }
           ],
@@ -533,6 +555,10 @@ const types_active_index = ref(0);
   max-height: 600px;
   min-height: 450px;
 
+  &.minimal_mode {
+    box-shadow: none;
+    border: 1px solid #6262621f;
+  }
 
   &.hide {
     opacity: 0;
@@ -548,6 +574,20 @@ const types_active_index = ref(0);
       background: var(--bg-3);
       height: 100%;
       padding-top: 50px;
+
+      &.minimal_mode {
+        border-right: 1px solid #6262621f;
+
+        li {
+          margin: 0 6px;
+          border-radius: 8px;
+          padding: 8px 15px;
+
+          &.active {
+            background-color: var(--theme-color_c);
+          }
+        }
+      }
 
       li {
         padding: 10px 15px;
@@ -577,6 +617,10 @@ const types_active_index = ref(0);
     flex-direction: column;
     --el-main-padding: 0;
 
+    &.minimal_mode{
+      background: var(--bg-1);
+    }
+
     .type_content {
       display: none;
 
@@ -586,7 +630,7 @@ const types_active_index = ref(0);
         --el-header-height: 80px;
 
         span {
-          background: #00000017;
+          // background: #00000017;
           padding: 10px;
           margin-right: 8px;
           border-radius: 5px;
@@ -594,15 +638,40 @@ const types_active_index = ref(0);
           transition: all 0.3s;
           align-items: center;
           display: flex;
+          position: relative;
           height: 40px;
 
           &.active {
             color: var(--theme-color, #0084ff);
             background: var(--theme-color_c, #0084ff10);
+            &::after{
+              opacity: 0.2;
+            }
           }
 
           &:hover {
             color: var(--theme-color, #0084ff);
+
+            &::after{
+              opacity: 0.2;
+            }
+          }
+
+          &::after {
+            content: '';
+            --w: 40px;
+            height: var(--w);
+            width: var(--w);
+            position: absolute;
+            background: var(--theme-color);
+            top: 2px;
+            left: 50%;
+            z-index: 1;
+            border-radius: var(--w);
+            transform: translateX(-50%);
+            filter: blur(8px);
+            opacity: 0;
+            transition: all .3s;
           }
         }
       }
@@ -657,6 +726,11 @@ const types_active_index = ref(0);
         margin-bottom: 10px;
         -webkit-box-shadow: 0 0 7px #00000029;
         box-shadow: 0 0 7px #00000029;
+      }
+
+      &.card.minimal_mode:not(.full) {
+        border: 2px solid var(--border-3);
+        box-shadow: 0 0 10px var(--shadow-2);
       }
 
       &.full {

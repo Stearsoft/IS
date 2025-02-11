@@ -21,7 +21,10 @@
             <IconMenu />
         </InputIconMenu>
     </div>
-    <ul class="subMenu" :class="subMenu_class_language" :style="{
+    <ul class="subMenu" :class="{
+        [subMenu_class_language]:true,
+        minimal_mode: is_data.theme.minimal_mode,
+    }" :style="{
         top: subMenu_language.top + 'px',
         left: subMenu_language.left + 'px'
     }">
@@ -34,6 +37,8 @@ import InputIconMenu from './InputIconMenu.vue';
 import IconUser from '../icons/IconUser.vue';
 import IconMenu from '../icons/IconMenu.vue';
 import { useI18n } from 'vue-i18n';
+import { is } from '@/utils/is';
+const is_data = is().is_current.value;
 const emit = defineEmits(['open']);
 const openSetting = () => {
     emit('open',"setting");
@@ -136,6 +141,11 @@ ul.subMenu {
         &:hover {
             background: rgba(0, 0, 0, 0.05);
         }
+    }
+
+    &.minimal_mode{
+        box-shadow: none;
+        border: 1px solid var(--border-2);
     }
 }
 
