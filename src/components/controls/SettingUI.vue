@@ -1,22 +1,31 @@
 <template>
   <div class="settingContainer" :class="{
     [settingUIclass]:true,
-    minimal_mode: is_data.theme.minimal_mode
+    minimal_mode: is_data.theme.minimal_mode,
+    mobile:window_width < 635
   }">
     <div
       class=" xl-absolute xl-right-2 xl-top-2 xl-size-6 xl-group hover:xl-bg-red-400 xl-transition-all xl-rounded-full"
       @click="closeSetting">
       <IconClose class="group-hover:xl-fill-white xl-transition-all" />
     </div>
+    <div 
+      v-if="window_width < 635 && settingUIclose"
+      class=" xl-absolute xl-left-3 xl-top-2 xl-size-6 xl-group xl-transition-all xl-rounded-full left_icon"
+      @click="settingUIclose = false">
+      <IconArrowLeft class="group-hover:xl-fill-white xl-transition-all" />
+    </div>
     <el-container>
-      <el-aside class="aside">
+      <el-aside class="aside" :class="{
+        close: window_width < 635 && settingUIclose
+      }">
         <ul class="type_list" :class="{
           minimal_mode: is_data.theme.minimal_mode
         }">
           <li v-for="(item, index) in types_list" :key="index" :class="{ active: index === types_active_index }"
-            @click="types_active_index = index">
+            @click="types_active_index = index;settingUIclose = true">
             <SettingIcon :icon="item.iconName" />
-            <span class="text_color" @click.stop="types_active_index = index">{{ item.label }}</span>
+            <span class="text_color xl-pointer-events-none xl-whitespace-nowrap" @click.stop="types_active_index = index">{{ item.label }}</span>
           </li>
         </ul>
       </el-aside>
@@ -54,8 +63,8 @@
                   </template>
                   <template v-else>
                     <dt>
-                      <span class="title">{{ ji.label }}</span>
-                      <span class="description">{{ ji.description }}</span>
+                      <span class="title xl-whitespace-nowrap">{{ ji.label }}</span>
+                      <span class="description xl-whitespace-nowrap">{{ ji.description }}</span>
                     </dt>
                     <dd>
                       <template v-if="ji.type === 'switch'">
@@ -94,8 +103,8 @@
                 </template>
                 <template v-else>
                   <dt>
-                    <span class="title">{{ ji.label }}</span>
-                    <span class="description">{{ ji.description }}</span>
+                    <span class="title xl-whitespace-nowrap">{{ ji.label }}</span>
+                    <span class="description xl-whitespace-nowrap">{{ ji.description }}</span>
                   </dt>
                   <dd>
                     <template v-if="ji.type === 'switch'">
@@ -135,7 +144,14 @@ import { useStore } from 'vuex';
 import { is } from '@/utils/is';
 import SettingIcon from './setting_components/SettingIcon.vue';
 import IconClose from '../icons/IconClose.vue';
+import IconArrowLeft from '../icons/IconArrowLeft.vue'
 const settingUIclass = ref('');
+const settingUIclose = ref(false);
+const window_width = ref(window.innerWidth);
+window.addEventListener('resize', () => {
+  window_width.value = window.innerWidth;
+});
+
 const emit = defineEmits(['close']);
 const closeSetting = () => {
   settingUIclass.value = 'hide';
@@ -544,7 +560,7 @@ const types_active_index = ref(0);
   border-radius: 7px;
   max-width: 800px;
   min-width: 200px;
-  width: 100%;
+  width: calc(100% - 20px);
   margin: auto;
   transition: all 0.3s;
   overflow: hidden;
@@ -554,6 +570,47 @@ const types_active_index = ref(0);
   animation: fadeInScale 0.3s;
   max-height: 600px;
   min-height: 450px;
+
+  .left_icon{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .left_icon:hover{
+    background-color: var(--theme-color);
+  }
+
+  &.mobile{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    max-height: 100%;
+    border-radius: 0;
+
+    .type_content{
+      width: 0;
+      overflow-x: hidden;
+      transition: width .3s;
+
+      &.active{
+        width: 100%;
+      }
+    }
+
+    .aside{
+      width: 100%;
+      transition: width .4s;
+
+      &.close{
+        width: 0;
+        overflow-x: hidden;
+      }
+    }
+  }
 
   &.minimal_mode {
     box-shadow: none;
@@ -570,7 +627,6 @@ const types_active_index = ref(0);
 
     .type_list {
       padding-top: 50px;
-
       background: var(--bg-3);
       height: 100%;
       padding-top: 50px;

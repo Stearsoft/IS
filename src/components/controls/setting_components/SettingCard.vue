@@ -1,7 +1,7 @@
 <template>
     <div class="card">
         <div class="card_title xl-transition-all" v-if="mode !== 'full'">
-            <span>{{ title }}</span>
+            <span class=" xl-whitespace-nowrap">{{ title }}</span>
         </div>
         <div class="card_container" :class="{
             full: mode == 'full',
@@ -116,12 +116,12 @@
                 <div v-for="(item, index) in engine" :key="index" @click="engine_toggle.change(item)"
                     class=" xl-flex xl-h-9 xl-px-2.5 xl-rounded xl-transition-all xl-items-center search_engine_item">
                     <img class=" xl-size-5" :src="item.icon" :alt="item.name">
-                    <span class=" xl-mx-8 xl-opacity-60 xl-w-24">{{ item.title }}</span>
-                    <span class=" xl-opacity-50 xl-ml-5">{{ item.url }}</span>
+                    <span class=" xl-mx-8 xl-opacity-60 xl-w-24 xl-whitespace-nowrap">{{ item.title }}</span>
+                    <span class=" xl-opacity-50 xl-ml-5 xl-whitespace-nowrap">{{ item.url }}</span>
                 </div>
                 <div class=" xl-flex xl-h-9 xl-px-2.5 xl-rounded xl-transition-all xl-items-center search_engine_item">
                     <img class=" xl-size-5" src="/assets/imgs/engine_ico/search.png" alt="custom">
-                    <span class=" xl-mx-8 xl-opacity-60 xl-w-24">{{ $t('setting.customSE') }}</span>
+                    <span class=" xl-mx-8 xl-opacity-60 xl-w-24 xl-whitespace-nowrap">{{ $t('setting.customSE') }}</span>
                     <input class=" xl-opacity-50 xl-ml-5 xl-bg-transparent" @blur="engine_toggle.change({
                         title: $t('setting.customSE'),
                         url: search_custom_engine.valueOf(),
