@@ -62,7 +62,7 @@
             <div v-else-if="card === 'staticWallpaper_imgs'" class="xl-flex xl-flex-wrap">
                 <div class="bg_container" v-for="(item, index) in theme.in_background" :key="index" :style="{
                     'background-image': `url(/assets/imgs/background/resize/${item}.webp)`,
-                }" @click="theme.upload.background('/assets/imgs/background/'+item+'.webp')"></div>
+                }" @click="theme.upload.background('/assets/imgs/background/' + item + '.webp')"></div>
             </div>
             <div v-else-if="card === 'staticWallpaper_random'" class="xl-flex xl-flex-wrap">
                 <div class="bg_container" v-for="(item, index) in theme.ra_background" :key="index" :style="{
@@ -121,7 +121,8 @@
                 </div>
                 <div class=" xl-flex xl-h-9 xl-px-2.5 xl-rounded xl-transition-all xl-items-center search_engine_item">
                     <img class=" xl-size-5" src="/assets/imgs/engine_ico/search.png" alt="custom">
-                    <span class=" xl-mx-8 xl-opacity-60 xl-w-24 xl-whitespace-nowrap">{{ $t('setting.customSE') }}</span>
+                    <span class=" xl-mx-8 xl-opacity-60 xl-w-24 xl-whitespace-nowrap">{{ $t('setting.customSE')
+                        }}</span>
                     <input class=" xl-opacity-50 xl-ml-5 xl-bg-transparent" @blur="engine_toggle.change({
                         title: $t('setting.customSE'),
                         url: search_custom_engine.valueOf(),
@@ -144,6 +145,7 @@ import ImageCompressor from 'image-compressor.js';
 import { useStore } from 'vuex';
 import SettingInputNecessary from './SettingInputNecessary.vue';
 import IconTrue from '@/components/icons/IconTrue.vue';
+import localforage from 'localforage';
 
 const { t } = useI18n();
 const uploaded_img_url = ref(null);
@@ -290,7 +292,7 @@ const theme = {
         ]
     ],
     in_background: [
-        "default","la60d5xp","1ea3qu53","cd4vpsk9","tg7fqy8w","9xujr4oc","4d8mzovo","d9tc5737","jk92agji","mc15tfz5","o6qz8zzr","o1gpeoqb","due321vq","9hc56mo0","ciuxyhc4","fbsdpiay","v9dt8l9d","apkhh598","gjvvqstw","mmsuugp6","qht6byw8","jepy8405","pn8svzxo","w4cs2tbb","pyh8n3o8",
+        "default", "la60d5xp", "1ea3qu53", "cd4vpsk9", "tg7fqy8w", "9xujr4oc", "4d8mzovo", "d9tc5737", "jk92agji", "mc15tfz5", "o6qz8zzr", "o1gpeoqb", "due321vq", "9hc56mo0", "ciuxyhc4", "fbsdpiay", "v9dt8l9d", "apkhh598", "gjvvqstw", "mmsuugp6", "qht6byw8", "jepy8405", "pn8svzxo", "w4cs2tbb", "pyh8n3o8",
     ],
     ra_background: [
         'https://tfseek.top/api/bingWallpaper.php',
@@ -309,6 +311,7 @@ const theme = {
             }
 
             try {
+
                 new ImageCompressor(val, {
                     maxSize: 1 * 1024 * 1024,
                     quality: 0.8,
@@ -317,18 +320,18 @@ const theme = {
                         reader.onloadend = () => {
                             const base64data = reader.result;
                             console.log(result.size / 1024 / 1024);
-                            if (result.size > 2 * 1024 * 1024) {
-                                // eslint-disable-next-line no-undef
-                                ElNotification({
-                                    title: t("static.warning"),
-                                    message: t("setting.msg.imgTooLarge", {
-                                        size: (result.size / 1024 / 1024).toFixed(2),
-                                        limit: "1.5MB"
-                                    }),
-                                    type: 'warning',
-                                });
-                                return false;
-                            }
+                            // if (result.size > 2 * 1024 * 1024) {
+                            //     // eslint-disable-next-line no-undef
+                            //     ElNotification({
+                            //         title: t("static.warning"),
+                            //         message: t("setting.msg.imgTooLarge", {
+                            //             size: (result.size / 1024 / 1024).toFixed(2),
+                            //             limit: "1.5MB"
+                            //         }),
+                            //         type: 'warning',
+                            //     });
+                            //     return false;
+                            // }
 
                             uploaded.value = true;
                             uploaded_img_url.value = base64data;
@@ -339,7 +342,25 @@ const theme = {
                             });
                             is_data.theme.background.type = "image";
                             is_data.theme.background.value = "";
-                            localStorage.setItem("is_bg", base64data);
+
+                            // 使用 localforage 存储图片
+                            saveImageToLocalForage(base64data);
+
+                            // 使用 localforage 存储图片数据
+                            function saveImageToLocalForage(base64data) {
+                                // 使用 localforage 存储数据，key 可以是任何唯一值
+                                localforage.setItem('xn:bg>background_image', {
+                                    base64data: base64data,
+                                    timestamp: new Date().toISOString()
+                                })
+                                    .then(() => {
+                                        console.log('Image successfully stored in localforage');
+                                    })
+                                    .catch((err) => {
+                                        console.error('Error storing image in localforage', err);
+                                    });
+                            }
+
                         };
                         reader.readAsDataURL(result);
                     },
@@ -352,6 +373,8 @@ const theme = {
                         });
                     },
                 });
+
+
                 return false;
             } catch (error) {
                 // eslint-disable-next-line no-undef
@@ -392,75 +415,38 @@ const theme = {
                 return false;
             }
 
-            let request = indexedDB.open("VideoDatabase", 1);
-
-            request.onupgradeneeded = function (event) {
-                let db = event.target.result;
-                if (!db.objectStoreNames.contains("videos")) {
-                    // 创建对象存储来保存视频
-                    db.createObjectStore("videos", { keyPath: "id" });
-                }
+            // 使用 localforage 存储视频
+            let videoData = {
+                id: 'xn:bg>background_video',  // 固定 ID
+                videoFile: val,  // 文件对象
+                timestamp: new Date().getTime()
             };
 
-            request.onsuccess = function (event) {
-                let db = event.target.result;
+            // 将视频存储到 localforage
+            localforage.setItem(videoData.id, videoData)
+                .then(() => {
+                    // eslint-disable-next-line no-undef
+                    ElNotification({
+                        title: t("static.success"),
+                        message: t("setting.msg.videoSaved"),
+                        type: 'success',
+                    });
 
-                // 开启事务
-                let transaction = db.transaction(["videos"], "readwrite");
-                let localStore = transaction.objectStore("videos");
+                    // 使用新的视频数据更新背景
+                    store.dispatch('background', {
+                        type: "video_file",
+                        value: 'is://type:video_file',
+                        base64: ''
+                    });
 
-                // 检查是否有已有视频记录，使用与保存时一致的 id
-                let getRequest = localStore.get('xn:bg>background_video'); // 使用相同 id 来读取
+                    is_data.theme.background.value = "";
+                    is_data.theme.background.type = "video_file";
+                })
+                .catch((err) => {
+                    console.error('无法保存视频', err);
+                    // 你可以添加额外的错误通知或处理
+                });
 
-                getRequest.onsuccess = function (event) {
-                    let videoData = {
-                        id: 'xn:bg>background_video',  // 固定 ID
-                        videoFile: val,  // 文件对象
-                        timestamp: new Date().getTime()
-                    };
-
-                    // 如果有视频，更新它，否则添加新的记录
-                    if (event.target.result) {
-                        localStore.put(videoData); // 覆盖已有记录
-                    } else {
-                        localStore.add(videoData); // 添加新记录
-                    }
-
-                    // 确保事务完成后再进行下一步操作
-                    transaction.oncomplete = function () {
-                        // eslint-disable-next-line no-undef
-                        ElNotification({
-                            title: t("static.success"),
-                            message: t("setting.msg.videoSaved"),
-                            type: 'success',
-                        });
-
-                        // 使用新的视频数据更新背景
-                        store.dispatch('background', {
-                            type: "video_file",
-                            value: 'is://type:video_file',
-                            base64: ''
-                        });
-
-                        is_data.theme.background.value = "";
-                        is_data.theme.background.type = "video_file";
-
-                        db.close(); // 关闭数据库连接
-                    };
-                };
-
-                getRequest.onerror = function (event) {
-                    console.error("Error fetching video from IndexedDB", event);
-                };
-
-                transaction.onerror = function (event) {
-                    console.error("Transaction error:", event);
-                };
-            };
-
-            request.onerror = function (event) {
-                console.error("Error opening IndexedDB", event);
-            };
             return false;
         }
 
@@ -501,15 +487,25 @@ const theme = {
                             const reader = new FileReader();
                             reader.onloadend = () => {
                                 const compressedBase64 = reader.result;
-                                store.dispatch('background', {
-                                    type: "image",
-                                    value: 'is://type:base64',
-                                    base64: compressedBase64
-                                });
-                                is_data.theme.background.type = "image";
-                                is_data.theme.background.value = "";
-                                localStorage.setItem("is_bg", compressedBase64);
-                                NProgress.done();
+
+                                localforage.setItem('xn:bg>background_image', {
+                                    base64data: compressedBase64
+                                })
+                                    .then(() => {
+                                        store.dispatch('background', {
+                                            type: "image",
+                                            value: 'is://type:base64',
+                                            base64: compressedBase64
+                                        });
+
+                                        is_data.theme.background.type = "image";
+                                        is_data.theme.background.value = "";
+
+                                        NProgress.done();
+                                    })
+                                    .catch((err) => {
+                                        console.error('保存到 localforage 失败:', err);
+                                    });
                             };
                             reader.readAsDataURL(result);
                         },
@@ -518,13 +514,11 @@ const theme = {
                         },
                     });
                 } else {
-                    console.error('Canvas to Blob failed');
+                    console.error('无法渲染');
                 }
             }, 'image/jpeg', 0.8);
-
-
-
         };
+
         img.src = imageUrl;
 
         return false;
@@ -550,7 +544,7 @@ const engine_toggle = {
         // eslint-disable-next-line no-undef
         ElNotification({
             title: t("static.success"),
-            message: t("search.engine_saved", {name:json.title}),
+            message: t("search.engine_saved", { name: json.title }),
             type: 'success',
         });
     }
