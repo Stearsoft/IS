@@ -21,7 +21,7 @@
                     <li class="text_color" aria-label="反馈">{{ $t("menu.feedback") }}</li>
                     <li class="text_color" aria-label="语言" @click="subMenu('language', $event)" autoHideMenu="false">{{
                         $t("menu.language")
-                        }}</li>
+                    }}</li>
                 </ul>
             </template>
             <template #icon>
@@ -38,7 +38,7 @@
     }">
         <li class="text_color" v-for="item in languages" :key="item.value" @click="switchLanguage(item.value)">{{
             item.name
-            }}</li>
+        }}</li>
     </ul>
 </template>
 <script setup>
@@ -113,8 +113,11 @@ document.addEventListener('click', (e) => {
 });
 const languages = [
     {
-        name: '中文',
-        value: 'zh'
+        name: '简体中文',
+        value: 'zh-cn'
+    }, {
+        name: '繁体中文',
+        value: 'zh-tw'
     }, {
         name: 'English',
         value: 'en'

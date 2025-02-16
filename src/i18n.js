@@ -1,10 +1,12 @@
 import { createI18n } from 'vue-i18n';
 import en from './langs/en.json';
+import zh_tw from './langs/zh-tw.json';
 import zh from './langs/zh.json';
 
 const messages = {
-    zh,
     en,
+    "zh-cn": zh,
+    "zh-tw": zh_tw,
 };
 
 const storedLanguage = localStorage.getItem('language');
@@ -16,7 +18,7 @@ if (storedLanguage && supportedLanguages.includes(storedLanguage)) {
 } else if (supportedLanguages.includes(browserLanguage)) {
     language = browserLanguage;
 } else {
-    language = 'zh';
+    language = 'zh-CN';
 }
 
 // 创建 i18n 实例

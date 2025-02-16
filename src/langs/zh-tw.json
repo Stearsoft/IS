@@ -1,0 +1,146 @@
+{
+    "action": {
+        "click": "點我",
+        "uploadFile_drop": "拖拽上傳",
+        "uploadFile_drop_em": "點擊上傳"
+    },
+    "background": {
+        "error": {
+            "load": "視頻加載失敗"
+        },
+        "label": "背景",
+        "loading": "背景圖片加載中"
+    },
+    "date": {
+        "day": "日",
+        "month": "月",
+        "year": "年"
+    },
+    "footer": {
+        "author": "星林",
+        "info": "關於",
+        "links": "友鏈",
+        "sentence": "讓生活充滿色彩，讓夢想更加絢麗"
+    },
+    "input": {
+        "msg": {
+            "enter": {
+                "wallhaven": "輸入關鍵詞來搜索Wallhaven壁紙"
+            },
+            "error": {
+                "url": "輸入的類型必須為鏈接"
+            }
+        }
+    },
+    "logo": {
+        "tif": "林中木",
+        "xn": "星檸"
+    },
+    "menu": {
+        "accountSetting": "賬號設置",
+        "feedback": "回饋",
+        "language": "語言",
+        "login": "登入",
+        "logout": "退出登錄",
+        "setting": "設定",
+        "switchLanguageSuccess": "語言切換成功"
+    },
+    "search": {
+        "engine_list": {
+            "baidu": "百度",
+            "bing": "必應",
+            "google": "Google",
+            "sogou": "搜狗",
+            "tif": "林中木"
+        },
+        "engine_saved": "搜索引擎修改成功，當前搜索引擎 { name }",
+        "input": "搜索框",
+        "suggestion": {
+            "love": "收藏",
+            "translate": "翻譯",
+            "url": "網址"
+        },
+        "suggestion_list": "搜索結果列表"
+    },
+    "setting": {
+        "airCopy": "隔空取義",
+        "airCopyDescription": "當登錄時候提示隔空取義內容",
+        "autoCleanInput": "自動清空搜索框",
+        "autoCleanInputDescription": "在搜索框失焦時候清除搜索框內容",
+        "autoFocus": "自動聚焦",
+        "autoFocusDescription": "在頁面開始的時候自動聚焦",
+        "autoHideBookmark": "自動隱藏書籤",
+        "autoHideBookmarkDescription": "自動隱藏書籤",
+        "aword": "一言",
+        "awordDescription": "顯示隨機一言",
+        "background_blur_description": "設置模糊度",
+        "baseTheme": "基礎樣式",
+        "closeCover": "開啟遮罩",
+        "closeCoverDescription": "開啟後，背景將添加暗黑遮罩",
+        "colorPage": "主題顏色",
+        "colorPage_text": {
+            "color_custom": "自定義主題色",
+            "color_default": "內置顏色",
+            "default": "設置內置的顏色作為主題色，第一個顏色為主顏色，第二個為鼠標懸浮字體顏色，第三個為懸浮背景顏色",
+            "default_2": "若主顏色不符合您的審美，可以先點擊下方的預選顏色，然後在上方自定義與預選顏色相近的您喜歡的主顏色",
+            "label": "選擇您喜愛的顏色，這個顏色將作為主色調"
+        },
+        "customSE": "自定義",
+        "darkMode": "深色模式",
+        "darkModeDescription": "開啟暗黑護眼模式",
+        "disableAutoGo": "關閉自動跳轉",
+        "disableAutoGoDescription": "在點擊搜索提示時候不跳轉",
+        "drawer_cancel": "取消",
+        "drawer_confirm": "確認",
+        "drawer_open": "設定",
+        "drawer_title": "提示",
+        "dynamic": "動態",
+        "dynamicDescription": "開啟後，起始頁將有動態效果",
+        "dynamicWallpaper": "視頻壁紙",
+        "dynamicWallpaper_text": {
+            "link": "設置鏈接作為視頻壁紙",
+            "upload": "上傳視頻壁紙"
+        },
+        "emptyValue": "空",
+        "maskOpacity": "蒙層透明度",
+        "maskOpacityDescription": "設置蒙層透明度",
+        "minimalMode": "極簡模式",
+        "minimalModeDescription": "開啟後，將去除所有裝飾元素",
+        "msg": {
+            "imgSize": "我們只支持圖片，並且圖片在壓縮後小於",
+            "imgTooLarge": "圖片太大了，我們只允許壓縮後為 { limit } 的圖片，但是您的是 { size } MB",
+            "onlyImg": "只支持圖片",
+            "onlyVideo": "我們只支持圖片類型文件",
+            "video": "我們只支持上傳視頻類型文件",
+            "videoSaved": "背景上傳成功",
+            "videoTooLarge": "視頻不能超過400Mb"
+        },
+        "searchEngineList": "搜索引擎列表",
+        "setting": "設定",
+        "staticWallpaper": "靜態壁紙",
+        "staticWallpaper_text": {
+            "color": "設置顏色作為壁紙",
+            "imgs": "使用推薦的壁紙",
+            "link": "使用鏈接",
+            "random": "隨機壁紙",
+            "time": "時間",
+            "time_description": "使用以",
+            "upload": "上傳壁紙"
+        },
+        "theme": "主題設置",
+        "timeStyle": "時間樣式",
+        "timeStyleDescription": "設置不同的時間樣式",
+        "weather": "天氣",
+        "weatherDescription": "顯示當地天氣",
+        "background_blur": "背景模糊"
+    },
+    "static": {
+        "error": "錯誤",
+        "info": "提示",
+        "success": "成功",
+        "warning": "警告"
+    },
+    "url": {
+        "translate": "https://fanyi.baidu.com/"
+    }
+}

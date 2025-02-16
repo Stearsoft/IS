@@ -18,7 +18,8 @@
     "language": "Language",
     "logout": "Log out",
     "setting": "Setting",
-    "switchLanguageSuccess": "Language switch successful"
+    "switchLanguageSuccess": "Language switch successful",
+    "login": "Log in"
   },
   "search": {
     "input": "search box",
@@ -59,30 +60,30 @@
     "autoCleanInputDescription": "Clear the search box content when the search box is out of focus",
     "autoFocus": "autofocus",
     "autoFocusDescription": "Automatically focus at the beginning of the page",
-    "background_blur": "background blur",
+    "background_blur": "Background blur",
     "background_blur_description": "Set blur",
     "baseTheme": "Basic style",
     "closeCover": "Turn on mask",
     "closeCoverDescription": "When turned on, a dark mask will be added to the background",
-    "colorPage": "theme color",
+    "colorPage": "Theme color",
     "colorPage_text": {
       "color_custom": "Custom theme color",
-      "color_default": "built-in colors",
+      "color_default": "Built-in colors",
       "default": "Set the built-in color as the theme color. The first color is the main color, the second is the mouse hover font color, and the third is the hover background color.",
       "default_2": "If the main color does not meet your aesthetic, you can first click on the pre-selected color below, and then customize your favorite main color that is similar to the pre-selected color above.",
       "label": "Choose your favorite color, this color will be the main color"
     },
-    "darkMode": "dark mode",
+    "darkMode": "Dark mode",
     "darkModeDescription": "Turn on dark eye protection mode",
     "disableAutoGo": "Turn off automatic jump",
     "disableAutoGoDescription": "Don’t jump when clicking the search prompt",
     "drawer_cancel": "Cancel",
-    "drawer_confirm": "confirm",
-    "drawer_open": "set up",
-    "drawer_title": "hint",
-    "dynamic": "dynamic",
+    "drawer_confirm": "Confirm",
+    "drawer_open": "Set up",
+    "drawer_title": "Hint",
+    "dynamic": "Dynamic",
     "dynamicDescription": "When turned on, the start page will have dynamic effects",
-    "dynamicWallpaper": "video wallpaper",
+    "dynamicWallpaper": "Video wallpaper",
     "dynamicWallpaper_text": {
       "link": "Set link as video wallpaper",
       "upload": "Upload video wallpaper"
@@ -99,12 +100,12 @@
       "videoTooLarge": "Video cannot exceed 400Mb"
     },
     "searchEngineList": "Search engine list",
-    "staticWallpaper": "static wallpaper",
+    "staticWallpaper": "Static wallpaper",
     "staticWallpaper_text": {
       "imgs": "Use recommended wallpapers",
-      "link": "use link",
+      "link": "Use link",
       "random": "Random wallpaper",
-      "time": "time",
+      "time": "Time",
       "time_description": "Use with",
       "upload": "Upload wallpaper",
       "color": "Set color as wallpaper"
@@ -112,7 +113,7 @@
     "theme": "Theme settings",
     "autoCleanInput": "Automatically clear search box",
     "maskOpacityDescription": "Set mask transparency",
-    "minimalMode": "minimalist mode",
+    "minimalMode": "Minimalist mode",
     "airCopy": "Take meaning from a distance",
     "airCopyDescription": "When logging in, it prompts to extract content from the air.",
     "autoHideBookmark": "Automatically hide bookmarks",
@@ -120,15 +121,26 @@
     "aword": "One word",
     "awordDescription": "Show random words",
     "customSE": "Customize",
-    "timeStyle": "time style",
+    "timeStyle": "Time style",
     "timeStyleDescription": "Set different time styles",
-    "weather": "weather",
-    "weatherDescription": "Show local weather"
+    "weather": "Weather",
+    "weatherDescription": "Show local weather",
+    "emptyValue": "null",
+    "setting": "Setting"
   },
   "static": {
     "info": "Info",
     "success": "Success",
     "warning": "Warn",
     "error": "Error"
+  },
+  "date": {
+    "day": "Day",
+    "month": "Moon",
+    "year": "Year"
+  },
+  "logo": {
+    "tif": "Tree in forest",
+    "xn": "Stearsoft"
   }
 }
