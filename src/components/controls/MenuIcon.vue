@@ -4,31 +4,41 @@
             <template #menu>
                 <ul>
                     <li class="text_color" aria-label="账号设置">{{ $t("menu.accountSetting") }}</li>
-                    <li class="text_color" aria-label="退出登录">{{ $t("menu.logout") }}</li>
+                    <li class="text_color" aria-label="登录" @click="login()">{{ user_info.login ? $t("menu.logout") :
+                        $t("menu.login") }}</li>
                 </ul>
             </template>
-            <IconUser />
+            <template #icon>
+                <img :src="user_info.avatar" alt="avatar" v-if="user_info.login && user_info.avatar.length >= 1"
+                    class=" xl-rounded-full hover:xl-opacity-70 xl-transition-opacity">
+                <IconUser v-else />
+            </template>
         </InputIconMenu>
         <InputIconMenu @change="triggerMenu" menu="menu" :open="open_menu.menu">
             <template #menu>
                 <ul>
                     <li class="text_color" aria-label="设置" @click="openSetting">{{ $t("menu.setting") }}</li>
                     <li class="text_color" aria-label="反馈">{{ $t("menu.feedback") }}</li>
-                    <li class="text_color" aria-label="语言" @click="subMenu('language', $event)" autoHideMenu="false">{{ $t("menu.language")
+                    <li class="text_color" aria-label="语言" @click="subMenu('language', $event)" autoHideMenu="false">{{
+                        $t("menu.language")
                         }}</li>
                 </ul>
             </template>
-            <IconMenu />
+            <template #icon>
+                <IconMenu />
+            </template>
         </InputIconMenu>
     </div>
     <ul class="subMenu" :class="{
-        [subMenu_class_language]:true,
+        [subMenu_class_language]: true,
         minimal_mode: is_data.theme.minimal_mode,
     }" :style="{
         top: subMenu_language.top + 'px',
         left: subMenu_language.left + 'px'
     }">
-        <li class="text_color" v-for="item in languages" :key="item.value" @click="switchLanguage(item.value)">{{ item.name }}</li>
+        <li class="text_color" v-for="item in languages" :key="item.value" @click="switchLanguage(item.value)">{{
+            item.name
+            }}</li>
     </ul>
 </template>
 <script setup>
@@ -38,10 +48,41 @@ import IconUser from '../icons/IconUser.vue';
 import IconMenu from '../icons/IconMenu.vue';
 import { useI18n } from 'vue-i18n';
 import { is } from '@/utils/is';
+import axios from 'axios';
+
+const user_info = ref({
+    avatar: '',
+});
 const is_data = is().is_current.value;
 const emit = defineEmits(['open']);
 const openSetting = () => {
-    emit('open',"setting");
+    emit('open', "setting");
+}
+
+// 发送GET请求
+axios.get('https://api.stear.cn/v1/user/info', {
+    withCredentials: true
+})
+    .then(function (response) {
+        const data = response.data;
+        if (data.data.username) {
+            user_info.value = data.data;
+            user_info.value.login = true;
+        }
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+const login = () => {
+    axios.post('https://api.stear.cn/v1/user/login?username=test&password=pwd', null, {
+        withCredentials: true
+    }).then(function (response) {
+        const data = response;
+        console.log(data);
+    })
+        .catch(function (error) {
+            console.log(error);
+        });
 }
 const { locale, t } = useI18n();
 const subMenu_class_language = ref('hide');
@@ -143,7 +184,7 @@ ul.subMenu {
         }
     }
 
-    &.minimal_mode{
+    &.minimal_mode {
         box-shadow: none;
         border: 1px solid var(--border-2);
     }

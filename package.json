@@ -14,6 +14,7 @@
     "@types/vue-router": "^2.0.0",
     "@vitejs/plugin-vue": "^5.1.4",
     "autoprefixer": "^10.4.20",
+    "axios": "^1.7.9",
     "core-js": "^3.38.1",
     "element-plus": "^2.8.3",
     "eslint": "^8.57.1",
