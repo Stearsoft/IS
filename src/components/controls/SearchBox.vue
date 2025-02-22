@@ -44,7 +44,24 @@
                 </template>
             </li>
         </ul>
-        <div id="collectionBox" class="hide"></div>
+        <div id="collectionBox" class="hide">
+            <div class="xl-flex">
+                <div class=" xl-grid group_collection xl-flex-grow xl-p-1 xl-w-full xl-h-300px xl-m-auto" ref="el">
+                    <div v-for="item in list" :key="item.id" class=" xl-text-center xl-p-4 xl-rounded xl-cursor-move">
+                        <div class=" xl-flex xl-flex-col xl-items-center" data-id="1726497211" :title="item.name">
+                            <a href="https://tfseek.top" :aria-label="item.name" target="_blank" menu="collection"></a>
+                            <div class=" xl-size-[50px] xl-backdrop-blur xl-rounded-full tile_icon xl-flex xl-items-center xl-justify-center" draggable="false">
+                                <img :alt="item.name" class="xl-size-[30px]"
+                                    src="https://tfseek.top/api/favicon/get.php?url=https://tfseek.top">
+                            </div>
+                            <div class=" xl-text-gray-50 xl-mt-1" draggable="false">
+                                <span>{{ item.id }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -54,6 +71,7 @@ import { is } from '@/utils/is';
 import IconTranslate from '../icons/IconTranslate.vue';
 import IconLove from '../icons/IconLove.vue';
 import IconLink from '../icons/IconLink.vue';
+import { useDraggable } from 'vue-draggable-plus'
 const is_data = is().is_current.value;
 const suggestions = ref([]);
 const emit = defineEmits(['focused', 'blurred', 'enter']);
@@ -226,6 +244,80 @@ setInterval(() => {
 onMounted(() => {
     if (is_data.search.auto_focus) searchInputDom.value.focus();
 })
+
+const list = ref([
+    {
+        name: 'Joao',
+        id: 1
+    },
+    {
+        name: 'Jean',
+        id: 2
+    },
+    {
+        name: 'Johanna',
+        id: 3
+    },
+    {
+        name: 'Juan',
+        id: 4
+    }, {
+        name: 'test',
+        id: 5
+    }, {
+        name: 'test',
+        id: 6
+    }, {
+        name: 'test',
+        id: 7
+    }, {
+        name: 'test',
+        id: 8
+    }, {
+        name: 'test',
+        id: 9
+    }, {
+        name: 'test',
+        id: 10
+    }, {
+        name: 'test',
+        id: 11
+    }, {
+        name: 'test',
+        id: 12
+    }, {
+        name: 'test',
+        id: 13
+    }, {
+        name: 'test',
+        id: 14
+    }, {
+        name: 'test',
+        id: 15
+    }, {
+        name: 'test',
+        id: 16
+    }, {
+        name: 'test',
+        id: 17
+    }, {
+        name: 'test',
+        id: 18
+    }
+])
+const el = ref()
+
+// eslint-disable-next-line no-unused-vars
+const { start } = useDraggable(el, list, {
+    animation: 150,
+    ghostClass: 'ghost',
+    onStart() {
+        console.log('start')
+    },
+    onUpdate() {
+        console.log('update')
+    }
+})
 </script>
 
 
@@ -233,7 +325,8 @@ onMounted(() => {
 <style lang="less" scoped>
 div#searchBox {
     position: absolute;
-    width: 500px;
+    width: calc(100% - 20px);
+    max-width: 500px;
     margin: auto;
     top: var(--top-box);
     left: 0;
@@ -350,6 +443,22 @@ div#timeContainer {
 
         img {
             height: 50px;
+        }
+    }
+}
+
+.group_collection {
+    grid-template-columns: repeat(auto-fill, minmax(98px, 5fr));
+    grid-template-rows: auto;
+
+    &>div {
+        &.sortable-chosen {
+            background-color: var(--bg-7);
+            transition: background-color .3s;
+        }
+
+        div.tile_icon {
+            background-color: var(--bg-7);
         }
     }
 }
