@@ -3,6 +3,8 @@
         <div class="menu" :class="{
                 minimal_mode: is_data.theme.minimal_mode,
                 [current_class]:true
+            }" :style="{
+                top: engineMode ? '70px' : '60px'
             }">
             <slot name="menu"></slot>
         </div>
@@ -14,6 +16,7 @@
 import { ref, watch } from 'vue';
 import { is } from '@/utils/is';
 const is_data = is().is_current.value;
+import { useRoute } from 'vue-router';
 
 const current_class = ref('hide');
 const emit = defineEmits(['change']);
@@ -43,7 +46,12 @@ watch(
         }
     }
 );
+const route = useRoute();
+const engineMode = ref(false);
 
+watch(() => route.path, (newPath) => {
+    engineMode.value = newPath === "/search";
+});
 </script>
 
 <style scoped lang="less">

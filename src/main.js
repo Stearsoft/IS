@@ -8,13 +8,14 @@ import './index.css'
 // 插件引入
 import i18n from './i18n';
 import store from './store'; // 导入 store
-
+import router from './router';
 
 const app = createApp(App);
 
 // 插件使用
 app.use(i18n);
 app.use(store);
+app.use(router);
 
 // 全局组件引入
 app.mount('#app');

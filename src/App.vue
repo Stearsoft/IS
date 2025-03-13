@@ -1,9 +1,9 @@
 <script setup>
 import BackgroundBox from './components/controls/BackgroundBox.vue';
-import BarCopyright from './components/controls/BarCopyright.vue';
 import MenuIcon from './components/controls/MenuIcon.vue';
 import SearchBox from './components/controls/SearchBox.vue';
 import SettingUI from './components/controls/SettingUI.vue';
+// import RiverBar from './components/controls/RiverBar.vue';
 import { ref } from 'vue';
 const SearchInput = ref(false);
 const onSearchFocus = () => {SearchInput.value = true;};
@@ -26,5 +26,6 @@ const Windows_UI = ref({
   <BackgroundBox :focus="SearchInput"></BackgroundBox>
   <MenuIcon @open="startUI"></MenuIcon>
   <SettingUI v-if="Windows_UI.setting" @close="closeUI"></SettingUI>
-  <BarCopyright></BarCopyright>
+  <!-- <RiverBar></RiverBar> -->
+  <router-view></router-view>
 </template>

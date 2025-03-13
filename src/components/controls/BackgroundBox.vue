@@ -1,5 +1,5 @@
 <template>
-    <div ref="backgroundBox" :class="'background-box' + (focus ? ' focus' : '')" :style="{
+    <div ref="backgroundBox" :class="'background-box' + (focus & !engineMode ? ' focus' : '')" :style="{
         'background-color': background_type == 'color' ? background_value : 'transparent',
     }" v-show="!is_data_r.theme.minimal_mode">
         <div :style="{ '--opacity': is_data_r.theme.background.mark_opacity }"></div>
@@ -17,7 +17,10 @@ import { watch, computed, ref, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import { is } from '@/utils/is';
 import localforage from 'localforage';
+import { useRoute } from 'vue-router';
 
+const route = useRoute();
+const engineMode = ref(false);
 const store = useStore();
 const is_data = is().is_current.value;
 const is_data_r = ref(is_data);
@@ -34,6 +37,9 @@ watch(is_data, (newValue) => {
     console.log("背景检测到is_data变化");
 })
 
+watch(() => route.path, (newPath) => {
+    engineMode.value = newPath === "/search";
+});
 defineProps({
     focus: {
         type: Boolean,

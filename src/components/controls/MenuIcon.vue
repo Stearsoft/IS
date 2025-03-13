@@ -1,5 +1,5 @@
 <template>
-    <div class="cornerBtnsContainer">
+    <div class="cornerBtnsContainer" :class="{'r':engineMode}">
         <InputIconMenu @change="triggerMenu" menu="user" :open="open_menu.user">
             <template #menu>
                 <ul>
@@ -42,14 +42,16 @@
     </ul>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { ref,watch } from 'vue';
 import InputIconMenu from './InputIconMenu.vue';
 import IconUser from '../icons/IconUser.vue';
 import IconMenu from '../icons/IconMenu.vue';
 import { useI18n } from 'vue-i18n';
 import { is } from '@/utils/is';
 import axios from 'axios';
-
+import { useRoute } from 'vue-router';
+const route = useRoute();
+const engineMode = ref(false);
 const user_info = ref({
     avatar: '',
 });
@@ -58,6 +60,9 @@ const emit = defineEmits(['open']);
 const openSetting = () => {
     emit('open', "setting");
 }
+watch(() => route.path, (newPath) => {
+    engineMode.value = newPath === "/search";
+});
 
 // 发送GET请求
 axios.get('https://api.stear.cn/v1/user/info', {
@@ -157,6 +162,10 @@ const switchLanguage = (language) => {
     display: flex;
     top: 10px;
     z-index: 1000;
+
+    &.r{
+        top: 0;
+    }
 }
 
 ul.subMenu {
