@@ -10,13 +10,18 @@
             <span v-else>{{ current_time }}</span>
         </div>
     </div>
-    <div id="searchBox" :class="{'engine':engineMode}">
+    <div id="searchBox" :class="engineMode ? 'engine' : 'start'">
         <div id="inputContainer" :class="{
             minimal_mode: is_data.theme.minimal_mode
         }">
             <input type="text" ref="searchInputDom" name="" :placeholder="is_data.search.placeholder" autocomplete="off"
-                :aria-label="$t('search.input')" id="search" class="searchInput" @focus="searchFocus" @blur="searchBlur"
-                @input="searchInput" @keyup.enter="searchEnter" @keydown="triggerItem" />
+                :aria-label="$t('search.input')" id="search" class="searchInput" 
+                @focus="searchFocus" 
+                @blur="searchBlur"
+                @input="searchInput" 
+                @keyup.enter="searchEnter" 
+                @keydown="triggerItem" 
+                />
             <span class="goSearch"></span>
         </div>
         <ul ref="searchSuggestionContainer" :aria-label="$t('search.suggestion_list')" :style="{
@@ -44,20 +49,28 @@
                 </template>
             </li>
         </ul>
-        
+
     </div>
 </template>
 
 <script setup>
-import { onMounted, ref,watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { is } from '@/utils/is';
 import IconTranslate from '../icons/IconTranslate.vue';
 import IconLove from '../icons/IconLove.vue';
 import IconLink from '../icons/IconLink.vue';
 import { useRouter } from 'vue-router';
 import { useRoute } from "vue-router";
+
+const urlParams = new URLSearchParams(window.location.search);
+const defaultValueFromUrl = urlParams.get('q') || '';
 const route = useRoute();
-const engineMode = ref(false);
+const currentURL = window.location.pathname;
+const isLocalHost = currentURL === '/search';
+const engineMode = ref(isLocalHost);
+watch(engineMode, (newValue, oldValue) => {
+    console.log('engineMode changed from', oldValue, 'to', newValue);
+});
 const router = useRouter()
 const is_data = is().is_current.value;
 const suggestions = ref([]);
@@ -66,6 +79,9 @@ const searchSuggestionContainer = ref(null);
 const searchInputDom = ref(null);
 const currentIndex = ref(-1);
 const current_time = ref(is_data.time.base);
+onMounted(() => {
+    searchInputDom.value.value = defaultValueFromUrl;
+});
 const searchFocus = () => {
     emit('focused');
 };
@@ -199,7 +215,9 @@ function goSearch(text) {
     } else {
         let target = "_blank";
         if (!is_data.search.disable_auto_redirect) {
-            if (is_data.search.engine_url == location.href + "search?q=") {
+            if (is_data.search.engine_url == 'https://' + location.host + "/search?q=" ||
+                is_data.search.engine_url == 'http://' + location.host + "/search?q="
+            ) {
                 target = "_self";
                 router.push({
                     path: "/search",
@@ -207,6 +225,7 @@ function goSearch(text) {
                         q: text
                     }
                 });
+                suggestions.value = [];
                 return;
             }
             window.open(is_data.search.engine_url + text, target);
@@ -253,24 +272,28 @@ div#searchBox {
     width: calc(100% - 20px);
     max-width: 500px;
     margin: auto;
-    top: var(--top-box);
-    left: 0;
-    right: 0;
     z-index: 1000;
 
-    &.engine{
+    &.engine {
         top: 10px;
         left: 200px;
         right: unset;
 
-        div#inputContainer{
+        div#inputContainer {
             box-shadow: 0 0 1px;
         }
 
-        ul{
+        ul {
             margin-top: 20px;
         }
     }
+
+    &.start {
+        top: var(--top-box);
+        left: 0;
+        right: 0;
+    }
+
     div#inputContainer {
         height: 100%;
         display: flex;
@@ -384,5 +407,4 @@ div#timeContainer {
         }
     }
 }
-
 </style>
