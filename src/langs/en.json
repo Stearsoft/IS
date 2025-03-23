@@ -142,5 +142,10 @@
   "logo": {
     "tif": "Tree in forest",
     "xn": "Stearsoft"
+  },
+  "tif": {
+    "key": {
+      "video": "Video"
+    }
   }
 }
