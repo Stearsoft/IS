@@ -29,11 +29,10 @@ defineProps({
 .video_container {
     margin-bottom: 10px;
     border-radius: 5px;
-    opacity: .8;
-    background-color: var(--bg-7);
+    background-color: var(--bg-9);
     transition: all .3s;
-
-    &:hover {}
+    backdrop-filter: blur(10px);
+    color: var(--font-1);
 
     .imgBox {
         width: 180px;

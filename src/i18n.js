@@ -10,22 +10,27 @@ const messages = {
 };
 
 const storedLanguage = localStorage.getItem('language');
-const browserLanguage = navigator.language || navigator.userLanguage;
+const browserLanguage = (navigator.language || navigator.userLanguage).toLowerCase();
 const supportedLanguages = Object.keys(messages);
+
 let language;
 if (storedLanguage && supportedLanguages.includes(storedLanguage)) {
     language = storedLanguage;
 } else if (supportedLanguages.includes(browserLanguage)) {
     language = browserLanguage;
+} else if (supportedLanguages.includes(browserLanguage.split('-')[0])) {
+    language = browserLanguage.split('-')[0];
 } else {
-    language = 'zh-CN';
+    language = 'zh-cn'; // 默认语言
 }
 
-// 创建 i18n 实例
+if (!storedLanguage) {
+    localStorage.setItem('language', language);
+}
+
 const i18n = createI18n({
     locale: language,
     messages,
 });
 
-// 导出 i18n 实例
 export default i18n;

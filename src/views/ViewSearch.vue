@@ -4,7 +4,14 @@
             <a href="/"><img src="/src/assets/imgs/xn.webp" alt="logo" class="xl-h-12 xl-mt-1 xl-ml-3"></a>
         </div>
         <div class="results_body">
-            <div class="category"></div>
+            <div class="category">
+                <div v-for="item in category" :key="item.key" class=" xl-flex" :class="{
+                    active: item.key === results_list.category
+                }" @click="changeCategory(item)">
+                    <RIcon :icon="item.icon" :focus="item.key === results_list.category" />
+                    <span>{{ t(item.text) }}</span>
+                </div>
+            </div>
             <div class="state" :class="{ 'fade-out': isFadingOut }">
                 <ul>
                     <li v-for="(state, index) in states" :key="index" :class="state.type"
@@ -17,27 +24,49 @@
                     </li>
                 </ul>
             </div>
-            <div class="results">
+            <div class="results" :class="{
+                'indent': results_list.category == 'web'
+            }">
                 <div class="lists">
-                    <ul class="web xl-max-w-[600px]">
-                        <template v-for="(result, index) in results_list.data.organic" :key="'result-' + index">
-                            <RItem :result="result" />
-                            <template v-if="index === 1 && results_list.data.videos">
-                                <div class="video xl-my-5">
-                                    <div>
-                                        <RVideo v-for="(video, videoIndex) in results_list.data.videos"
-                                        :key="'video-' + videoIndex" :video="video" />
+                    <ul class="web">
+                        <template v-if="results_list.category == 'web'" >
+                            <template v-for="(result, index) in results_list.data.organic" :key="'result-' + index">
+                                <RItem :result="result" />
+                                <template v-if="index === 1 && results_list.data.videos">
+                                    <div class="video xl-my-5">
+                                        <div>
+                                            <RVideo v-for="(video, videoIndex) in results_list.data.videos"
+                                                :key="'video-' + videoIndex" :video="video" />
+                                        </div>
                                     </div>
-                                </div>
-                            </template>
-                        </template>
+                                </template>
 
-                        <div class="suggestion" v-show="results_list.data.related">
-                            <span v-for="(item, index) in results_list.data.related" :key="'suggestion-' + index"
-                                class="xl-rounded-full" @click="suggestion(item)">
-                                {{ item.text }}
-                            </span>
-                        </div>
+
+                                <template
+                                    v-else-if="index === Math.floor(results_list.data.organic.length / 2) && results_list.data.people_also_ask">
+                                    <div>
+                                        <div class="questions xl-my-5">
+                                            <RQuestion v-for="(question, qIndex) in results_list.data.people_also_ask"
+                                                :key="'question-' + qIndex" :question="question" />
+                                        </div>
+                                    </div>
+                                </template>
+
+                            </template>
+
+                            <div class="suggestion" v-show="results_list.data.related">
+                                <span v-for="(item, index) in results_list.data.related" :key="'suggestion-' + index"
+                                    class="xl-rounded-full" @click="suggestion(item)">
+                                    {{ item.text }}
+                                </span>
+                            </div>
+                        </template>
+                        <template v-else-if="results_list.category == 'image'">
+                            <div></div>
+                            <div class="image_box xl-flex xl-flex-wrap">
+                                <RImage v-for="(image, index) in results_list.data.images" :key="index" :image="image"></RImage>
+                            </div>
+                        </template>
                     </ul>
 
                 </div>
@@ -58,19 +87,56 @@ import IconLoading from '@/components/icons/IconLoading.vue';
 import IconSuccess from '@/components/icons/IconSuccess.vue';
 import RItem from '@/components/search/RItem.vue';
 import RVideo from '@/components/search/RVideo.vue';
+import RQuestion from '@/components/search/RQuestion.vue';
+import RIcon from '@/components/search/RIcon.vue';
+import RImage from '@/components/search/RImage.vue';
 import axios from 'axios';
 import { useI18n } from 'vue-i18n';
 
-// eslint-disable-next-line no-unused-vars
 const { t } = useI18n();
+const route = useRoute();
+const router = useRouter();
+const category = [
+    {
+        'text': 'tif.key.web',
+        'key': 'web',
+        'icon': 'internet'
+    }, {
+        'text': 'tif.key.image',
+        'key': 'image',
+        'icon': 'image',
+    }
+]
+const getCategory = () => {
+    if (route.query.cg && category.map(item => item.key).includes(route.query.cg)) {
+        return route.query.cg;
+    } else {
+        return 'web';
+    }
+}
 const results_list = ref({
     page: 1,
     state: 'loading',
-    category: 'web',
+    category: getCategory(),
     data: []
 });
-const route = useRoute();
-const router = useRouter();
+const changeCategory = (item) => {
+    if (item.key === results_list.value.category) return;
+    results_list.value = {
+        page: 1,
+        state: 'loading',
+        category: item.key,
+        data: []
+    };
+    router.push({
+        path: '/search',
+        query: {
+            q: route.query.q,
+            cg: item.key
+        }
+    });
+    result.web(route.query.q);
+}
 if (!route.query.q) location.href = '/';
 const states = ref([]);
 const isFadingOut = ref(false);
@@ -90,7 +156,7 @@ const suggestion = (json) => {
     results_list.value = {
         page: 1,
         state: 'loading',
-        category: 'web',
+        category: getCategory(),
         data: []
     };
 }
@@ -146,7 +212,7 @@ const result = {
         axios.get(`https://tfseek.top/api/search.php?q=${key}&page=${results_list.value.page}&category=${results_list.value.category}`)
             .then((response) => {
                 const data = response.data;
-                if (data.organic && data.organic.length >= 1) {
+                if (data.organic && data.organic.length >= 1 || data.images && data.images.length >= 1) {
                     results_list.value.data = data;
                     results_list.value.state = "success";
                     results_list.value.page++;
@@ -195,7 +261,6 @@ const result = {
     }
 
     .results_body {
-
         position: absolute;
         --header-height: 70px;
         top: var(--header-height, 70px);
@@ -203,11 +268,40 @@ const result = {
         height: calc(100% - var(--header-height, 70px) - 10px);
         overflow: auto;
 
+        .category {
+            margin-left: 200px;
+            display: flex;
+            margin-bottom: 20px;
+
+            &>div {
+                padding: 4px 11px;
+                margin-right: 5px;
+                border-radius: 5px;
+                transition: all.3s;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                opacity: .6;
+                font-size: 12px;
+
+                &.active {
+                    background-color: var(--theme-color_c);
+                    color: var(--theme-color);
+                }
+
+                &:hover {
+                    background-color: var(--bg-6);
+                    opacity: 1;
+                }
+            }
+        }
+
         .state {
             margin-left: 200px;
             transition: opacity 0.5s ease, max-height 0.5s ease;
             overflow: hidden;
             max-height: 150px;
+            color: var(--font-1);
 
             &.fade-out {
                 opacity: 0;
@@ -225,7 +319,13 @@ const result = {
         }
 
         .results {
-            margin-left: 200px;
+            &.indent {
+                margin-left: 200px;
+
+                .list > ul.web{
+                    max-width: 600px;
+                }
+            }
 
             .suggestion {
                 display: grid;
@@ -248,11 +348,11 @@ const result = {
                 }
             }
 
-            .video{
+            .video {
                 border-radius: 5px;
                 margin-bottom: 30px;
 
-                h3{
+                h3 {
                     margin: 10px 5px;
                     font-size: 15px;
                     font-weight: 700;

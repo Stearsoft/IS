@@ -1,5 +1,5 @@
 <template>
-    <div class="cornerBtnsContainer" :class="{'r':engineMode}">
+    <div class="cornerBtnsContainer" :class="{ 'r': engineMode }">
         <InputIconMenu @change="triggerMenu" menu="user" :open="open_menu.user">
             <template #menu>
                 <ul>
@@ -42,7 +42,7 @@
     </ul>
 </template>
 <script setup>
-import { ref,watch } from 'vue';
+import { ref, watch } from 'vue';
 import InputIconMenu from './InputIconMenu.vue';
 import IconUser from '../icons/IconUser.vue';
 import IconMenu from '../icons/IconMenu.vue';
@@ -76,7 +76,12 @@ axios.get('https://api.stear.cn/v1/user/info', {
         }
     })
     .catch(function (error) {
-        console.log(error);
+        console.log("error", error);
+        user_info.value = {
+            "msg": "未登录，请先登录",
+            "data": {}
+        }
+        user_info.value.login = false;
     });
 const login = () => {
     axios.post('https://api.stear.cn/v1/user/login?username=test&password=pwd', null, {
@@ -163,7 +168,7 @@ const switchLanguage = (language) => {
     top: 10px;
     z-index: 1000;
 
-    &.r{
+    &.r {
         top: 0;
     }
 }

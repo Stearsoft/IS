@@ -57,10 +57,10 @@ export default defineConfig({
           if (id.includes('src/main.js')) {
             return 'main';
           }
-          if (id.includes('src/langs/')) { 
+          if (id.includes('src/langs/')) {
             return 'language';
           }
-        },        
+        },
         entryFileNames: 'assets/js/[name]-[hash].js',
         chunkFileNames: 'assets/js/[name]-[hash].js',
         assetFileNames(assetInfo) {

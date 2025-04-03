@@ -1,5 +1,5 @@
 <template>
-    <li class=" xl-mb-7">
+    <li class=" xl-mb-7 r_item">
         <div class="display xl-flex xl-mb-1">
             <div class="favicon xl-mr-2 xl-flex xl-items-center">
                 <img :src="result.official ? result.site_icon : 'https://tfseek.top/api/favicon/get.php?url=' + result.link"
@@ -60,16 +60,24 @@ const capitalizeHostName = (url) => {
         const parsedUrl = new URL(url);
         const hostname = parsedUrl.hostname.replace(/^www\./, '');
         const parts = hostname.split('.');
-        const capitalizedHost = parts.map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('.');
-        return capitalizedHost;
+
+        if (parts.length > 1) {
+            parts[0] = parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
+        }
+
+        return parts.join('.');
     } catch (error) {
         console.error('Invalid URL:', url);
         return '';
     }
-}
+};
+
 </script>
 
 <style scoped lang="less">
+.r_item{
+    color: var(--font-1);
+}
 .title {
     color: #007afe;
 
@@ -86,9 +94,10 @@ const capitalizeHostName = (url) => {
     position: relative;
     margin-bottom: 15px;
     margin-left: 20px;
+    color: var(--font-1);
 
     &:not(.inline) {
-        width: 100%;
+        width: calc(50% - 20px);
 
         &::before {
             --w: 10px;
