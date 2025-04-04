@@ -25,11 +25,19 @@
                 </ul>
             </div>
             <div class="results" :class="{
-                'indent': results_list.category == 'web'
+                'indent': results_list.category == 'web',
+                'xl-flex': results_list.category == 'image'
             }">
+                <div v-show="results_list.category == 'image'"
+                    class=" xl-flex xl-flex-col xl-backdrop-blur-md navigations xl-sticky xl-top-3">
+                    <div v-for="(item, index) in results_list.data.navigation" :key="index" class=" navigation"
+                        @click="addNavigation(item)">
+                        <span>{{ item.title }}</span>
+                    </div>
+                </div>
                 <div class="lists">
                     <ul class="web">
-                        <template v-if="results_list.category == 'web'" >
+                        <template v-if="results_list.category == 'web'">
                             <template v-for="(result, index) in results_list.data.organic" :key="'result-' + index">
                                 <RItem :result="result" />
                                 <template v-if="index === 1 && results_list.data.videos">
@@ -64,7 +72,14 @@
                         <template v-else-if="results_list.category == 'image'">
                             <div></div>
                             <div class="image_box xl-flex xl-flex-wrap">
-                                <RImage v-for="(image, index) in results_list.data.images" :key="index" :image="image"></RImage>
+                                <RImage v-for="(image, index) in results_list.data.images" :key="index" :image="image">
+                                </RImage>
+                            </div>
+                        </template>
+                        <template v-else-if="results_list.category == 'video'">
+                            <div class="videos_Container">
+                                <RVideoB v-for="(video, index) in results_list.data?.data?.result || []" :key="index"
+                                    :video="video" />
                             </div>
                         </template>
                     </ul>
@@ -90,6 +105,7 @@ import RVideo from '@/components/search/RVideo.vue';
 import RQuestion from '@/components/search/RQuestion.vue';
 import RIcon from '@/components/search/RIcon.vue';
 import RImage from '@/components/search/RImage.vue';
+import RVideoB from '@/components/search/RVideo.b.vue';
 import axios from 'axios';
 import { useI18n } from 'vue-i18n';
 
@@ -105,6 +121,10 @@ const category = [
         'text': 'tif.key.image',
         'key': 'image',
         'icon': 'image',
+    }, {
+        'text': 'tif.key.video',
+        'key': 'video',
+        'icon': 'video'
     }
 ]
 const getCategory = () => {
@@ -137,6 +157,22 @@ const changeCategory = (item) => {
     });
     result.web(route.query.q);
 }
+const addNavigation = (item) => {
+    results_list.value = {
+        page: 1,
+        state: 'loading',
+        category: 'image',
+        data: []
+    };
+    router.push({
+        path: '/search',
+        query: {
+            q: route.query.q + ' ' + item.title,
+            cg: 'image'
+        }
+    });
+    result.web(route.query.q);
+}
 if (!route.query.q) location.href = '/';
 const states = ref([]);
 const isFadingOut = ref(false);
@@ -145,6 +181,7 @@ const run = () => {
     console.log("执行 run() 函数");
     progress(2000, false);
     result.web(route.query.q);
+
 };
 const suggestion = (json) => {
     router.push({
@@ -212,7 +249,10 @@ const result = {
         axios.get(`https://tfseek.top/api/search.php?q=${key}&page=${results_list.value.page}&category=${results_list.value.category}`)
             .then((response) => {
                 const data = response.data;
-                if (data.organic && data.organic.length >= 1 || data.images && data.images.length >= 1) {
+                if (data.organic && data.organic.length >= 1
+                    || data.images && data.images.length >= 1
+                    || data.data.result && data.data.result.length >= 1
+                ) {
                     results_list.value.data = data;
                     results_list.value.state = "success";
                     results_list.value.page++;
@@ -319,10 +359,64 @@ const result = {
         }
 
         .results {
+            .navigations {
+                background: var(--bg-6);
+                border-radius: 0 10px 10px 0;
+                padding: 10px 0;
+                height: fit-content;
+                --border-style: 1px solid var(--bg-7);
+                border-top: var(--border-style);
+                border-bottom: var(--border-style);
+                border-right: var(--border-style);
+
+                .navigation {
+                    color: var(--theme-color);
+                    --w: 120px;
+                    padding: 3px;
+                    margin-bottom: 10px;
+                    margin-right: 10px;
+                    margin-left: 30px;
+                    width: var(--w);
+                    max-width: var(--w);
+                    position: relative;
+
+
+
+                    &:hover {
+                        color: var(--theme-color_b);
+
+                        &::before {
+                            background-color: var(--theme-color_b);
+                        }
+                    }
+
+                    &::before {
+                        content: '';
+                        --size: 7px;
+                        width: var(--size);
+                        height: var(--size);
+                        border-radius: 50%;
+                        background-color: var(--theme-color);
+                        position: absolute;
+                        left: -15px;
+                        top: 50%;
+                        transform: translateY(-50%);
+                    }
+
+                    span {
+                        display: block;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                        white-space: nowrap;
+                    }
+                }
+            }
+
+
             &.indent {
                 margin-left: 200px;
 
-                .list > ul.web{
+                .list>ul.web {
                     max-width: 600px;
                 }
             }
@@ -358,6 +452,16 @@ const result = {
                     font-weight: 700;
                     color: var(--theme-color);
                 }
+            }
+
+            .videos_Container {
+                justify-items: center;
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(235px, 1fr));
+                gap: 10px;
+                max-width: calc(235px * 7 + 40px);
+                grid-template-rows: auto;
+                margin-left: 200px;
             }
         }
     }

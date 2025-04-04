@@ -71,6 +71,12 @@ const engineMode = ref(isLocalHost);
 watch(engineMode, (newValue, oldValue) => {
     console.log('engineMode changed from', oldValue, 'to', newValue);
 });
+
+watch(() => route.query.q, (newQ) => {
+    if (newQ) {
+        searchInputDom.value.value = newQ;
+    }
+});
 const router = useRouter()
 const is_data = is().is_current.value;
 const suggestions = ref([]);
