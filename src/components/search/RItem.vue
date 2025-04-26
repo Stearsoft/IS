@@ -20,10 +20,10 @@
         <span class="link">{{ decodeURI(result.link) }}</span>
         <p class=" xl-opacity-80 xl-max-w-[600px]">{{ result.description }}</p>
         <div v-show="result.extensions">
-            <ul class=" xl-ml-5 xl-mt-3 xl-flex xl-flex-wrap">
+            <ul class=" xl-ml-5 xl-mt-3 xl-flex xl-flex-wrap extension_group">
                 <li v-for="(item, index) in result.extensions" :key="index" class=" xl-my-1 extensions" :class="{
                     inline: item.type == 'text',
-                }"  v-show="index !== result.extensions.length - 1">
+                }" v-show="index !== result.extensions.length - 1">
                     <template v-if="item.type == 'site_link'">
                         <h3>
                             <a :href="item.link" target="_blank" class=" xl-text-base" rel="noopener noreferrer">
@@ -75,9 +75,10 @@ const capitalizeHostName = (url) => {
 </script>
 
 <style scoped lang="less">
-.r_item{
+.r_item {
     color: var(--font-1);
 }
+
 .title {
     color: #007afe;
 
@@ -90,11 +91,43 @@ const capitalizeHostName = (url) => {
     color: #0f935e;
 }
 
+.extension_group {
+    @media screen and (max-width: 960px) {
+        flex-direction: column;
+        margin-top: 20px;
+        margin-left: 0;
+
+        .extensions {
+            margin-left: 0;
+            margin-top: 0;
+            width: 100% !important;
+            margin-bottom: 0;
+            padding: 10px 5px;
+            border-top: 1px solid #b8b8b8;
+            transition: all .3s;
+
+            a {
+                color: var(--font-1);
+            }
+
+            &::before {
+                display: none !important;
+            }
+
+            &:hover {
+                background-color: rgba(0, 0, 0, 0.05);
+            }
+        }
+    }
+}
+
 .extensions {
     position: relative;
     margin-bottom: 15px;
     margin-left: 20px;
     color: var(--font-1);
+
+
 
     &:not(.inline) {
         width: calc(50% - 20px);
@@ -125,6 +158,10 @@ const capitalizeHostName = (url) => {
         opacity: .7;
         margin-right: 5px;
         width: 100%;
+
+        @media screen and (max-width: 960px) {
+            display: none;
+        }
     }
 
     &:hover::before {
@@ -136,7 +173,7 @@ const capitalizeHostName = (url) => {
         opacity: .8;
     }
 
-    p{
+    p {
         opacity: .8;
     }
 }

@@ -12,6 +12,53 @@
                     <span>{{ t(item.text) }}</span>
                 </div>
             </div>
+            <div class="overview" v-if="results_list.data.overview">
+                <div class="left">
+                    <h3>{{ results_list.data.overview.title ? results_list.data.overview.title : '' }}</h3>
+                    <div class="digest">
+                        <div class="imgs">
+                            <div class="image-group" v-if="firstTwoImages.length === 2">
+                                <div class="image" v-for="(item, index) in firstTwoImages" :key="index">
+                                    <a :href="item.href" target="_blank" rel="noopener noreferrer">
+                                        <img :src="item.image" :alt="item.image_alt">
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="image-group">
+                                <template v-for="(item, index) in restItems" :key="index">
+                                    <div class="img_se">
+                                        <a :href="item.href" target="_blank" rel="noopener noreferrer">
+                                            <img :src="item.image" :alt="item.image_alt">
+                                        </a>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="knowledge" v-show="results_list.data.knowledge">
+                    <p>{{ results_list.data.knowledge.description }}</p>
+                    <ul class="info">
+                        <li v-for="(item, index) in results_list.data.knowledge.facts" :key="index">
+                            <h4>{{ item.key }}</h4>
+                            <p>
+                                <template v-for="(a, ind) in item.value">
+                                    <template v-if="a.link">
+                                        <a :href="a.link" target="_blank" rel="noopener noreferrer" :key="ind">
+                                            <span>{{ a.text }}</span>
+                                        </a>
+                                    </template>
+                                    <template v-else>
+                                        <span :key="ind">{{ a.text }}</span>
+                                    </template>
+
+                                </template>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
             <div class="state" :class="{ 'fade-out': isFadingOut }">
                 <ul>
                     <li v-for="(state, index) in states" :key="index" :class="state.type"
@@ -87,7 +134,6 @@
                 </div>
                 <div class="right_bar">
                     <div class="ai_answer"></div>
-                    <div class="knowledge"></div>
                 </div>
             </div>
             <div class="pages"></div>
@@ -96,7 +142,7 @@
 </template>
 
 <script setup>
-import { watch, onMounted, ref } from 'vue';
+import { watch, onMounted, ref, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import IconLoading from '@/components/icons/IconLoading.vue';
 import IconSuccess from '@/components/icons/IconSuccess.vue';
@@ -279,11 +325,32 @@ const result = {
             });
     }
 };
+
+const items = computed(() => results_list.value.data.overview.items || [])
+
+const firstTwoImages = computed(() => {
+    return items.value.filter(i => i.type === 'img').slice(0, 2)
+})
+
+const restItems = computed(() => {
+    let imgCount = 0
+    return items.value.filter(item => {
+        if (item.type === 'img') {
+            imgCount++
+            return imgCount > 2
+        }
+        return false
+    })
+})
 </script>
 
 <style scoped lang="less">
 .result_container {
     background-color: var(--bg-7);
+
+    @media screen and (max-width: 960px) {
+        background-color: rgba(232, 234, 237, 0.888);
+    }
 
     .search_header {
         width: 100%;
@@ -312,6 +379,7 @@ const result = {
             margin-left: 200px;
             display: flex;
             margin-bottom: 20px;
+            margin-top: 10px;
 
             &>div {
                 padding: 4px 11px;
@@ -333,6 +401,105 @@ const result = {
                     background-color: var(--bg-6);
                     opacity: 1;
                 }
+
+                span {
+                    font-size: 15px;
+                }
+            }
+
+            @media screen and (max-width: 1220px) {
+                margin-left: 10px;
+            }
+        }
+
+        .overview {
+            margin-left: 200px;
+
+            @media screen and (max-width: 1220px) {
+                margin-left: 10px;
+            }
+
+            .digest {
+                margin: 29px 0;
+            }
+
+            .imgs {
+                display: flex;
+                max-width: 600px;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                border-radius: 10px;
+
+                @media screen and (max-width: 960px) {
+                    max-width: 100%;
+                }
+
+                .image-group {
+                    display: flex;
+                    width: 100%;
+
+                    .image,
+                    .img_se {
+                        width: 100%;
+                    }
+
+
+                    img {
+                        width: 100%;
+                        max-height: 150px;
+                        object-fit: cover;
+                        height: 100%;
+                    }
+                }
+            }
+
+            h3 {
+                font-size: 30px;
+            }
+
+            .knowledge {
+                margin-left: 20px;
+                border-left: 1px solid var(--border-3);
+                padding: 0 10px;
+                max-width: 500px;
+                position: absolute;
+                left: 810px;
+                top: 140px;
+
+                @media screen and (max-width: 1220px) {
+                    left: 610px;
+                }
+
+                @media screen and (max-width: 960px) {
+                    position: unset;
+                    margin-left: 10px;
+                    max-width: 100%;
+                    border-left: none;
+                    border-bottom: 1px solid var(--border-3);
+                    margin-bottom: 40px;
+                }
+
+                &>p {
+                    margin-bottom: 20px;
+                    font-size: 18px;
+                }
+
+                ul {
+                    li {
+                        display: flex;
+                        margin-bottom: 5px;
+
+                        h4 {
+                            width: 100px;
+                            min-width: 100px;
+                        }
+
+                        a {
+                            color: #0084ff;
+                        }
+                    }
+                }
             }
         }
 
@@ -342,6 +509,10 @@ const result = {
             overflow: hidden;
             max-height: 150px;
             color: var(--font-1);
+
+            @media screen and (max-width: 1220px) {
+                margin-left: 10px;
+            }
 
             &.fade-out {
                 opacity: 0;
@@ -413,17 +584,42 @@ const result = {
             }
 
 
+
             &.indent {
                 margin-left: 200px;
 
-                .list>ul.web {
+
+                @media screen and (max-width: 1220px) {
+                    margin-left: 10px;
+                }
+
+                @media screen and (max-width: 960px) {
+                    margin-left: 0;
+                }
+
+                .lists>ul.web {
                     max-width: 600px;
+
+                    @media screen and (max-width: 960px) {
+                        max-width: 100%;
+
+                        li {
+                            padding: 10px;
+                            background-color: var(--bg-3);
+                            margin-bottom: 10px;
+                        }
+                    }
                 }
             }
 
             .suggestion {
                 display: grid;
                 grid-template-columns: 1fr 1fr;
+
+                @media screen and (max-width: 960px) {
+                    background-color: var(--bg-3);
+                    grid-template-columns: 1fr;
+                }
 
                 span {
                     border: 1px solid var(--theme-color);
@@ -439,12 +635,30 @@ const result = {
                         color: white;
                         background-color: var(--theme-color);
                     }
+
+                    @media screen and (max-width: 960px) {
+                        border-radius: 0;
+                        border: none;
+                        // border-bottom: 1px solid;
+                        text-align: left;
+                        color: var(--font-1);
+                        margin: none;
+
+                        &:hover {
+                            background-color: rgba(0, 0, 0, 0.05);
+                            color: var(--font-1);
+                        }
+                    }
                 }
             }
 
             .video {
                 border-radius: 5px;
                 margin-bottom: 30px;
+
+                @media screen and (max-width: 960px) {
+                    background-color: var(--bg-3);
+                }
 
                 h3 {
                     margin: 10px 5px;

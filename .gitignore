@@ -27,5 +27,6 @@ coverage
 *.sln
 *.sw?
 *.tsbuildinfo
+test.html
 
 vite.config.js.timestamp-*.mjs

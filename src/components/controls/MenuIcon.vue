@@ -50,6 +50,7 @@ import { useI18n } from 'vue-i18n';
 import { is } from '@/utils/is';
 import axios from 'axios';
 import { useRoute } from 'vue-router';
+import { XN_CONFIG } from '@/utils/config';
 const route = useRoute();
 const engineMode = ref(false);
 const user_info = ref({
@@ -63,9 +64,9 @@ const openSetting = () => {
 watch(() => route.path, (newPath) => {
     engineMode.value = newPath === "/search";
 });
-
 // 发送GET请求
-axios.get('https://api.stear.cn/v1/user/info', {
+axios.get(XN_CONFIG.API.STEAR.BASE_URL + XN_CONFIG.API.STEAR.API.info, {
+    params: {},
     withCredentials: true
 })
     .then(function (response) {
@@ -84,7 +85,7 @@ axios.get('https://api.stear.cn/v1/user/info', {
         user_info.value.login = false;
     });
 const login = () => {
-    axios.post('https://api.stear.cn/v1/user/login?username=test&password=pwd', null, {
+    axios.post(XN_CONFIG.API.STEAR.BASE_URL + XN_CONFIG.API.STEAR.API.login+'?username=test&password=pwd', null, {
         withCredentials: true
     }).then(function (response) {
         const data = response;
