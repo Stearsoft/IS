@@ -3,7 +3,11 @@
         <div class="search_header">
             <a href="/"><img src="/src/assets/imgs/xn.webp" alt="logo" class="xl-h-12 xl-mt-1 xl-ml-3"></a>
         </div>
-        <div class="results_body">
+        <div class="results_body" :style="{
+            '--bg-blur': is_data_r.tif.result_blur + 'px',
+        }" :class="{
+            'item_bg': is_data_r.tif.item_bg
+        }">
             <div class="category">
                 <div v-for="item in category" :key="item.key" class=" xl-flex" :class="{
                     active: item.key === results_list.category
@@ -11,6 +15,18 @@
                     <RIcon :icon="item.icon" :focus="item.key === results_list.category" />
                     <span>{{ t(item.text) }}</span>
                 </div>
+            </div>
+            <div class="state" :class="{ 'fade-out': isFadingOut }">
+                <ul>
+                    <li v-for="(state, index) in states" :key="index" :class="state.type"
+                        class="xl-mb-2 xl-flex xl-items-center">
+                        <div class="icon" :class="state.type == 'loading' ? 'loading' : ''">
+                            <IconLoading v-if="state.type == 'loading'" />
+                            <IconSuccess v-else />
+                        </div>
+                        <span :class="state.type" class="xl-ml-2 xl-text-xs">{{ state.text }}</span>
+                    </li>
+                </ul>
             </div>
             <div class="overview" v-if="results_list.data.overview">
                 <div class="left">
@@ -38,6 +54,11 @@
                     </div>
                 </div>
                 <div class="knowledge" v-show="results_list.data.knowledge">
+                    <div class="imgs xl-mb-3">
+                        <div class="img_ab" v-for="(img, index) in results_list.data.knowledge.images" :key="index">
+                            <img :src="img.image" :alt="img.image_alt">
+                        </div>
+                    </div>
                     <p>{{ results_list.data.knowledge.description }}</p>
                     <ul class="info">
                         <li v-for="(item, index) in results_list.data.knowledge.facts" :key="index">
@@ -58,18 +79,6 @@
                         </li>
                     </ul>
                 </div>
-            </div>
-            <div class="state" :class="{ 'fade-out': isFadingOut }">
-                <ul>
-                    <li v-for="(state, index) in states" :key="index" :class="state.type"
-                        class="xl-mb-2 xl-flex xl-items-center">
-                        <div class="icon" :class="state.type == 'loading' ? 'loading' : ''">
-                            <IconLoading v-if="state.type == 'loading'" />
-                            <IconSuccess v-else />
-                        </div>
-                        <span :class="state.type" class="xl-ml-2 xl-text-xs">{{ state.text }}</span>
-                    </li>
-                </ul>
             </div>
             <div class="results" :class="{
                 'indent': results_list.category == 'web',
@@ -153,11 +162,15 @@ import RIcon from '@/components/search/RIcon.vue';
 import RImage from '@/components/search/RImage.vue';
 import RVideoB from '@/components/search/RVideo.b.vue';
 import axios from 'axios';
+import { is } from '@/utils/is';
 import { useI18n } from 'vue-i18n';
+import { XN_CONFIG } from '@/utils/config';
 
+const is_data = is().is_current.value;
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
+const is_data_r = ref(is_data);
 const category = [
     {
         'text': 'tif.key.web',
@@ -173,6 +186,11 @@ const category = [
         'icon': 'video'
     }
 ]
+
+watch(is_data, (newValue) => {
+    is_data_r.value = newValue;
+    console.log("搜索检测到is_data变化");
+})
 const getCategory = () => {
     if (route.query.cg && category.map(item => item.key).includes(route.query.cg)) {
         return route.query.cg;
@@ -292,7 +310,7 @@ const progress = (interval, updateIntervalOnly = false) => {
 
 const result = {
     web: (key) => {
-        axios.get(`https://tfseek.top/api/search.php?q=${key}&page=${results_list.value.page}&category=${results_list.value.category}`)
+        axios.get(XN_CONFIG.API.TIF.BASE_URL +XN_CONFIG.API.TIF.API.search +`?q=${key}&page=${results_list.value.page}&category=${results_list.value.category}`)
             .then((response) => {
                 const data = response.data;
                 if (data.organic && data.organic.length >= 1
@@ -365,11 +383,39 @@ const restItems = computed(() => {
             width: 180px;
             display: block;
         }
+
+
+        @media screen and (max-width:820px) {
+            height: 110px;
+
+            a img {
+                position: absolute;
+                left: 0;
+                right: 0;
+                margin: auto;
+            }
+        }
     }
 
     .results_body {
         position: absolute;
         --header-height: 70px;
+        backdrop-filter: blur(var(--bg-blur, 10px));
+
+        &.item_bg li {
+            @media screen and (min-width:820px) {
+                padding: 10px;
+                border-radius: 5px;
+                box-shadow: 0 0 0.4375rem #00000029;
+                background-color: var(--bg-6);
+                margin-bottom: 15px;
+            }
+        }
+
+        @media screen and (max-width:820px) {
+            --header-height: 110px;
+        }
+
         top: var(--header-height, 70px);
         width: 100%;
         height: calc(100% - var(--header-height, 70px) - 10px);
@@ -540,6 +586,10 @@ const restItems = computed(() => {
                 border-bottom: var(--border-style);
                 border-right: var(--border-style);
 
+                @media screen and (max-width:720px) {
+                    display: none;
+                }
+
                 .navigation {
                     color: var(--theme-color);
                     --w: 120px;
@@ -607,6 +657,7 @@ const restItems = computed(() => {
                             padding: 10px;
                             background-color: var(--bg-3);
                             margin-bottom: 10px;
+                            border-radius: 5px;
                         }
                     }
                 }
@@ -676,6 +727,12 @@ const restItems = computed(() => {
                 max-width: calc(235px * 7 + 40px);
                 grid-template-rows: auto;
                 margin-left: 200px;
+
+                @media screen and (max-width: 1220px) {
+                    margin-left: 10px;
+                    display: flex;
+                    flex-wrap: wrap;
+                }
             }
         }
     }

@@ -18,7 +18,7 @@
             <template #menu>
                 <ul>
                     <li class="text_color" aria-label="设置" @click="openSetting">{{ $t("menu.setting") }}</li>
-                    <li class="text_color" aria-label="反馈">{{ $t("menu.feedback") }}</li>
+                    <li class="text_color" aria-label="反馈" @click="openFeedback">{{ $t("menu.feedback") }}</li>
                     <li class="text_color" aria-label="语言" @click="subMenu('language', $event)" autoHideMenu="false">{{
                         $t("menu.language")
                     }}</li>
@@ -49,17 +49,23 @@ import IconMenu from '../icons/IconMenu.vue';
 import { useI18n } from 'vue-i18n';
 import { is } from '@/utils/is';
 import axios from 'axios';
-import { useRoute } from 'vue-router';
+import { useRoute,useRouter } from 'vue-router';
 import { XN_CONFIG } from '@/utils/config';
 const route = useRoute();
 const engineMode = ref(false);
 const user_info = ref({
     avatar: '',
 });
+const router = useRouter();
 const is_data = is().is_current.value;
 const emit = defineEmits(['open']);
 const openSetting = () => {
     emit('open', "setting");
+}
+const openFeedback = () => {
+    router.push({
+        path: '/feedback',
+    });
 }
 watch(() => route.path, (newPath) => {
     engineMode.value = newPath === "/search";

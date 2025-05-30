@@ -1,16 +1,15 @@
 <template>
   <div class="settingContainer" :class="{
-    [settingUIclass]:true,
+    [settingUIclass]: true,
     minimal_mode: is_data.theme.minimal_mode,
-    mobile:window_width < 635
+    mobile: window_width < 635
   }">
     <div
       class=" xl-absolute xl-right-2 xl-top-2 xl-size-6 xl-group hover:xl-bg-red-400 xl-transition-all xl-rounded-full"
       @click="closeSetting">
       <IconClose class="group-hover:xl-fill-white xl-transition-all" />
     </div>
-    <div 
-      v-if="window_width < 635 && settingUIclose"
+    <div v-if="window_width < 635 && settingUIclose"
       class=" xl-absolute xl-left-3 xl-top-2 xl-size-6 xl-group xl-transition-all xl-rounded-full left_icon"
       @click="settingUIclose = false">
       <IconArrowLeft class="group-hover:xl-fill-white xl-transition-all" />
@@ -23,9 +22,10 @@
           minimal_mode: is_data.theme.minimal_mode
         }">
           <li v-for="(item, index) in types_list" :key="index" :class="{ active: index === types_active_index }"
-            @click="types_active_index = index;settingUIclose = true">
+            @click="types_active_index = index; settingUIclose = true">
             <SettingIcon :icon="item.iconName" />
-            <span class="text_color xl-pointer-events-none xl-whitespace-nowrap" @click.stop="types_active_index = index">{{ item.label }}</span>
+            <span class="text_color xl-pointer-events-none xl-whitespace-nowrap"
+              @click.stop="types_active_index = index">{{ item.label }}</span>
           </li>
         </ul>
       </el-aside>
@@ -36,14 +36,13 @@
           class="type_content">
           <template v-if="item.contents.group">
             <el-header class="group">
-              <span class="text_color" v-for="(ii, i) in item.contents.pages" :key="i"
-                :class="{ 
-                  active: i === item.contents.default_page,
-                  'xl-opacity-30': ii.minimal_mode_hide && is_data.theme.minimal_mode,
-                  'xl-pointer-events-none': ii.minimal_mode_hide && is_data.theme.minimal_mode,
-                  'xl-cursor-none': ii.minimal_mode_hide && is_data.theme.minimal_mode,
-                }" @click.stop="item.contents.default_page = i">{{
-                  ii.label }}</span>
+              <span class="text_color" v-for="(ii, i) in item.contents.pages" :key="i" :class="{
+                active: i === item.contents.default_page,
+                'xl-opacity-30': ii.minimal_mode_hide && is_data.theme.minimal_mode,
+                'xl-pointer-events-none': ii.minimal_mode_hide && is_data.theme.minimal_mode,
+                'xl-cursor-none': ii.minimal_mode_hide && is_data.theme.minimal_mode,
+              }" @click.stop="item.contents.default_page = i">{{
+                ii.label }}</span>
             </el-header>
             <el-main class="pages">
               <div class="page" v-for="(ii, i) in item.contents.pages" :key="i"
@@ -96,6 +95,7 @@
                 disabled: !ji.condition(),
                 card: ji.type === 'card',
                 full: ji.card_mode == 'full',
+                slider: ji.type === 'slider',
                 minimal_mode: is_data.theme.minimal_mode
               }">
                 <template v-if="ji.type === 'card'">
@@ -113,10 +113,10 @@
                     <template v-else-if="ji.type === 'button'">
                       <button class="xn-btn primary" @click="ji.action">{{ ji.text }}</button>
                     </template>
-                    <template v-else-if="ji.type === 'slider'">
-                      <el-slider v-model="ji.default" :min="ji.min" :max="ji.max" :format-tooltip="ji.format_tooltip"
-                        @change="ji.done(ji.default)" @input="ji.input(ji.default)"></el-slider>
-                    </template>
+                      <template v-else-if="ji.type === 'slider'">
+                        <el-slider v-model="ji.default" :min="ji.min" :max="ji.max" :format-tooltip="ji.format_tooltip"
+                          @change="ji.done(ji.default)" @input="ji.input(ji.default)"></el-slider>
+                      </template>
                     <template v-else-if="ji.type === 'select'">
                       <el-select v-model="ji.value" :placeholder="ji.placeholder" style="width: 150px"
                         @change="ji.action">
@@ -538,9 +538,42 @@ const types_list_default = [
     iconName: 'search',
     contents: {
       group: false,
-      default_page: 0,
+      // default_page: 0,
       page: [
-
+        {
+          label: t('setting.ResultBackground'),
+          description: t('setting.ResultBackgroundD'),
+          type: 'switch',
+          default: is_data.tif.item_bg,
+          condition: function () {
+            return window.innerWidth >= 960;
+          },
+          action: function (value) {
+            is_data.tif.item_bg = value;
+          }
+        }, {
+          label: t('setting.ResultBackgroundBlur'),
+          description: t('setting.ResultBackgroundDs'),
+          type: 'slider',
+          default: is_data.tif.result_blur,
+          action: function (value) {
+            console.log(value);
+          },
+          max: 100,
+          min: 0,
+          format_tooltip: function (value) {
+            return value + 'px';
+          },
+          condition: function () {
+            return true;
+          },
+          input: function (value) {
+            is_data.tif.result_blur = value;
+          },
+          done: function (value) {
+            is_data.tif.result_blur = value;
+          }
+        },
       ]
     }
   }
@@ -571,16 +604,17 @@ const types_active_index = ref(0);
   max-height: 600px;
   min-height: 450px;
 
-  .left_icon{
+  .left_icon {
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  .left_icon:hover{
+
+  .left_icon:hover {
     background-color: var(--theme-color);
   }
 
-  &.mobile{
+  &.mobile {
     width: 100%;
     height: 100%;
     position: fixed;
@@ -591,21 +625,21 @@ const types_active_index = ref(0);
     max-height: 100%;
     border-radius: 0;
 
-    .type_content{
+    .type_content {
       width: 0;
       overflow-x: hidden;
       transition: width .3s;
 
-      &.active{
+      &.active {
         width: 100%;
       }
     }
 
-    .aside{
+    .aside {
       width: 100%;
       transition: width .4s;
 
-      &.close{
+      &.close {
         width: 0;
         overflow-x: hidden;
       }
@@ -673,7 +707,7 @@ const types_active_index = ref(0);
     flex-direction: column;
     --el-main-padding: 0;
 
-    &.minimal_mode{
+    &.minimal_mode {
       background: var(--bg-1);
     }
 
@@ -700,7 +734,8 @@ const types_active_index = ref(0);
           &.active {
             color: var(--theme-color, #0084ff);
             background: var(--theme-color_c, #0084ff10);
-            &::after{
+
+            &::after {
               opacity: 0.2;
             }
           }
@@ -708,7 +743,7 @@ const types_active_index = ref(0);
           &:hover {
             color: var(--theme-color, #0084ff);
 
-            &::after{
+            &::after {
               opacity: 0.2;
             }
           }

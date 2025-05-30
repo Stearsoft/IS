@@ -8,6 +8,10 @@ const routes = [
     {
         path: '/search',
         component: () => import('@/views/ViewSearch.vue')
+    },
+    {
+        path: '/feedback',
+        component: () => import('@/views/ViewFeedback.vue')
     }
 ];
 

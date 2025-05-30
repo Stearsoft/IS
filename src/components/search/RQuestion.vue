@@ -34,20 +34,20 @@
 
                 <a :href="question.answer_link" target="_blank" rel="noopener noreferrer">
                     <div v-show="question.answer_display_link" class="xl-flex xl-mt-4">
-                    <div class="xl-flex xl-items-center xl-mr-5">
-                        <img :src="question.site_name ? question.site_icon : 'https://tfseek.top/api/favicon/get.php?url=' + question.link"
-                            :alt="capitalizeHostName(link)" class=" xl-size-7 xl-rounded-full" :style="{
-                                'background-color': question.site_name ? question.site_icon_backgroundcolor : '',
-                            }">
-                    </div>
-                    <div>
-                        <div class="display_box">
-                            <h4>{{ question.answer_source }}</h4>
-                            <p>{{ question.display_link }}</p>
+                        <div class="xl-flex xl-items-center xl-mr-5">
+                            <img :src="question.site_name ? question.site_icon : 'https://tfseek.top/api/favicon/get.php?url=' + question.link"
+                                :alt="capitalizeHostName(link)" class=" xl-size-7 xl-rounded-full" :style="{
+                                    'background-color': question.site_name ? question.site_icon_backgroundcolor : '',
+                                }">
                         </div>
-                        <span>{{ link }}</span>
+                        <div>
+                            <div class="display_box">
+                                <h4>{{ question.answer_source }}</h4>
+                                <p>{{ question.display_link }}</p>
+                            </div>
+                            <span>{{ link }}</span>
+                        </div>
                     </div>
-                </div>
                 </a>
             </div>
         </div>
@@ -110,6 +110,10 @@ const capitalizeHostName = (url) => {
     margin-bottom: 10px;
     color: var(--font-1);
 
+    @media screen and (max-width: 960px) {
+        border-radius: 0;
+    }
+
     &:hover {
         background-color: var(--bg-7);
     }
@@ -123,6 +127,10 @@ const capitalizeHostName = (url) => {
         top: 0;
         left: 0;
         border-radius: .25rem 0 0 .25rem;
+
+        @media screen and (max-width: 960px) {
+            background-color: transparent;
+        }
     }
 
     .accordion__header {
@@ -175,9 +183,11 @@ const capitalizeHostName = (url) => {
                         border-bottom: 1px solid;
                         color: var(--theme-color);
                     }
+
                     &:not(.table_header):hover {
                         background-color: var(--bg-7);
                     }
+
                     td {
                         text-align: center;
                     }

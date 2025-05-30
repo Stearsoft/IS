@@ -117,7 +117,11 @@
     "airCopy": "隔空取义",
     "customSE": "自定义",
     "setting": "设置",
-    "emptyValue": "空"
+    "emptyValue": "空",
+    "ResultBackground": "结果背景",
+    "ResultBackgroundD": "在宽屏设备中的搜索结果更为突兀",
+    "ResultBackgroundDs": "搜索结果背景模糊",
+    "ResultBackgroundBlur": "模糊背景"
   },
   "action": {
     "click": "点我",
@@ -146,7 +150,7 @@
   "tif": {
     "key": {
       "video": "视频",
-      "web":"网页",
+      "web": "网页",
       "image": "图片"
     }
   }

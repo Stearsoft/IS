@@ -56,6 +56,15 @@ const stamp2date = (stamp) => {
     margin-bottom: 10px;
     margin-left: 5px;
     margin-right: 5px;
+
+    @media screen and (max-width:960px) {
+        background-color: transparent !important;
+    }
+    @media screen and (max-width:720px) {
+        width: calc(50% - 15px);
+        --width: 100%;
+    }
+
     .img{
         width: var(--width);
         height: 132px;

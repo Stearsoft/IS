@@ -292,6 +292,12 @@ div#searchBox {
         ul {
             margin-top: 20px;
         }
+
+        @media screen and (max-width:820px) {
+            top: 60px;
+            left: 0;
+            right: 0;
+        }
     }
 
     &.start {

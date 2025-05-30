@@ -31,6 +31,16 @@ article {
     padding: 4px 13px;
     margin-bottom: 22px;
 
+    @media screen and (max-width:720px) {
+        width: 50%;
+        --width: 100%;
+
+        .imageBox img{
+            width: 100%;
+            height: 200px !important;
+            border-radius: 7px;
+        }
+    }
     .imageBox {
         img {
             height: 145px;

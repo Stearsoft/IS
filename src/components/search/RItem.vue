@@ -108,6 +108,8 @@ const capitalizeHostName = (url) => {
 
             a {
                 color: var(--font-1);
+                width: 100%;
+                display: block;
             }
 
             &::before {

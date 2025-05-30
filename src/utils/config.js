@@ -9,7 +9,10 @@ const XN_CONFIG = {
             }
         },
         TIF: {
-            BASE_URL: ""
+            BASE_URL: "https://tfseek.top/api/",
+            API:{
+                search:"ENTER YOUR SEARCH API"
+            }
         }
     }
 

@@ -52,6 +52,8 @@ const is_default = local_is ? JSON.parse(local_is) : {
     tif: {
         tif_ai: false,
         tif_newPage: true,
+        item_bg:false,
+        result_blur:10,
     }
 };
 const is_current = ref (is_default);
